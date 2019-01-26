@@ -3,7 +3,7 @@ index:
    defaults: {_controller: AppBundle:Main_Page:index,subpage: posty}
 galery:
    path: /profil/galeria/album/{album_id}
-   defaults: {_controller: AppBundle:Main_Page:galery,album_id: 1}  
+   defaults: {_controller: AppBundle:Main_Page:galery}  
 image_upload:
    path: /profil/galeria/album/{album_id}/upload
    defaults: {_controller: AppBundle:Main_Page:upload}
@@ -22,13 +22,16 @@ add_album:
    
 image:
    path: /profil/galeria/album/{album_id}/zdjecie/{image_id}
-   defaults: {_controller: AppBundle:Main_Page:images,album_id: 1}     
-   
-   
+   defaults: {_controller: AppBundle:Main_Page:images}     
+edit_img_description:   
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/edytuj_opis
+   defaults: {_controller: AppBundle:Main_Page:edit_img_description}
+delete_image:
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/usun-zdjecie
+   defaults: {_controller: AppBundle:Main_Page:delete_img}
 login:
    path: /login
    defaults: {_controller: AppBundle:Login:index}
-   
 register:
    path: /login/rejestracja
    defaults: {_controller: AppBundle:Login:register}
