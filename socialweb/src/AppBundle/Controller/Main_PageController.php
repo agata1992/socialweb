@@ -38,7 +38,7 @@ class Main_PageController extends Controller{
 			'name' => $name,'surname' => $surname,'subpage' => $subpage,'albums' => $albums));
 		}
 		else{
-		    return $this->render('main_page.html.twig', array(
+			return $this->render('main_page.html.twig', array(
 			'page_name' => 'Strona Glówna','nav_title' => 'Strona Glówna','user' => $user,
 			'name' => $name,'surname' => $surname,'subpage' => $subpage));
 		}
@@ -171,7 +171,7 @@ class Main_PageController extends Controller{
 	}
 
 	public function change_album_nameAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id){
-		user = $cookie_service->check_exist_user_cookie();
+		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
