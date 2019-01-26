@@ -1,0 +1,154 @@
+{% extends 'main.html.twig' %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center align-items-center" id="container1">
+        <div class="align-self-center" id="login-container">
+            <div class="container ">
+                <div class="row bottom-border">
+                    <div class="col font-comic log-reg-title-active" id="title-log">Logowanie</div>
+                    <div class="col font-comic pointer" id="title-reg">Rejestracja</div>
+                </div>
+				<div class="row row-margin" id="row-log1">
+                    <div class="col-12">
+					    <label for="log-email">Email</label>
+						<div class="input-group">
+                            <span class="input-group-text">@</span>  
+                            <input type="text" class="form-control" id="log-email" placeholder="email">
+                        </div>
+					</div>
+				</div>
+				<div class="row row-margin" id="row-log2">	
+                    <div class="col-12" id="col-log-pass">
+					    <label for="log-pass">Hasło</label>
+					    <div class="input-group">
+                            <span class="input-group-text">
+				               <i class="fa fa-unlock-alt"></i>
+							</span>
+                            <input type="password" class="form-control" id="log-pass" placeholder="Hasło">
+                            <div class="invalid-feedback"></div>
+						</div>
+				        
+					</div>
+                </div>
+                <div class="row row-margin" id="row-log3">
+				    <div class="col-12">
+				        <div class="d-flex justify-content-center align-items-center">
+				           <button class="btn btn-primary" type="submit" onclick="Login()">Loguj</button>
+				        </div>
+					</div>
+				</div>
+				
+				
+				<div class="row row-margin" id="row-reg1">
+				    <div class="col-6" id="col-reg-name">
+				        <label for="reg-name">Imię</label>
+					    <div class="input-group">
+                            <span class="input-group-text">
+							    <i class="fa fa-user"></i>	
+							</span> 
+					        <input type="text" class="form-control" id="reg-name" name="reg-name" placeholder="Imię"/>
+						    <div class="invalid-feedback"></div>
+						</div>
+						
+				    </div>			
+					<div class="col-6" id="col-reg-surname">
+				        <label for="reg-surname">Nazwisko</label>
+				        <div class="input-group">
+                            <span class="input-group-text">
+							    <i class="fa fa-user"></i>
+							</span>
+				            <input type="text" class="form-control" id="reg-surname" placeholder="Nazwisko"/>
+				            <div class="invalid-feedback"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row row-margin" id="row-reg2">
+				    <div class="col-6" id="col-reg-email">
+				        <label for="reg-email1">Email</label>
+					    <div class="input-group">
+                            <span class="input-group-text">@</span> 
+					        <input type="text" class="form-control" id="reg-email1" placeholder="Email"/>
+						    <div class="invalid-feedback"></div>
+						</div>
+				    </div>			
+					<div class="col-6" id="col-reg-email2">
+				        <label for="reg-email2">Powtórz Email</label>
+				        <div class="input-group">
+                            <span class="input-group-text">@</span>
+				            <input type="text" class="form-control" id="reg-email2" placeholder="Powtórz email"/>
+				            <div class="invalid-feedback"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row row-margin" id="row-reg3">
+				    <div class="col-6" id="col-reg-pass">
+				        <label for="reg-pass">Hasło</label>
+					    <div class="input-group">
+                            <span class="input-group-text">
+								<i class="fa fa-unlock-alt"></i>
+							</span> 
+					        <input type="password" class="form-control" id="reg-pass" placeholder="Hasło"/>
+						    <div class="invalid-feedback"></div>
+						</div>
+				    </div>			
+					<div class="col-6" id="col-reg-city">
+				        <label for="reg-city">Miasto</label>
+				        <div class="input-group">
+                            <span class="input-group-text">
+								<i class="fa fa-home"></i>
+							</span>
+				            <input type="text" class="form-control" id="reg-city" placeholder="Miasto"/>
+				        </div>
+					</div>
+				</div>
+				
+				<div class="row row-margin" id="row-reg4">
+				    <div class="col-6" id="col-reg-birthdate">
+				        <label for="reg-birthdate">Data urodzenia</label>
+					    <div class="input-group">
+                            <span class="input-group-text">
+								<i class="fa fa-calendar"></i>
+							</span> 
+					        <input type="date" class="form-control" id="reg-birthdate" placeholder="Data urodzenia"/>
+						    <div class="invalid-feedback"></div>
+						
+						</div>
+				    </div>			
+					<div class="col-6" id="col-reg-gender">
+				        <label for="reg-gender">Płeć</label>
+				        <div class="input-group">
+                            <span class="input-group-text">
+								<i class="fa fa-male"></i>
+							</span>
+				            <select id="reg-gender" class="form-control">
+                                <option selected  disabled="true">Wybierz...</option>
+                                <option>Kobieta</option>
+							    <option>Mężczyzna</option>
+                            </select> 
+	                        <div class="invalid-feedback"></div>
+				        </div>
+					</div>
+				</div>
+				
+				<div class="row row-margin " id="row-reg5">
+				    <div class="col-12">
+				        <div class="d-flex justify-content-center align-items-center">
+						<button  class="btn btn-primary" type="submit" onclick="Register()" >Rejestruj</button>
+				        </div>
+					</div>
+				</div>	
+			</div>
+		</div>	
+	</div>	
+		
+	<div class="d-flex justify-content-center align-items-center" id="container2">
+		<div class="align-self-center text-center" id="results-container">
+			<h4>Utworzono konto</h4>
+			<h5>Dziękujemy za rejestracje</h5>
+			<h5>Teraz możesz się zalogować <a class="" href="/socialweb/web/app_dev.php/login">tutaj</a></h5>
+		</div>
+	</div>	
+{% endblock %}

@@ -1,0 +1,40 @@
+index:
+   path: /profil/{subpage}
+   defaults: {_controller: AppBundle:Main_Page:index,subpage: posty}
+galery:
+   path: /profil/galeria/album/{album_id}
+   defaults: {_controller: AppBundle:Main_Page:galery,album_id: 1}  
+image_upload:
+   path: /profil/galeria/album/{album_id}/upload
+   defaults: {_controller: AppBundle:Main_Page:upload}
+album_access:
+   path: /profil/galeria/album/{album_id}/dostep
+   defaults: {_controller: AppBundle:Main_Page:album_access}  
+change_album_name:
+   path: /profil/galeria/album/{album_id}/zmien-nazwe-albumu
+   defaults: {_controller: AppBundle:Main_Page:change_album_name}  
+delete_album:
+   path: /profil/galeria/album/{album_id}/usun-album
+   defaults: {_controller: AppBundle:Main_Page:delete_album}   
+add_album:
+   path: /profil/galeria/dodaj-album
+   defaults: {_controller: AppBundle:Main_Page:add_album}      
+   
+image:
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}
+   defaults: {_controller: AppBundle:Main_Page:images,album_id: 1}     
+   
+   
+login:
+   path: /login
+   defaults: {_controller: AppBundle:Login:index}
+   
+register:
+   path: /login/rejestracja
+   defaults: {_controller: AppBundle:Login:register}
+signin:
+   path: /login/logowanie
+   defaults: {_controller: AppBundle:Login:login}
+signout:
+   path: /wyloguj
+   defaults: {_controller: AppBundle:Login:signout}
