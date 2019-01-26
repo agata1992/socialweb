@@ -24,7 +24,7 @@ class Main_PageController extends Controller{
 		if($user == '')
 		    return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
-        $user_data = $db_service->get_user_data();
+		$user_data = $db_service->get_user_data();
 		$name = $user_data[1];
 		$surname = $user_data[2];
 
