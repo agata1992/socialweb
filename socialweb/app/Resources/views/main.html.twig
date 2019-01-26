@@ -1,140 +1,140 @@
 <html>
-    <head>
-        <meta charset="UTF-8"/>
-        <title>{% block title %}SocialWeb - {{page_name}}{% endblock %}</title>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>{% block title %}SocialWeb - {{page_name}}{% endblock %}</title>
 		<link rel="icon" type="image/x-icon" href="{{ asset('service-image/icon.ico') }}"/>
-	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-	    <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
-	    <script src="{{ asset('css/style.css') }}"></script>
-	    <script src="{{ asset('js/script.js') }}"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+		<script src="{{ asset('css/style.css') }}"></script>
+		<script src="{{ asset('js/script.js') }}"></script>
 	
 	<body>
-	    <div id="main">
-	        <nav class="navbar navbar-expand navbar-dark bg-dark" id="nav1">
-                <a class="navbar-brand text-white" href="/socialweb/web/app_dev.php/profil">SocialWeb</a>
-	            <div class="collapse navbar-collapse" >
-	                <ul class="navbar-nav mr-auto" id="navbar-nav_">
-				        <li class="nav-item">
-		                   <a class="nav-link text-white">{{nav_title}}</a>
-					    </li>
-				    </ul>
-				    <ul class="navbar-nav mr-auto" id="navbar-nav1">
-				        {% if not user == "" %}
-	                        <li class="nav-item">
-		                        <a class="nav-link text-white" href="/socialweb/web/app_dev.php/forum">Forum</a>
-					        </li>
-					    {% endif %}
-					    {% if not user == "" %}
-					        <li class="nav-item">
-						        <a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy">Grupy</a>
-					        </li>
-					    {% endif %}
+		<div id="main">
+			<nav class="navbar navbar-expand navbar-dark bg-dark" id="nav1">
+				<a class="navbar-brand text-white" href="/socialweb/web/app_dev.php/profil">SocialWeb</a>
+				<div class="collapse navbar-collapse" >
+					<ul class="navbar-nav mr-auto" id="navbar-nav_">
+						<li class="nav-item">
+							<a class="nav-link text-white">{{nav_title}}</a>
+						</li>
+					</ul>
+					<ul class="navbar-nav mr-auto" id="navbar-nav1">
+						{% if not user == "" %}
+							<li class="nav-item">
+								<a class="nav-link text-white" href="/socialweb/web/app_dev.php/forum">Forum</a>
+							</li>
+						{% endif %}
+						{% if not user == "" %}
+							<li class="nav-item">
+								<a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy">Grupy</a>
+							</li>
+						{% endif %}
 						
 						{% if not user == "" %}
-					        <li class="nav-item">
-							    <div class="input-group">
-						            <input type="text" class="form-control" placeholder="Szukaj"/>
-							        <button class="btn btn-default bg-primary">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-							    </div>
-					        </li>
-					    {% endif %}	
-				    </ul>
+							<li class="nav-item">
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Szukaj"/>
+									<button class="btn btn-default bg-primary">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</li>
+						{% endif %}	
+					</ul>
 				
-			        <ul class="navbar-nav nav-right" id="navbar-nav2">
-					    {% if not user == "" %}
-					        <li class="nav-item">
-					            <a class="nav-link text-white" href="/socialweb/web/app_dev.php/wyloguj">{{name}} {{surname}} 
+					<ul class="navbar-nav nav-right" id="navbar-nav2">
+						{% if not user == "" %}
+							<li class="nav-item">
+								<a class="nav-link text-white" href="/socialweb/web/app_dev.php/wyloguj">{{name}} {{surname}} 
 									<span><i class="fa fa-sign-out"></i></span>
 								</a>
-					        </li>
-					    {% endif %}
+							</li>
+						{% endif %}
 					</ul>
-				    {% if not user == "" %}
-				        <ul class="navbar-nav nav-right" id="navbar-nav3">
-					        <li class="nav-item" id="navbar1">
-					            <a class="nav-link text-white" data-toggle="collapse" data-target="#dropdown-nav1">
-						            <span class="navbar-toggler-icon"></span>
-					            </a>
-	                            <div class="dropdown-menu dropdown-menu-right bg-dark" id="dropdown-nav1">
-                                    <div class="container">
-						                <div class="row text-white row-margin2">
-							                <div class="col-12 text-center">
-							                    <a class="nav-link text-white" href="/socialweb/web/app_dev.php/wyloguj">
-							                        <h5>{{name}} {{surname}}</h5>
-							                        <span><i class="fa fa-sign-out"></i></span>
-							                    </a>    
-							                </div>
-							            </div>
+					{% if not user == "" %}
+						<ul class="navbar-nav nav-right" id="navbar-nav3">
+							<li class="nav-item" id="navbar1">
+								<a class="nav-link text-white" data-toggle="collapse" data-target="#dropdown-nav1">
+									<span class="navbar-toggler-icon"></span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right bg-dark" id="dropdown-nav1">
+									<div class="container">
+										<div class="row text-white row-margin2">
+											<div class="col-12 text-center">
+												<a class="nav-link text-white" href="/socialweb/web/app_dev.php/wyloguj">
+													<h5>{{name}} {{surname}}</h5>
+													<span><i class="fa fa-sign-out"></i></span>
+												</a>	
+											</div>
+										</div>
 							
-							            <div class="row text-white row-margin2">
-							                <div class="col-12 text-center">
-							                    <img src="{{ asset('service-image/user.png') }}" width="50px" class="img-fluid rounded-circle">
-							                </div>
-							            </div>
+										<div class="row text-white row-margin2">
+											<div class="col-12 text-center">
+												<img src="{{ asset('service-image/user.png') }}" width="50px" class="img-fluid rounded-circle">
+											</div>
+										</div>
 							
-							            <div class="row text-white row-margin2">
-							                <div class="col-12 text-center">
-								                <a class="nav-link text-white" href="/socialweb/web/app_dev.php/forum">Forum</a>
-							                </div>
-							            </div>
-							            <div class="row text-white row-margin2">
-							                <div class="col-12 text-center">
-									            <a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy">Grupy</a>
-                                            </div>
-							            </div>	
+										<div class="row text-white row-margin2">
+											<div class="col-12 text-center">
+												<a class="nav-link text-white" href="/socialweb/web/app_dev.php/forum">Forum</a>
+											</div>
+										</div>
+										<div class="row text-white row-margin2">
+											<div class="col-12 text-center">
+												<a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy">Grupy</a>
+											</div>
+										</div>	
 								
-								        <div class="row text-white row-margin2">
-							                <div class="col-12 text-center">
-								                <div class="input-group">
-						                            <input type="text" class="form-control" placeholder="Szukaj"/>
-							                        <button class="btn btn-default bg-primary">
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
-							                    </div>
-										    </div>
-									    </div>
-							        </div>
-                                </div>
-					        </li>
-				        </ul>
-				    {% endif %}
+										<div class="row text-white row-margin2">
+											<div class="col-12 text-center">
+												<div class="input-group">
+													<input type="text" class="form-control" placeholder="Szukaj"/>
+													<button class="btn btn-default bg-primary">
+														<i class="fa fa-search"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					{% endif %}
 				</div>
-            </nav>
+			</nav>
 			{% if not user == "" %}
-			    <div class=" bg-dark text-white" id="container4">
-			        <div class="container-fluid">
-			            <div class="row align-items-center" id="row2">
-			                <div class="col-6 align-self-center">
-			                    <h5>
-							        <img src="{{ asset('service-image/user.png') }}" width="50px" class="img-fluid rounded-circle">
-                                    {{name}} {{surname}}
-							    </h5>
-                            </div>
-			                <div class="col-3 align-self-center">
-			                    <button id="" type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						            <i class="fa fa-envelope"></i> Wiadomośći <span class="badge badge-light">9</span>
-					            </button>
-			                </div>
-						    <div class="col-3 align-self-center">
-			                    <button id="" type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						            <i class="fa fa-cog"></i> Moje konto
+				<div class=" bg-dark text-white" id="container4">
+					<div class="container-fluid">
+						<div class="row align-items-center" id="row2">
+							<div class="col-6 align-self-center">
+								<h5>
+									<img src="{{ asset('service-image/user.png') }}" width="50px" class="img-fluid rounded-circle">
+									{{name}} {{surname}}
+								</h5>
+							</div>
+							<div class="col-3 align-self-center">
+								<button id="" type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-envelope"></i> Wiadomośći <span class="badge badge-light">9</span>
 								</button>
-			                </div>
-				        </div>
-			        </div>
-			    </div>
+							</div>
+							<div class="col-3 align-self-center">
+								<button id="" type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-cog"></i> Moje konto
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			{% endif %}
 	
-	        {% block content %}{% endblock %}
-	    </div>
-	    <div class="bg-dark" id="footer">
-	        Stopka
-	    </div>
+			{% block content %}{% endblock %}
+		</div>
+		<div class="bg-dark" id="footer">
+			Stopka
+		</div>
 		<script src="{{ asset('js/script.js') }}"></script>
 	</body>
 </html>
