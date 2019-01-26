@@ -158,8 +158,24 @@ nav{
 	padding-top:10px;	
 }
 
+.description-image-div{
+	margin-top: 20px;
+	
+}
+
+.comments-image-div{
+	margin-top:30px;
+	border: 1px solid #ccc;
+	padding:15px;
+}
+
+.comments-row{
+	margin-top:15px;
+}
+
+
 #setting-image-div{
-	margin-top:10px;	
+	margin-top:10px;
 }
 
 @media screen and ( max-width: 829px ) {
@@ -181,7 +197,6 @@ nav{
 		display:flex;
 	}
 }
-
 
 #row-reg5,#row-log3{
 	margin-top:15px;

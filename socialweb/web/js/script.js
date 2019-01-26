@@ -405,13 +405,12 @@ function add_album(){
 	});
 }
 
-
 function delete_album(){
 	$('#decision-modal .modal-body p').html("Czy chesz usunąć album wraz ze zdjęciami?")
 	$('#decision-modal').addClass('delete-album-modal');
 	$('.delete-album-modal').show();
 	$(".delete-album-modal .modal-header .close").click(function() {
-	   $('.delete-album-modal').hide();
+		$('.delete-album-modal').hide();
 	});
 	$(".delete-album-modal .modal-footer #button_cancel").click(function() {
 		$('.delete-album-modal').hide();
@@ -431,3 +430,36 @@ function delete_album(){
 	});
 }
 
+function edit_image_description(){
+	$('#edit-image-description-modal').show();
+	
+	$("#edit-image-description-modal .modal-header .close").click(function() {
+		$('#edit-image-description-modal').hide();
+	});
+	$("#edit-image-description-modal .modal-footer #button_cancel").click(function() {
+		$('#edit-image-description-modal').hide();
+	});
+	
+	$("#edit-image-description-modal .modal-footer #button_confirm").click(function() {
+		description = $('#img-description').val();
+		var data='&description='+description;
+		
+		var request = $.ajax({
+			url: window.location.pathname+"/edytuj_opis",
+			type: "POST",
+			datatype: "json",
+			data: data
+		});
+	
+		request.done(function(results){  
+			if(results == ''){
+				$('#edit-image-description-modal').hide(); 
+				location.reload();
+			}
+			else{
+				$('#edit-image-description-feedback').html(results);
+			}
+		});
+	});
+
+}

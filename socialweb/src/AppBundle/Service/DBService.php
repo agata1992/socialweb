@@ -145,12 +145,14 @@ class DBService{
 		$user->setgender($gender);
 		$user->setprofile_img('');
 		$this->entityManager->persist($user);
-		$this->entityManager->flush();	
-		
-		
+		$this->entityManager->flush();
 	}
 	
-	
+	public function set_image_description($description,$image){
+		$image->setdescription($description);
+		$this->entityManager->persist($image);
+		$this->entityManager->flush();
+	}
 }
 
 

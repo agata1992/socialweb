@@ -34,12 +34,12 @@ class Main_PageController extends Controller{
 			$albums = $db_service->get_user_albums();
 
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Gl體na','nav_title' => 'Strona Gl體na','user' => $user,
+			'page_name' => 'Strona G艂贸wna','nav_title' => 'Strona G艂贸wna','user' => $user,
 			'name' => $name,'surname' => $surname,'subpage' => $subpage,'albums' => $albums));
 		}
 		else{
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Gl體na','nav_title' => 'Strona Gl體na','user' => $user,
+			'page_name' => 'Strona G艂贸wna','nav_title' => 'Strona G艂贸wna','user' => $user,
 			'name' => $name,'surname' => $surname,'subpage' => $subpage));
 		}
 	}
@@ -59,13 +59,13 @@ class Main_PageController extends Controller{
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Gl體na',
+			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
 			'user' => $user,'name' => $name,'surname' => $surname));
 		}
 		else{
 			$images = $db_service->get_images_by_album_id($album_id);
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Gl體na','nav_title' => 'Strona Gl體na','user' => $user,
+			'page_name' => 'Strona G艂贸wna','nav_title' => 'Strona G艂贸wna','user' => $user,
 			'name' => $name,'surname' => $surname,'subpage' => 'album','album' => $album,'images' => $images));
 		}
 	}
@@ -85,15 +85,22 @@ class Main_PageController extends Controller{
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Gl體na',
+			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
 			'user' => $user,'name' => $name,'surname' => $surname));
 		}
 		else{
 			$image = $db_service->get_image_by_image_id($image_id,$album_id);
-
-			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Gl體na','nav_title' => 'Strona Gl體na','user' => $user,
-			'name' => $name,'surname' => $surname,'subpage' => 'zdjecie','album' => $album,'image' => $image));
+			
+			if($image == null){
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
+				'user' => $user,'name' => $name,'surname' => $surname));
+			}
+			else{
+				return $this->render('main_page.html.twig', array(
+				'page_name' => 'Strona Gl贸wna','nav_title' => 'Strona G艂贸wna','user' => $user,
+				'name' => $name,'surname' => $surname,'subpage' => 'zdjecie','album' => $album,'image' => $image));
+			}
 		}
 	}
 
@@ -113,7 +120,7 @@ class Main_PageController extends Controller{
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title'=>'Strona Gl體na',
+			'page_name' => 'Nie znaleziono strony','nav_title' =>' Strona G艂贸wna',
 			'user' => $user,'name' => $name,'surname' => $surname));
 		}
 
@@ -160,7 +167,7 @@ class Main_PageController extends Controller{
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Gl體na',
+			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
 			'user' => $user,'name' => $name,'surname' => $surname));
 		}
 		else{
@@ -188,7 +195,7 @@ class Main_PageController extends Controller{
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Gl體na',
+			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
 			'user' => $user,'name' => $name,'surname' => $surname));
 		}
 		else{
@@ -273,7 +280,7 @@ class Main_PageController extends Controller{
 
 			if($album == null){
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Gl體na',
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
 				'user' => $user,'name' => $name,'surname' => $surname));
 			}
 			else{
@@ -297,7 +304,51 @@ class Main_PageController extends Controller{
 		else
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
+
+	public function edit_img_descriptionAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id,$image_id){
+		if($request->isXmlHttpRequest() == "true"){
+			$user = $cookie_service->check_exist_user_cookie();
+
+			if($user == '')
+				return new RedirectResponse('/socialweb/web/app_dev.php/login');
+
+			$user_data = $this->getDoctrine()
+			->getRepository(Users::class)->findOneBy(['email' => $user]);
+
+			$user_data = $db_service->get_user_data();
+			$name = $user_data[1];
+			$surname = $user_data[2];
+			$user_id = $user_data[0];
+			
+			$description = $request->request->get('description');
+			$album = $db_service->get_user_album_by_id($album_id);
+
+			if($album == null){
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
+				'user' => $user,'name' => $name,'surname' => $surname));
+			}
+			else{
+				$image = $db_service->get_image_by_image_id($image_id,$album_id);
+			
+				if($image == null){
+					return $this->render('page_no_found.html.twig',array(
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona G艂贸wna',
+					'user' => $user,'name' => $name,'surname' => $surname));
+				}
+				else{
+					$results = '';
+					if(strlen($description) > 255)
+						$results = "Opis nie mo偶e by膰 d艂u偶szy ni偶 255 znak贸w";
+					else{
+						$db_service->set_image_description($description,$image);
+						
+						}
+				}
+				
+				return new JsonResponse($results);
+			}
+		}
+	}
 }
-
-
 ?>

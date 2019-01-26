@@ -270,7 +270,7 @@
 												<button type="button" class="btn btn-primary" title="Ustaw jako profilowe" onclick="">
 													<i class="fa fa-user"></i> 
 												</button>
-												<button type="button" class="btn btn-primary" title="Dodaj opis" onclick="">
+												<button type="button" class="btn btn-primary" title="Dodaj opis" onclick="edit_image_description()">
 													<i class="fa fa-pencil"></i> 
 												</button>
 											</div>
@@ -280,6 +280,32 @@
 													{{name}} {{surname}} <br>
 													<div style="margin-left:32px;">dodano {{image.add_date |date("d.m.Y")}}</div>
 												</h6>
+											</div>
+											{% if not image.description == '' %}
+												<div class="description-image-div">
+													<div class="text-white"><h6>{{ image.description }}</h6></div>
+												</div>
+											{% endif %}
+											<div class="comments-image-div">
+												<div class="row">
+													<div class="col-12 text-center text-white">
+														<h5>Komentarze:</h5>
+													</div>
+												</div>
+												<div class="row comments-row">
+													<div class="col-12 text-white">
+														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+														<div class="d-inline-block text-bold"><h6>{{name}} {{surname}}</h6></div>
+														<div style="margin-left:32px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+													</div>
+												</div>
+												<div class="row comments-row">
+													<div class="col-12 text-white">
+														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+														<div class="d-inline-block text-bold"><h6>{{name}} {{surname}}</h6></div>
+														<div style="margin-left:32px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -295,7 +321,7 @@
 				<div class="modal-content">
 					<div class="modal-header bg-primary">
 						<h4 class="modal-title">Potwierdź decyzje</h4> 
-						<button type="button" class="close" data-dismiss="modal" >×</button>
+						<button type="button" class="close" data-dismiss="modal">×</button>
 					</div>
 					<div class="modal-body">
 						<p></p>
@@ -308,4 +334,27 @@
 			</div>
 		</div>
 	</div>
+	{% if subpage == 'zdjecie' %}
+		<div class="modal" id="edit-image-description-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h4 class="modal-title">Edytuj opis</h4> 
+						<button type="button" class="close" data-dismiss="modal">×</button>
+					</div>
+					<div class="modal-body">
+						<textarea class="form-control" rows="5" id="img-description" placeholder="{{image.description}}"></textarea>
+						<h6 id="edit-image-description-feedback" class="text-danger text-center"></h6>
+					</div>
+					<div class="modal-footer">
+						<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+						<button id="button_confirm" type="button" class="btn btn-primary">Potwierdzam</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	</div>
+	
+	
 {% endblock %}
