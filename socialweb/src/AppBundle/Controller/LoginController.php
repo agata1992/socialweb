@@ -104,7 +104,7 @@ class LoginController extends Controller{
 			$salt = uniqid();
 			$password = $password.$salt;
 			$password = md5($password);
-		$db_service->add_user($name,$surname,$email,$password,$salt,$city,$birthdate,$gender);
+			$db_service->add_user($name,$surname,$email,$password,$salt,$city,$birthdate,$gender);
 		}
 	
 		return new JsonResponse($results);
