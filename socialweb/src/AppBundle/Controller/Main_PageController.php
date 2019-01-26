@@ -29,7 +29,7 @@ class Main_PageController extends Controller{
 		$surname = $user_data[2];
 
 		if($subpage == "galeria"){
-			$user_id =  $user_data[0];
+			$user_id = $user_data[0];
 
 			$albums = $db_service->get_user_albums();
 
@@ -146,7 +146,7 @@ class Main_PageController extends Controller{
 	}
 
 	public function album_accessAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id){
-	    $user = $cookie_service->check_exist_user_cookie();
+		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
@@ -256,7 +256,7 @@ class Main_PageController extends Controller{
 
 	public function delete_albumAction(CookieService $cookie_service,DBService $db_service,FileService $file_service,Request $request,$album_id){
 		if($request->isXmlHttpRequest() == "true"){
-		$user = $cookie_service->check_exist_user_cookie();
+			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
 				return new RedirectResponse('/socialweb/web/app_dev.php/login');
@@ -297,16 +297,6 @@ class Main_PageController extends Controller{
 		else
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
-
-
-
-
-
-
-
-
-
-
 }
 
 
