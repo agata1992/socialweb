@@ -29,6 +29,9 @@ edit_img_description:
 delete_image:
    path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/usun-zdjecie
    defaults: {_controller: AppBundle:Main_Page:delete_img}
+set_as_profile_img:
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/profilowe
+   defaults: {_controller: AppBundle:Main_Page:set_as_profile_img}
 login:
    path: /login
    defaults: {_controller: AppBundle:Login:index}

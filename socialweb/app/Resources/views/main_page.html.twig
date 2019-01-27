@@ -262,22 +262,33 @@
 							<div class="row">
 								<div class="col-sm-12 text-center">
 									<div class="image-div text-left">
-										<img src="{{ asset('images/' ~image.image_name) }}" width="100%" class="img-fluid rounded">
+										<img src="{{ asset('images/' ~image.image_name) }}" width="100%" class="img-fluid rounded"/>
+										{% if user[9] == image.image_name %}
+										<div class="is_profile_img"><a class="btn btn-primary" title="To zdjęcie jest Twoim profilowym">
+											<i class="fa fa-image text-white"></i></a>
+										</div>
+										{% endif %}
 											<div class="text-white" id="setting-image-div">
 												<button type="button" class="btn btn-primary" title="Usuń zdjęcie" onclick="delete_image()">
 													<i class="fa fa-trash"></i> 
 												</button>
-												<button type="button" class="btn btn-primary" title="Ustaw jako profilowe" onclick="">
-													<i class="fa fa-user"></i> 
-												</button>
+												{% if not album.album_access == 1 %}
+													<button type="button" class="btn btn-primary" title="Ustaw jako profilowe" onclick="set_as_profile_img()">
+														<i class="fa fa-user"></i> 
+													</button>
+												{% endif %}
 												<button type="button" class="btn btn-primary" title="Dodaj opis" onclick="edit_image_description()">
 													<i class="fa fa-pencil"></i> 
 												</button>
 											</div>
 											<div class="info-image-div text-white">
 												<h6>
-													<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
-													{{name}} {{surname}} <br>
+													{% if user[9] == '' %}
+														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+													{% else %}
+														<img src="{{ asset('images/' ~user[9]) }}" width="30px" height="30px" class="rounded-circle">
+													{% endif %}
+													{{user[1]}} {{user[2]}} <br>
 													<div style="margin-left:32px;">dodano {{image.add_date |date("d.m.Y")}}</div>
 												</h6>
 											</div>
@@ -295,18 +306,19 @@
 												<div class="row comments-row">
 													<div class="col-12 text-white">
 														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
-														<div class="d-inline-block text-bold"><h6>{{name}} {{surname}}</h6></div>
+														<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
 														<div style="margin-left:32px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
 													</div>
 												</div>
 												<div class="row comments-row">
 													<div class="col-12 text-white">
 														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
-														<div class="d-inline-block text-bold"><h6>{{name}} {{surname}}</h6></div>
+														<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
 														<div style="margin-left:32px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
 													</div>
 												</div>
 											</div>
+										
 										</div>
 									</div>
 								</div>

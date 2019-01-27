@@ -153,7 +153,7 @@ $("#con-album").hide();
 $("#con-image").hide();
 
 
-$("#drop-nav1").css('top', $("#nav1").height()+20);
+$("#dropdown-nav1").css('top', $("#nav1").height()+20);
 $("#image-feedback").hide();
 $("#album-name-feedback").hide();
 $("#add-album-feedback").hide();
@@ -186,7 +186,7 @@ $("#upload-form").submit(function(e) {
 
 
 window.onresize = function(event) {
-	$("#drop-nav1").css('top', $("#nav1").height()+20);
+	$("#dropdown-nav1").css('top', $("#nav1").height()+20);
 };
 
 $('#title-log').click(function (event) {
@@ -406,7 +406,7 @@ function add_album(){
 }
 
 function delete_album(){
-	$('#decision-modal .modal-body p').html("Czy chesz usunąć album wraz ze zdjęciami?")
+	$('#decision-modal .modal-body p').html("Czy chcesz usunąć album wraz ze zdjęciami?")
 	$('#decision-modal').addClass('delete-album-modal');
 	$('.delete-album-modal').show();
 	
@@ -466,7 +466,7 @@ function edit_image_description(){
 }
 
 function delete_image(){
-	$('#decision-modal .modal-body p').html("Czy chesz usunąć zdjęcie?")
+	$('#decision-modal .modal-body p').html("Czy chcesz usunąć zdjęcie?")
 	$('#decision-modal').addClass('delete-image-modal');
 	$('.delete-image-modal').show();
 	
@@ -493,4 +493,32 @@ function delete_image(){
 		});
 	});
 }
+	
+function set_as_profile_img(){
+		$('#decision-modal .modal-body p').html("Czy chcesz ustawić zdjęcie jako profilowe?")
+	$('#decision-modal').addClass('profile-image-modal');
+	$('.profile-image-modal').show();
+	
+	$(".profile-image-modal .modal-header .close").click(function() {
+		$('.profile-image-modal').hide();
+	});
+	
+	$(".profile-image-modal .modal-footer #button_cancel").click(function() {
+		$('.profile-image-modal').hide();
+	});
+	
+	$(".profile-image-modal .modal-footer #button_confirm").click(function() {
+		var request = $.ajax({
+			url: window.location.pathname+"/profilowe",
+			type: "POST",
+			datatype: "json"
+		});   
+	
+		request.done(function(results){  
+			$('profile-image-modal').hide(); 
+			location.reload();
+		});
+	});
+}
+
 

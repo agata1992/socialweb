@@ -153,13 +153,16 @@ class DBService{
 		$this->entityManager->persist($image);
 		$this->entityManager->flush();
 	}
+	
+	public function set_as_profile_image($image){
+		$this->get_user_data();
+		$user = $this->entityManager
+		->getRepository(Users::class)->findOneBy(['id' => $this->user_data_array[0]]);
+		
+		
+		$user->setprofile_img($image->getimage_name());
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
+	}
 }
-
-
-
-
-
-
-
-
 ?>

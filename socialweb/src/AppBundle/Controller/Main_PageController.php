@@ -25,8 +25,6 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
 
 		if($subpage == "galeria"){
 			$user_id = $user_data[0];
@@ -34,13 +32,13 @@ class Main_PageController extends Controller{
 			$albums = $db_service->get_user_albums();
 
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user,
-			'name' => $name,'surname' => $surname,'subpage' => $subpage,'albums' => $albums));
+			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
+			'subpage' => $subpage,'albums' => $albums));
 		}
 		else{
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user,
-			'name' => $name,'surname' => $surname,'subpage' => $subpage));
+			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
+			'subpage' => $subpage));
 		}
 	}
 
@@ -51,22 +49,18 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
-		$user_id = $user_data[0];
-
 		$album = $db_service->get_user_album_by_id($album_id);
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
 			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user,'name' => $name,'surname' => $surname));
+			'user' => $user_data));
 		}
 		else{
 			$images = $db_service->get_images_by_album_id($album_id);
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user,
-			'name' => $name,'surname' => $surname,'subpage' => 'album','album' => $album,'images' => $images));
+			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
+			'subpage' => 'album','album' => $album,'images' => $images));
 		}
 	}
 
@@ -77,16 +71,12 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
-		$user_id = $user_data[0];
-
 		$album = $db_service->get_user_album_by_id($album_id);
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
 			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user,'name' => $name,'surname' => $surname));
+			'user' => $user_data));
 		}
 		else{
 			$image = $db_service->get_image_by_image_id($image_id,$album_id);
@@ -94,12 +84,12 @@ class Main_PageController extends Controller{
 			if($image == null){
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user,'name' => $name,'surname' => $surname));
+				'user' => $user_data));
 			}
 			else{
 				return $this->render('main_page.html.twig', array(
-				'page_name' => 'Strona Glówna','nav_title' => 'Strona Główna','user' => $user,
-				'name' => $name,'surname' => $surname,'subpage' => 'zdjecie','album' => $album,'image' => $image));
+				'page_name' => 'Strona Glówna','nav_title' => 'Strona Główna','user' => $user_data,
+				'subpage' => 'zdjecie','album' => $album,'image' => $image));
 			}
 		}
 	}
@@ -112,16 +102,12 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
-		$user_id = $user_data[0];
-
 		$album = $db_service->get_user_album_by_id($album_id);
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
 			'page_name' => 'Nie znaleziono strony','nav_title' =>' Strona Główna',
-			'user' => $user,'name' => $name,'surname' => $surname));
+			'user' => $user_data));
 		}
 
 		$results = array();
@@ -159,16 +145,13 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
-		$user_id = $user_data[0];
 
 		$album = $db_service->get_user_album_by_id($album_id);
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
 			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user,'name' => $name,'surname' => $surname));
+			'user' => $user_data));
 		}
 		else{
 			$album_access = $request->request->get('album_access');
@@ -187,16 +170,13 @@ class Main_PageController extends Controller{
 		->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
-		$user_id = $user_data[0];
 
 		$album = $db_service->get_user_album_by_id($album_id);
 
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
 			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user,'name' => $name,'surname' => $surname));
+			'user' => $user_data));
 		}
 		else{
 
@@ -231,10 +211,6 @@ class Main_PageController extends Controller{
 		->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 		$user_data = $db_service->get_user_data();
-		$name = $user_data[1];
-		$surname = $user_data[2];
-		$user_id = $user_data[0];
-
 		$album_name = $request->request->get('name');
 		$results = '';
 
@@ -270,18 +246,12 @@ class Main_PageController extends Controller{
 
 			$user_data = $this->getDoctrine()
 			->getRepository(Users::class)->findOneBy(['email' => $user]);
-
-			$user_data = $db_service->get_user_data();
-			$name = $user_data[1];
-			$surname = $user_data[2];
-			$user_id = $user_data[0];;
-
 			$album = $db_service->get_user_album_by_id($album_id);
 
 			if($album == null){
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user,'name' => $name,'surname' => $surname));
+				'user' => $user_data));
 			}
 			else{
 
@@ -316,17 +286,13 @@ class Main_PageController extends Controller{
 			->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 			$user_data = $db_service->get_user_data();
-			$name = $user_data[1];
-			$surname = $user_data[2];
-			$user_id = $user_data[0];
-			
 			$description = $request->request->get('description');
 			$album = $db_service->get_user_album_by_id($album_id);
 
 			if($album == null){
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user,'name' => $name,'surname' => $surname));
+				'user' => $user_data));
 			}
 			else{
 				$image = $db_service->get_image_by_image_id($image_id,$album_id);
@@ -334,7 +300,7 @@ class Main_PageController extends Controller{
 				if($image == null){
 					return $this->render('page_no_found.html.twig',array(
 					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-					'user' => $user,'name' => $name,'surname' => $surname));
+					'user' => $user_data));
 				}
 				else{
 					$results = '';
@@ -363,16 +329,12 @@ class Main_PageController extends Controller{
 			->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 			$user_data = $db_service->get_user_data();
-			$name = $user_data[1];
-			$surname = $user_data[2];
-			$user_id = $user_data[0];
-		
 			$album = $db_service->get_user_album_by_id($album_id);
 
 			if($album == null){
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user,'name' => $name,'surname' => $surname));
+				'user' => $user_data));
 			}
 			else{
 				$image = $db_service->get_image_by_image_id($image_id,$album_id);
@@ -380,39 +342,56 @@ class Main_PageController extends Controller{
 				if($image == null){
 					return $this->render('page_no_found.html.twig',array(
 					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-					'user' => $user,'name' => $name,'surname' => $surname));
+					'user' => $user_data));
 				}
 				else{
 					$file_service->remove_user_image($image->getimage_name());
 					$db_service->remove_image_info($image);
-						
-						
-				
-				
-				
-				
 				}
 			}
-		
-		
-		
-		
-		
 		
 			return new JsonResponse('');
 		}
 		else
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
+	}
+	
+	public function set_as_profile_imgAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id,$image_id){
+		if($request->isXmlHttpRequest() == "true"){
+			$user = $cookie_service->check_exist_user_cookie();
+
+			if($user == '')
+				return new RedirectResponse('/socialweb/web/app_dev.php/login');
+
+			$user_data = $this->getDoctrine()
+			->getRepository(Users::class)->findOneBy(['email' => $user]);
+
+			$user_data = $db_service->get_user_data();
+			$album = $db_service->get_user_album_by_id($album_id);
+
+			if($album == null){
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data));
+			}
+			else{
+				$image = $db_service->get_image_by_image_id($image_id,$album_id);
 			
-			
-			
-			
+				if($image == null){
+					return $this->render('page_no_found.html.twig',array(
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data));
+				}
+				else{
+					
+					$db_service->set_as_profile_image($image);
+				}
+			}
 		
-		
-		
+			return new JsonResponse('');
 		}
-	
-	
-	
+		else
+			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
+	}
 }
 ?>
