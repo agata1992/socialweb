@@ -409,9 +409,11 @@ function delete_album(){
 	$('#decision-modal .modal-body p').html("Czy chesz usunąć album wraz ze zdjęciami?")
 	$('#decision-modal').addClass('delete-album-modal');
 	$('.delete-album-modal').show();
+	
 	$(".delete-album-modal .modal-header .close").click(function() {
 		$('.delete-album-modal').hide();
 	});
+	
 	$(".delete-album-modal .modal-footer #button_cancel").click(function() {
 		$('.delete-album-modal').hide();
 	});
@@ -461,5 +463,34 @@ function edit_image_description(){
 			}
 		});
 	});
-
 }
+
+function delete_image(){
+	$('#decision-modal .modal-body p').html("Czy chesz usunąć zdjęcie?")
+	$('#decision-modal').addClass('delete-image-modal');
+	$('.delete-image-modal').show();
+	
+	$(".delete-image-modal .modal-header .close").click(function() {
+		$('.delete-image-modal').hide();
+	});
+	
+	$(".delete-image-modal .modal-footer #button_cancel").click(function() {
+		$('.delete-image-modal').hide();
+	});
+	
+	$(".delete-image-modal .modal-footer #button_confirm").click(function() {
+		var request = $.ajax({
+			url: window.location.pathname+"/usun-zdjecie",
+			type: "POST",
+			datatype: "json"
+		});   
+	
+		request.done(function(results){  
+			$('.delete-image-modal').hide(); 
+			path = window.location.pathname;
+			index = path.indexOf('zdjecie');
+			window.location.href = path.substring(0,index-1);
+		});
+	});
+}
+

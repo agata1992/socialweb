@@ -343,12 +343,76 @@ class Main_PageController extends Controller{
 					else{
 						$db_service->set_image_description($description,$image);
 						
-						}
+					}
 				}
 				
 				return new JsonResponse($results);
 			}
 		}
+		else
+			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
+	public function delete_imgAction(CookieService $cookie_service,DBService $db_service,FileService $file_service,Request $request,$album_id,$image_id){
+		if($request->isXmlHttpRequest() == "true"){
+			$user = $cookie_service->check_exist_user_cookie();
+
+			if($user == '')
+				return new RedirectResponse('/socialweb/web/app_dev.php/login');
+
+			$user_data = $this->getDoctrine()
+			->getRepository(Users::class)->findOneBy(['email' => $user]);
+
+			$user_data = $db_service->get_user_data();
+			$name = $user_data[1];
+			$surname = $user_data[2];
+			$user_id = $user_data[0];
+		
+			$album = $db_service->get_user_album_by_id($album_id);
+
+			if($album == null){
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user,'name' => $name,'surname' => $surname));
+			}
+			else{
+				$image = $db_service->get_image_by_image_id($image_id,$album_id);
+			
+				if($image == null){
+					return $this->render('page_no_found.html.twig',array(
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user,'name' => $name,'surname' => $surname));
+				}
+				else{
+					$file_service->remove_user_image($image->getimage_name());
+					$db_service->remove_image_info($image);
+						
+						
+				
+				
+				
+				
+				}
+			}
+		
+		
+		
+		
+		
+		
+			return new JsonResponse('');
+		}
+		else
+			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
+			
+			
+			
+			
+		
+		
+		
+		}
+	
+	
+	
 }
 ?>
