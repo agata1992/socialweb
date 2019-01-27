@@ -158,6 +158,9 @@ $("#image-feedback").hide();
 $("#album-name-feedback").hide();
 $("#add-album-feedback").hide();
 
+$("#replay-image-comment-div").hide();
+
+
 $('#add-image').change(function(){
 	$('#upload-form').submit();
 });
@@ -239,6 +242,13 @@ $('#title-friends').click(function (event) {
 $('#title-galery').click(function (event) {
 	window.location.href = "/socialweb/web/app_dev.php/profil/galeria";	
 });
+
+$("#image-comments-replay-button").click(function() {
+	if($('#replay-image-comment-div').is(':hidden'))
+		$('#replay-image-comment-div').show();
+	else
+		$('#replay-image-comment-div').hide();
+	});
 
 function Register(){
 	var name = document.getElementById("reg-name").value;
