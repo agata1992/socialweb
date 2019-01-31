@@ -136,7 +136,13 @@ window.onload = function(event) {
 		$("#con-image").show();
 		$("#setting-image-div").show();
 	}
-};
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/page") &&
+		!window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/page/[0-9]*")){
+		window.location.pathname = window.location.pathname + "/1";
+	}
+}
+
 
 $("#row-reg1").hide();
 $("#row-reg2").hide();
@@ -169,7 +175,7 @@ $("#upload-form").submit(function(e) {
 	e.preventDefault();
 	var data=new FormData(this);
 	var request = $.ajax({
-		url: window.location.pathname+"/upload",
+		url:window.location.pathname+"/upload",
 		type: "POST",
 		datatype: "json",
 		data:  data,
@@ -225,22 +231,25 @@ $("#title-reg").click(function() {
 });
 
 $('#title-posts').click(function (event) {
-	window.location.href = "/socialweb/web/app_dev.php/profil/posty";
+	if(window.location.pathname != "/socialweb/web/app_dev.php/profil/posty")
+	window.location.pathname = "/socialweb/web/app_dev.php/profil/posty";
 	
 });
 
 $('#title-profile').click(function (event) {
-	window.location.href = "/socialweb/web/app_dev.php/profil/omnie";	
+	if (window.location.pathname != "/socialweb/web/app_dev.php/profil/omnie")
+		window.location.pathname = "/socialweb/web/app_dev.php/profil/omnie";	
 });
 
 
 $('#title-friends').click(function (event) {
-	alert('kk');
-	window.location.href = "/socialweb/web/app_dev.php/profil/znajomi";	
+	if (window.location.pathname != "/socialweb/web/app_dev.php/profil/znajomi")
+	window.location.pathname = "/socialweb/web/app_dev.php/profil/znajomi";	
 });
 
 $('#title-galery').click(function (event) {
-	window.location.href = "/socialweb/web/app_dev.php/profil/galeria";	
+	if (window.location.pathanme != "/socialweb/web/app_dev.php/profil/galeria")
+	window.location.pathname = "/socialweb/web/app_dev.php/profil/galeria";	
 });
 
 $("#image-comments-replay-button").click(function() {
@@ -453,9 +462,9 @@ function edit_image_description(){
 	});
 	
 	$("#edit-image-description-modal .modal-footer #button_confirm").click(function() {
-		description = $('#img-description').val();
+		var description = $('#img-description').val();
 		var data='&description='+description;
-		
+		alert("desc"+description);
 		var request = $.ajax({
 			url: window.location.pathname+"/edytuj_opis",
 			type: "POST",
@@ -466,6 +475,7 @@ function edit_image_description(){
 		request.done(function(results){  
 			if(results == ''){
 				$('#edit-image-description-modal').hide(); 
+				alert('pppp');
 				location.reload();
 			}
 			else{

@@ -42,9 +42,10 @@ class Main_PageController extends Controller{
 		}
 	}
 
-	public function galeryAction(CookieService $cookie_service,DBService $db_service,$album_id){
+	public function galeryAction(CookieService $cookie_service,DBService $db_service,$album_id,$page){
 		$user = $cookie_service->check_exist_user_cookie();
 
+		
 		if($user == '')
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
@@ -57,10 +58,19 @@ class Main_PageController extends Controller{
 			'user' => $user_data));
 		}
 		else{
+			$images_on_page =12;
+			
 			$images = $db_service->get_images_by_album_id($album_id);
-			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-			'subpage' => 'album','album' => $album,'images' => $images));
+			$count_images = count($images);
+			
+			if(($count_images/$images_on_page)<($page-1))
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data));
+			else
+				return $this->render('main_page.html.twig', array(
+				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
+				'subpage' => 'album','album' => $album,'images' => $images,'page' => $page));
 		}
 	}
 
@@ -93,7 +103,6 @@ class Main_PageController extends Controller{
 			}
 		}
 	}
-
 
 	public function uploadAction(CookieService $cookie_service,DBService $db_service,FileService $file_service,Request $request,$album_id){
 		$user = $cookie_service->check_exist_user_cookie();
