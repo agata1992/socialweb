@@ -131,22 +131,75 @@
 								</div>
 							
 							</div>
+							{% set albums_on_page = 4 %}
+							{% set all_albums = albums | length %}
+							{% set begin = (page * albums_on_page) - albums_on_page %}
+							{% set end = begin + albums_on_page %}
+							{% set all_pages = all_albums / albums_on_page %}
+							{% set all_pages = all_pages | round(0,'ceil') %}
 							{% set i = 0 %}
+							{% set j = 0 %}
+							
 							{% for album in albums %}
-								{% if i%4==0 %}
-									<div class="row text-white row-galery">
+								{% if j >= begin and j < end %}
+									{% if i % 4==0 %}
+										<div class="row text-white row-galery">
+									{% endif %}
+									<div class="col-sm-3 text-center margin-col galery-div">
+										<div class="bg-secondary" style="border:1px solid;padding:5px;">
+											<a href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page"><img src="{{ asset('service-image/no_image.png') }}" width="150px" class="img-fluid rounded"></a>
+											<h5 class="text-truncate">{{album.album_name}}</h5>
+										</div>
+									</div>
+									{% if i % 4 == 3 or j == all_albums - 1%}
+										</div>
+									{% endif %}
+									{% set i = i + 1 %}
 								{% endif %}
-								<div class="col-sm-3 text-center margin-col galery-div">
-									<div class="bg-secondary" style="border:1px solid;padding:5px;">
-										<a href="galeria/album/{{album.id}}/page"><img src="{{ asset('service-image/no_image.png') }}" width="150px" class="img-fluid rounded"></a>
-										<h5 class="text-truncate">{{album.album_name}}</h5>
+								{% set j = j + 1 %}
+							{% endfor %}
+							
+							{% if all_albums > albums_on_page %}
+								<div class="row row-margin3">
+									<div class="col-12 text-center">
+										<nav>
+											<ul class="pagination justify-content-center">
+												{% if page == 1 %}
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/2">2</a></li>
+													{% if all_pages >= 3 %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/3">3</a></li>
+													{% endif %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{all_pages}}">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{page+1}}">Następne</a></li>
+												{% elseif page == all_pages %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{page-1}}">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/1"><<</a></li>
+													{% if all_pages >= 3 %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{page-2}}">{{page - 2}}</a></li>
+													{% endif %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{page-1}}">{{page - 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="/socialweb/web/app_dev.php/profil/galeria/{{page}}">{{page}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+												{% else %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{page-1}}">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/1"><<</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="/socialweb/web/app_dev.php/profil/galeria/{{page - 1}}">{{page - 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="/socialweb/web/app_dev.php/profil/galeria/{{page}}">{{page}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="/socialweb/web/app_dev.php/profil/galeria/{{page + 1}}">{{page + 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="/socialweb/web/app_dev.php/profil/galeria/{{all_pages}}">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/{{page+1}}">Następne</a></li>
+												{% endif %}
+											</ul>
+										</nav>
 									</div>
 								</div>
-								{% if i%4==3 %}
-									</div>
-								{% endif %}
-								{% set i = i+1 %}
-							{% endfor %}
+							{% endif %}
+							
+							
 						</div>
 					{% endif %}
 					
@@ -226,15 +279,15 @@
 									</div><h6 id="album-name-feedback" class="text-danger"></h6>
 								</div>
 							</div>
-							
 							<div class="row">
 								<div class="col-12 text-center text-white">
 									<h5>.</h5>
 								</div>
 							</div>
+							
 							{% set i = 0 %}
 							{% set image_on_page = 12 %}
-							{% set all_image = images|length %}
+							{% set all_image = images | length %}
 							{% set begin = (page * image_on_page) - image_on_page %}
 							{% set end = begin + image_on_page %}
 							{% set all_pages = all_image / image_on_page %}
@@ -242,22 +295,22 @@
 							{% set i = 0 %}
 							{% set j = 0 %}
 							{% for image in images %}
-								{% if j>=begin and j<end %}
+								{% if j >= begin and j < end %}
 									{% if i%4==0 %}
 										<div class="row text-white">
 									{% endif %}
 									<div class="col-sm-3 text-center margin-col">
-										<a href="{{album.getid}}/page/zdjecie/{{image.id}}">
+										<a href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/zdjecie/{{image.id}}">
 											<img src="{{ asset('images/' ~image.image_name) }}" width="150px" class="img-fluid rounded galery-img">
 										</a>
 									</div>
-									{% if i%4 == 3 or j == all_image-1 %}
+									{% if i % 4 == 3 or j == all_image - 1 %}
 										</div>
 									{% endif %}
 									
-									{% set i = i+1 %}
+									{% set i = i + 1 %}
 								{% endif %}
-								{% set j = j+1 %}
+								{% set j = j + 1 %}
 							{% endfor %}
 							
 							{% if all_image > image_on_page %}
@@ -270,7 +323,7 @@
 													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
 													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
 													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/2">2</a></li>
-													{% if all_pages >=3 %}
+													{% if all_pages >= 3 %}
 														<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/3">3</a></li>
 													{% endif %}
 													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/{{all_pages}}">>></a></li>
@@ -278,7 +331,7 @@
 												{% elseif page == all_pages %}
 													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/{{page-1}}">Poprzednie</a></li>
 													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/1"><<</a></li>
-													{% if all_pages >=3 %}
+													{% if all_pages >= 3 %}
 														<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/{{page-2}}">{{page - 2}}</a></li>
 													{% endif %}
 													<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/profil/galeria/album/{{album.id}}/page/{{page-1}}">{{page - 1}}</a></li>
@@ -299,7 +352,7 @@
 									</div>
 								</div>
 							{% endif %}
-							{% if images|length ==0 %}	
+							{% if images | length == 0 %}	
 								<div class="row text-white">
 									<div class="col-sm-12 text-center margin-col">
 										<h5>Nie posiadasz zdjęć w tym albumie</h5>

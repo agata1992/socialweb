@@ -70,7 +70,8 @@ window.onload = function(event) {
 	}
 	
 	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria"){
+	window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria" ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/[0-9]*")){
 	
 		$('#title-galery').addClass( "log-reg-title-active" );
 		$('#title-galery').removeClass( "pointer" );
@@ -464,7 +465,6 @@ function edit_image_description(){
 	$("#edit-image-description-modal .modal-footer #button_confirm").click(function() {
 		var description = $('#img-description').val();
 		var data='&description='+description;
-		alert("desc"+description);
 		var request = $.ajax({
 			url: window.location.pathname+"/edytuj_opis",
 			type: "POST",
@@ -475,7 +475,6 @@ function edit_image_description(){
 		request.done(function(results){  
 			if(results == ''){
 				$('#edit-image-description-modal').hide(); 
-				alert('pppp');
 				location.reload();
 			}
 			else{

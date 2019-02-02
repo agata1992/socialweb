@@ -18,7 +18,7 @@ use AppBundle\Service\FileService;
 
 class Main_PageController extends Controller{
 
-	public function indexAction(CookieService $cookie_service,DBService $db_service,$subpage){
+	public function indexAction(CookieService $cookie_service,DBService $db_service,$subpage,$page){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -29,11 +29,18 @@ class Main_PageController extends Controller{
 		if($subpage == "galeria"){
 			$user_id = $user_data[0];
 
+			$albums_on_page = 4;
 			$albums = $db_service->get_user_albums();
-
-			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-			'subpage' => $subpage,'albums' => $albums));
+			$count_albums = count($albums);
+			
+			if(($count_albums/$albums_on_page)<($page-1))
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data));
+			else
+				return $this->render('main_page.html.twig', array(
+				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
+				'subpage' => $subpage,'albums' => $albums,'page' =>$page));
 		}
 		else{
 			return $this->render('main_page.html.twig', array(
@@ -51,7 +58,7 @@ class Main_PageController extends Controller{
 
 		$user_data = $db_service->get_user_data();
 		$album = $db_service->get_user_album_by_id($album_id);
-
+		
 		if($album == null){
 			return $this->render('page_no_found.html.twig',array(
 			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
