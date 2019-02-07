@@ -7,6 +7,9 @@ use Doctrine\ORM\EntityManager;
 use  AppBundle\Entity\Users;
 use  AppBundle\Entity\Albums;
 use  AppBundle\Entity\Images;
+use  AppBundle\Entity\Friends;
+use  AppBundle\Entity\Invitations;
+
 
 
 class DBService{
@@ -163,6 +166,73 @@ class DBService{
 		$user->setprofile_img($image->getimage_name());
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
+	}
+	
+	public function search_users($name,$city,$gender){
+		$this->get_user_data();
+		
+		$search_users = $this->entityManager
+		->getRepository(Users::class)->createQueryBuilder('u')
+		->where('CONCAT(u.name,  \' \',u.surname) LIKE :name and u.id <> :my_id and u.city LIKE :city')->setParameter(":name", '%'.$name.'%')
+		->setParameter(":city", '%'.$city.'%')->setParameter(":my_id",$this->user_data_array[0]);
+		
+		if($gender != '')
+			$search_users = $search_users->andwhere('u.gender = :gender')->setParameter(":gender", $gender);
+		
+		$search_users = $search_users->getQuery()->getResult();
+		
+		return $search_users;
+	}
+	
+	public function check_friend($searched_user){
+		$this->get_user_data();
+		
+		$results = 0;
+		$friends = $this->entityManager
+		->getRepository(Friends::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' => $searched_user->getid()]);
+		
+		$friends2 = $this->entityManager
+		->getRepository(Invitations::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' => $searched_user->getid()]);
+		
+		if($friends != null)
+			$results = 1;
+		
+		if($friends2 != null)
+			$results = 2;
+		
+		return $results;
+	}
+	
+	public function invitations($friend_id){
+		$this->get_user_data();
+		
+		$user = $this->entityManager
+		->getRepository(Users::class)->findOneBy(['id' => $friend_id]);
+		
+		if(!$user == null){
+		
+			$friends1 = $this->entityManager
+			->getRepository(Friends::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' =>$friend_id]);
+			
+			$friends2 = $this->entityManager
+			->getRepository(Friends::class)->findOneBy(['user1_id' => $friend_id,'user2_id' => $this->user_data_array[0]]);
+			
+			$invitations1 = $this->entityManager
+			->getRepository(Invitations::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' =>$friend_id]);
+			
+			$invitations2 = $this->entityManager
+			->getRepository(Invitations::class)->findOneBy(['user1_id' => $friend_id,'user2_id' => $this->user_data_array[0]]);
+			
+			if($friends1 == null && $friends2 == null && $invitations1 == null && $invitations2 == null){
+				$invitations_ = new Invitations();
+				$invitations_->setuser1_id($this->user_data_array[0]);
+				$invitations_->setuser2_id($friend_id);
+				$invitations_->setadd_date(new \DateTime(date("Y-m-d H:i")));
+				
+				$this->entityManager->persist($invitations_);
+				$this->entityManager->flush();
+			}
+		}
 	}
 }
 ?>

@@ -142,6 +142,12 @@ window.onload = function(event) {
 		!window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/page/[0-9]*")){
 		window.location.pathname = window.location.pathname + "/1";
 	}
+	
+	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/wyszukiwarka")){
+		if($('#gender-select').val() == 'Kobieta' || $('#gender-select').val() == 'Mężczyzna')
+			$('#select-gender-delete').show();
+	}
 }
 
 
@@ -152,13 +158,6 @@ $("#row-reg4").hide();
 $("#row-reg5").hide();
 $('#container2').removeClass( "d-flex" );
 $("#container2").css('display', 'none');
-
-$("#con-profile").hide();
-$("#con-friends").hide();
-$("#con-galery").hide();
-$("#con-album").hide();
-$("#con-image").hide();
-
 
 $("#dropdown-nav1").css('top', $("#nav1").height()+20);
 $("#image-feedback").hide();
@@ -409,8 +408,14 @@ function add_album(){
 	new_album = $('#new_album').val();
 	var data='&name='+new_album;
 	
+	if(!window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/[0-9]*"))
+		$url = window.location.pathname+"/1/dodaj-album";
+	else
+		$url = window.location.pathname+"/dodaj-album";
+	
+	
 	var request = $.ajax({
-		url: window.location.pathname+"/dodaj-album",
+		url: $url,
 		type: "POST",
 		datatype: "json",
 		data: data
@@ -514,7 +519,7 @@ function delete_image(){
 }
 	
 function set_as_profile_img(){
-		$('#decision-modal .modal-body p').html("Czy chcesz ustawić zdjęcie jako profilowe?")
+	$('#decision-modal .modal-body p').html("Czy chcesz ustawić zdjęcie jako profilowe?")
 	$('#decision-modal').addClass('profile-image-modal');
 	$('.profile-image-modal').show();
 	
@@ -540,4 +545,55 @@ function set_as_profile_img(){
 	});
 }
 
+function add_to_friends(friend_id){
+	var data='&friend_id='+friend_id;
+	
+	if(window.location.pathname == '/socialweb/web/app_dev.php/wyszukiwarka')
+		url = window.location.pathname+"/1/add-to-friends";
+	else
+		url = window.location.pathname+"/add-to-friends";
+	
+	var request = $.ajax({
+			url: url,
+			type: "POST",
+			datatype: "json",
+			data: data
+		});
+	 
+		request.done(function(results){  
+			location.reload();
+			
+		});
+}
 
+$('#range1').change(function(){
+	if($('#range-input2').val() == '')
+		$('#range-input1').val($('#range1').val());
+	else{
+		if($('#range1').val() <= $('#range2').val())
+			$('#range-input1').val($('#range1').val());
+		else
+			$('#range1').val($('#range-input1').val());
+	}
+});
+
+$('#range2').change(function(){
+	if($('#range-input1').val() == '')
+		$('#range-input2').val($('#range2').val());
+	else{
+		if($('#range2').val() >= $('#range1').val())
+			$('#range-input2').val($('#range2').val());
+		else
+			$('#range2').val($('#range-input2').val());
+		}
+});
+
+$('#gender-select').change(function(){
+	if($('#gender-select').val() == 'Kobieta' || $('#gender-select').val() == 'Mężczyzna')
+		$('#select-gender-delete').show();
+});
+
+$('#select-gender-delete').click(function (event) {
+	$('#gender-select').val('Płeć');
+	$('#select-gender-delete').hide();
+});

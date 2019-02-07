@@ -1,0 +1,206 @@
+{% extends 'main.html.twig' %}
+
+{% block content %}
+	<div class=" bg-dark text-white" id="container5">
+		<div class="container-fluid">
+			<div class="align-items-center row" id="row3">
+				<div class=" col-12">
+					<h5><i class="fa fa-search"></i>Wyszukiwarka</h5>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="container6">
+		<div class="container-fluid bg-dark">
+			<div class="container" id="search-container">
+				<div class="row text-white">
+					<div class="col-8 margin-col">
+						<div class="bg-secondary" style="border:1px solid;padding:5px;">
+							<h6>Wyszukaj osoby</h6>
+							<form class="search-form" action="/socialweb/web/app_dev.php/wyszukiwarka" method="GET">
+								<div class="row row-margin2">
+									<div class="col-9">
+										<input type="text" class="form-control" name="name" placeholder="Imię i nazwisko" value="{{ searcher_user_name }}"/>
+									</div>
+								</div>
+								<div class="row row-margin2">
+									<div class="col-9">
+										<input type="text" class="form-control" name="city" placeholder="Miejscowość" value="{{ searcher_user_city }}"/>
+									</div>
+								</div>
+								<div class="align-items-center row row-margin2">
+									<div class="col-4">
+										<select class="form-control" name="gender" id="gender-select">
+											<option selected disabled="true">Płeć</option>
+											{% if searcher_user_gender =="Kobieta" %}
+												<option selected>Kobieta</option>
+											{% else %}
+												<option>Kobieta</option>
+											{% endif %}
+											{% if searcher_user_gender =="Mężczyzna" %}
+												<option selected>Mężczyzna</option>
+											{% else %}
+												<option>Mężczyzna</option>
+											{% endif %}
+										</select> 
+									</div>
+								
+									<div class="col-1" id="select-gender-delete">
+										<a type="text" class="btn btn-primary" title="Usuń wybór">
+										<h6 class="pointer">X</h6></a>
+									</div>
+								</div>
+								<div class="row row-margin2">
+									<div class="col-3">
+										{% if searcher_user_min_age == '' %}
+											<input type="range" class="range bg-dark slider" id="range1">
+										{% else %}
+											<input type="range" class="range bg-dark slider" id="range1" value="{{ searcher_user_min_age }}">
+										{% endif %}
+									</div>
+									<div class="col-3">
+										{% if searcher_user_min_age == '' %}
+											<input type="text" class="form-control" id="range-input1" name="min_age" placeholder="Wiek od"/>
+										{% else %}
+											<input type="text" class="form-control" id="range-input1" name="min_age" placeholder="Wiek od" value="{{ searcher_user_min_age }}"/>
+										{% endif %}
+									</div>
+									<div class="col-3">
+										{% if searcher_user_max_age == '' %}
+											<input type="range" class="range bg-dark slider" id="range2">
+										{% else %}
+											<input type="range" class="range bg-dark slider" id="range2" value="{{ searcher_user_max_age }}">
+										{% endif %}
+									</div>
+									<div class="col-3">
+										{% if searcher_user_max_age == '' %}
+											<input type="text" class="form-control" id="range-input2" name="max_age" placeholder="Wiek do"/>
+										{% else %}
+											<input type="text" class="form-control" id="range-input2" name="max_age" placeholder="Wiek do" value="{{ searcher_user_max_age }}"/>
+										{% endif %}
+									</div>
+								</div>
+								<div class="row row-margin2">
+									<div class="col-4">
+										<button class="btn btn-primary">Szukaj</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+				{% set users_on_page = 9 %}	
+				{% set all_users = searched_users | length %}
+				{% set begin = (page * users_on_page) - users_on_page %}
+				{% set end = begin + users_on_page %}
+				{% set all_pages = all_users / users_on_page %}
+				{% set all_pages = all_pages | round(0,'ceil') %}
+				{% set i = 0 %}
+				{% set j = 0 %}
+				
+				{% for searched_user in searched_users %}
+					{% if j >= begin and j < end %}
+						{% if i % 3==0 %}
+							<div class="row text-white row-galery">
+						{% endif %}
+						<div class="col-sm-4 text-center margin-col">
+							<div class="bg-secondary" style="border:1px solid;padding:5px;">
+								{% if searched_user.profile_img == '' %}
+									<a href="#" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
+								{%else %}
+									<a href="#" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('images/'~searched_user.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
+								{% endif %}
+								
+								<h5 class="text-truncate">{{ searched_user.name }} {{ searched_user.surname }}</h5>
+								{% if searched_user.city == '' %}
+									<h6>-</h6>
+								{% else %}
+									<h6>{{ searched_user.city }} </h6>
+								{% endif %}
+								{% if searched_user.age == 0 %}
+									<h6> {{searched_user.age}} lat </h6>
+								{% elseif searched_user.age == 1 %}
+									<h6> {{searched_user.age}} rok </h6>
+								{% else %}
+									<h6> {{searched_user.age}} lata </h6>
+								{% endif %}   
+									   
+								<h5>
+									<a href="#"><i class="fa fa-envelope text-white"></i></a>
+									{% if searched_user.friendship == 0 %}
+										<a class="pointer" title="Zaproś do znajomych" onclick="add_to_friends({{ searched_user.id }})"><i class="fa fa-user-plus text-white"></i></a>
+									{% elseif searched_user.friendship == 1 %}
+										<a style="pointer-events: auto" title="Jesteście znajomymi" class="btn disabled pointer"><i class="fa fa-user-plus text-white"></i></a>
+									{% else %}
+										<a style="pointer-events: auto" title="Wysłano zaproszenie" class="btn disabled pointer"><i class="fa fa-user-plus text-white"></i></a>
+									{% endif %}
+								</h5>
+							</div>
+						</div>
+									
+						{% if i % 3 == 2 or j== all_users - 1%}
+							</div>
+						{% endif %}
+						{% set i = i + 1 %}	
+					{% endif %}
+					{% set j = j + 1 %}
+				{% endfor %}
+				
+				{% if all_users > users_on_page %}
+					<div class="row row-margin3">
+						<div class="col-12 text-center">
+							<nav>
+								<ul class="pagination justify-content-center">
+									{% if page == 1 %}
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+										<li class="page-item"><a class="page-link bg-primary text-white" 
+										href="/socialweb/web/app_dev.php/wyszukiwarka/2?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">2</a></li>
+										{% if all_pages >= 3 %}
+											<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/3?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">3</a></li>
+										{% endif %}
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{all_pages}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">>></a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page+1}}?name={{searcher_user_name}}">Następne</a></li>
+									{% elseif page == all_pages %}
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page-1}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">Poprzednie</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/1?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}"><<</a></li>
+									{% if all_pages >= 3 %}
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page-2}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">{{page - 2}}</a></li>
+									{% endif %}
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page-1}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">{{page - 1}}</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">{{page}}</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+									{% else %}
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page-1}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">Poprzednie</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/1?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}"><<</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page - 1}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">{{page - 1}}</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">{{page}}</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page + 1}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">{{page + 1}}</a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white btn" href="/socialweb/web/app_dev.php/wyszukiwarka/{{all_pages}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">>></a></li>
+										<li class="page-item"><a class="page-link bg-primary text-white" href="/socialweb/web/app_dev.php/wyszukiwarka/{{page+1}}?name={{searcher_user_name}}&city={{searcher_user_city}}&gender={{searcher_user_gender}}&min_age={{searcher_user_min_age}}&max_age={{searcher_user_max_age}}">Następne</a></li>
+									{% endif %}
+								</ul>
+							</nav>
+						</div>
+					</div>
+				{% endif %}		
+						
+				{% if searched_users | length == 0 %}	
+					<div class="row">
+						<div class="col-12 text-center text-white">
+							<h5>.</h5>
+						</div>
+					</div>
+					<div class="row text-white">
+						<div class="col-sm-12 text-center margin-col">
+							<h5>Brak wyników</h5>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

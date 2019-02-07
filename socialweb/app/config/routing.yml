@@ -44,3 +44,11 @@ signin:
 signout:
    path: /wyloguj
    defaults: {_controller: AppBundle:Login:signout}
+
+
+search:
+   path: /wyszukiwarka/{page}
+   defaults: {_controller: AppBundle:Search:index,page:1}
+add_to_friends:
+   path: /wyszukiwarka/{page}/add-to-friends
+   defaults: {_controller: AppBundle:Friends:add_to_friends,page:1}

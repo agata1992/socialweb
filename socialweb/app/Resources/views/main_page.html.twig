@@ -1,7 +1,7 @@
 {% extends 'main.html.twig' %}
 
 {% block content %}
-	<div  id="container3">
+	<div id="container3">
 		<div class="container-fluid">
 			<div class="row bottom-border2 text-white bg-dark" id="row-title">
 				<div class="col font-comic log-reg-title-active" id="title-posts">
@@ -26,7 +26,7 @@
 							</div>
 						</div>
 					</div>
-	
+					
 					<div class="container" id="con-profile">
 						<div class="row bg-success">
 							<div class="col-12">
@@ -34,7 +34,7 @@
 							</div>
 						</div>
 					</div>
-	
+					
 					<div class="container" id="con-friends">
 						<div class="row text-white">
 							<div class="col-12 text-center">
@@ -199,7 +199,18 @@
 								</div>
 							{% endif %}
 							
-							
+							{% if albums | length == 0 %}	
+								<div class="row">
+									<div class="col-12 text-center text-white">
+									<h5>.</h5>
+								</div>
+							</div>
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										<h5>Nie posiadasz żadnych albumów</h5>
+									</div>
+								</div>
+							{% endif %}
 						</div>
 					{% endif %}
 					
