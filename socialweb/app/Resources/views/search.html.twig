@@ -107,9 +107,9 @@
 						<div class="col-sm-4 text-center margin-col">
 							<div class="bg-secondary" style="border:1px solid;padding:5px;">
 								{% if searched_user.profile_img == '' %}
-									<a href="#" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
+									<a href="/socialweb/web/app_dev.php/user/{{ searched_user.id }}" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
 								{%else %}
-									<a href="#" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('images/'~searched_user.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
+									<a href="/socialweb/web/app_dev.php/user/{{ searched_user.id }}" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('images/'~searched_user.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
 								{% endif %}
 								
 								<h5 class="text-truncate">{{ searched_user.name }} {{ searched_user.surname }}</h5>

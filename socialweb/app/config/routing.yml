@@ -45,10 +45,20 @@ signout:
    path: /wyloguj
    defaults: {_controller: AppBundle:Login:signout}
 
-
 search:
    path: /wyszukiwarka/{page}
    defaults: {_controller: AppBundle:Search:index,page:1}
 add_to_friends:
    path: /wyszukiwarka/{page}/add-to-friends
    defaults: {_controller: AppBundle:Friends:add_to_friends,page:1}
+   
+user_profile:
+   path: /user/{user_id}/{subpage}/{page}
+   defaults: {_controller: AppBundle:User_profile:show_profile,subpage:"posty",page:1}
+other_user_galery:
+   path: /user/{user_id}/galeria/album/{album_id}/page/{page}
+   defaults: {_controller: AppBundle:User_profile:other_user_galery,page:1}
+   
+other_user_image:
+   path: /user/{user_id}/galeria/album/{album_id}/zdjecie/{image_id}
+   defaults: {_controller: AppBundle:User_profile:other_user_images} 

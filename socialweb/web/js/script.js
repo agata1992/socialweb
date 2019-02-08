@@ -1,8 +1,12 @@
 window.onload = function(event) {
 	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil"
-	|| window.location.pathname == "/socialweb/web/app_dev.php/profil/posty/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/posty"){
+	window.location.pathname == "/socialweb/web/app_dev.php/profil" ||
+	window.location.pathname == "/socialweb/web/app_dev.php/profil/posty/" || 
+	window.location.pathname == "/socialweb/web/app_dev.php/profil/posty" ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/") || 
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*") ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/posty/") || 
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/posty")){
 		
 		$('#title-posts').addClass( "log-reg-title-active" );
 		$('#title-posts').removeClass( "pointer" );
@@ -25,7 +29,10 @@ window.onload = function(event) {
 	}
 	
 	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie"){
+	window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie" ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/omnie/") ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/omnie")
+	){
 		
 		$('#title-profile').addClass( "log-reg-title-active" );
 		$('#title-profile').removeClass( "pointer" );
@@ -48,7 +55,9 @@ window.onload = function(event) {
 	}
 	
 	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/znajomi/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/znajomi"){
+	window.location.pathname == "/socialweb/web/app_dev.php/profil/znajomi" ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi/") ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi")){
 		$('#title-friends').addClass( "log-reg-title-active" );
 		$('#title-friends').removeClass( "pointer" );
 	
@@ -71,7 +80,9 @@ window.onload = function(event) {
 	
 	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria/" || 
 	window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria" ||
-	window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/[0-9]*")){
+	window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/[0-9]*") ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria/") ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria")){
 	
 		$('#title-galery').addClass( "log-reg-title-active" );
 		$('#title-galery').removeClass( "pointer" );
@@ -93,7 +104,8 @@ window.onload = function(event) {
 		$("#con-image").hide();
 	}
 	
-	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil/galeria/album")) {
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil/galeria/album") || 
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria/album")) {
 	
 		$('#title-galery').addClass( "log-reg-title-active" );
 		$('#title-galery').removeClass( "pointer" );
@@ -115,7 +127,8 @@ window.onload = function(event) {
 		$("#con-album").show();
 	}
 	
-	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/zdjecie")) {
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/zdjecie") ||
+	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria/album/[0-9]*/zdjecie")) {
 	
 		$('#title-galery').addClass( "log-reg-title-active" );
 		$('#title-galery').removeClass( "pointer" );
@@ -230,26 +243,74 @@ $("#title-reg").click(function() {
 	$("#row-reg5").show();
 });
 
-$('#title-posts').click(function (event) {
-	if(window.location.pathname != "/socialweb/web/app_dev.php/profil/posty")
-	window.location.pathname = "/socialweb/web/app_dev.php/profil/posty";
+$('#title-posts').click(function (event) {alert(window.location.pathname);
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil")){
+		if(window.location.pathname != "/socialweb/web/app_dev.php/profil/posty")
+			window.location.pathname = "/socialweb/web/app_dev.php/profil/posty";
+	}
+	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/user")){
+		location_ = window.location.pathname;
+		match_ = location_.match("/socialweb/web/app_dev.php/user/[0-9]*");
+		user_id = match_.toString().replace("/socialweb/web/app_dev.php/user/","");
+		
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/posty"))
+			window.location.pathname = "/socialweb/web/app_dev.php/user/"+user_id+"/posty";
+	}
 	
 });
 
 $('#title-profile').click(function (event) {
-	if (window.location.pathname != "/socialweb/web/app_dev.php/profil/omnie")
-		window.location.pathname = "/socialweb/web/app_dev.php/profil/omnie";	
+
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil")){
+		if (window.location.pathname != "/socialweb/web/app_dev.php/profil/omnie")
+			window.location.pathname = "/socialweb/web/app_dev.php/profil/omnie";
+	}
+	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/user")){
+		location_ = window.location.pathname;
+		match_ = location_.match("/socialweb/web/app_dev.php/user/[0-9]*");
+		user_id = match_.toString().replace("/socialweb/web/app_dev.php/user/","");
+		
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/omnie"))
+			window.location.pathname = "/socialweb/web/app_dev.php/user/"+user_id+"/omnie";
+	}
+	
 });
 
 
 $('#title-friends').click(function (event) {
-	if (window.location.pathname != "/socialweb/web/app_dev.php/profil/znajomi")
-	window.location.pathname = "/socialweb/web/app_dev.php/profil/znajomi";	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil")){
+		if (window.location.pathname != "/socialweb/web/app_dev.php/profil/znajomi")
+			window.location.pathname = "/socialweb/web/app_dev.php/profil/znajomi";
+	}
+	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/user")){
+		location_ = window.location.pathname;
+		match_ = location_.match("/socialweb/web/app_dev.php/user/[0-9]*");
+		user_id = match_.toString().replace("/socialweb/web/app_dev.php/user/","");
+		alert(user_id);
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi"))
+			window.location.pathname = "/socialweb/web/app_dev.php/user/"+user_id+"/znajomi";
+	}
 });
 
 $('#title-galery').click(function (event) {
-	if (window.location.pathanme != "/socialweb/web/app_dev.php/profil/galeria")
-	window.location.pathname = "/socialweb/web/app_dev.php/profil/galeria";	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil")){
+		if (window.location.pathanme != "/socialweb/web/app_dev.php/profil/galeria")
+			window.location.pathname = "/socialweb/web/app_dev.php/profil/galeria";
+	}
+	
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/user")){
+		location_ = window.location.pathname;
+		match_ = location_.match("/socialweb/web/app_dev.php/user/[0-9]*");
+		user_id = match_.toString().replace("/socialweb/web/app_dev.php/user/","");
+		
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria"))
+			window.location.pathname = "/socialweb/web/app_dev.php/user/"+user_id+"/galeria";
+	}
+	
+	
 });
 
 $("#image-comments-replay-button").click(function() {

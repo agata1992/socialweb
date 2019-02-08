@@ -1,0 +1,564 @@
+<div id="container3">
+		<div class="container-fluid">
+			<div class="row bottom-border2 text-white bg-dark" id="row-title">
+				<div class="col font-comic log-reg-title-active" id="title-posts">
+					<h5>POSTY</h5>
+				</div>
+				<div class="col font-comic pointer" id="title-profile">
+					<h5>MÓJ PROFIL</h5>
+				</div>
+				<div class="col font-comic pointer" id="title-friends">
+					<h5>ZNAJOMI</h5>
+				</div>			  
+				<div class="col font-comic pointer" id="title-galery">
+					<h5>GALERIA</h5>
+				</div>			
+			</div>
+			<div class="row bg-dark" id="main-row" >
+				<div class="col-12">
+					<div class="container" id="con-posts">
+						<div class="row bg-success">
+							<div class="col-12">
+								POSTY
+							</div>
+						</div>
+					</div>
+					
+					<div class="container" id="con-profile">
+						<div class="row bg-success">
+							<div class="col-12">
+								PROFIL
+							</div>
+						</div>
+					</div>
+					
+					<div class="container" id="con-friends">
+						<div class="row text-white">
+							<div class="col-12 text-center">
+								<h5> ZNAJOMI(5)</h5>
+							</div>
+						</div>
+						
+						<div class="row text-white">
+							<div class="col-6 margin-col">
+								<div class="bg-secondary" style="border:1px solid;padding:5px;">
+									<h6>Wyszukaj znajomego</h6>
+									<div class="input-group">
+										<input type="text" class="form-control" placeholder="Szukaj"/>
+										<button class="btn btn-default bg-primary">
+											<i class="fa fa-search"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row text-white">
+							<div class="col-sm-4 text-center margin-col">
+								<div class="bg-secondary" style="border:1px solid;padding:5px;">
+									<img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle">
+									<h5 class="text-truncate">Imie Nazwisko</h5>
+									<h6>Warszawa</h6>
+									<h6>24 lata</h6>
+									<h5><a href="#"><i class="fa fa-envelope text-white"></i></a>
+										<a href="#"><i class="fa fa-user-plus text-white"></i></a>
+									</h5>
+								</div>
+							</div>
+							
+							<div class="col-sm-4 text-center margin-col">
+								<div class="bg-secondary" style="border:1px solid;padding:5px;">
+									<img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle">
+									<h5 class="text-truncate">Imie Nazwisko</h5>
+									<h6>Warszawa</h6>
+									<h6>24 lata</h6>
+									<h5>
+										<a href="#" title="Wyśij wiadomość prywatną"><i class="fa fa-envelope text-white"></i></a>
+									<a href="#" title="Dodaj użytkownika do znajomych"><i class="fa fa-user-plus text-white"></i></a>
+									</h5>
+								</div>
+							</div>
+							
+							<div class="col-sm-4 text-center margin-col">
+								<div class="bg-secondary" style="border:1px solid;padding:5px;">
+									<img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle">
+									<h5 class="text-truncate">Imie Nazwisko</h5>
+									<h6>Warszawa</h6>
+									<h6>24 lata</h6>
+									<h5>
+										<a href="#"><i class="fa fa-envelope text-white"></i></a>
+										<a href="#"><i class="fa fa-user-plus text-white"></i></a>
+									</h5>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row text-white">
+							<div class="col-12 text-center znajomi-col">
+								<div class="align-items-center" style="padding:5px;">
+									<nav>
+										<ul class="pagination justify-content-center">
+											<li class="page-item bg-secondary"><a class="page-link bg-secondary text-white" href="#">Poprzednie</a></li>
+											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">1</a></li>
+											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">2</a></li>
+											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">3</a></li>
+											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">Następne</a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					{% if subpage == 'galeria' %}
+						<div class="container" id="con-galery">
+							<div class="row">
+								<div class="col-12 text-center text-white">
+									<h5>GALERIA({{albums|length}})</h5>
+								</div>
+							</div>
+							{% if page_name == "Strona Główna" %}
+								<div class="row text-white row-galery">
+									<div class="col-sm-7 text-center margin-col">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="" id="new_album"/>
+											<button type="button" class="btn btn-primary margin_left20" onclick="add_album()">Dodaj album</button>
+										</div>
+										<h6 id="add-album-feedback" class="text-danger"></h6>
+									</div>
+								</div>
+							{% endif %}
+							{% set albums_on_page = 4 %}
+							{% set all_albums = albums | length %}
+							{% set begin = (page * albums_on_page) - albums_on_page %}
+							{% set end = begin + albums_on_page %}
+							{% set all_pages = all_albums / albums_on_page %}
+							{% set all_pages = all_pages | round(0,'ceil') %}
+							{% set i = 0 %}
+							{% set j = 0 %}
+							
+							{% if page_name == "Strona Główna" %}
+								{% set link = "/socialweb/web/app_dev.php/profil" %}
+							{% elseif page_name == "Profil" %}
+								{% set link = "/socialweb/web/app_dev.php/user/" ~user_profile.id %}
+							{% endif %}
+								
+							{% for album in albums %}
+								{% if j >= begin and j < end %}
+									{% if i % 4==0 %}
+										<div class="row text-white row-galery">
+									{% endif %}
+									<div class="col-sm-3 text-center margin-col galery-div">
+										<div class="bg-secondary" style="border:1px solid;padding:5px;">
+											<a href="{{ link }}/galeria/album/{{album.id}}/page"><img src="{{ asset('service-image/no_image.png') }}" width="150px" class="img-fluid rounded"></a>
+											<h5 class="text-truncate">{{album.album_name}}</h5>
+										</div>
+									</div>
+									{% if i % 4 == 3 or j == all_albums - 1%}
+										</div>
+									{% endif %}
+									{% set i = i + 1 %}
+								{% endif %}
+								{% set j = j + 1 %}
+							{% endfor %}
+							
+							{% if all_albums > albums_on_page %}
+								<div class="row row-margin3">
+									<div class="col-12 text-center">
+										<nav>
+											<ul class="pagination justify-content-center">
+												{% if page == 1 %}
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/2">2</a></li>
+													{% if all_pages >= 3 %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/3">3</a></li>
+													{% endif %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{all_pages}}">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{page+1}}">Następne</a></li>
+												{% elseif page == all_pages %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{page-1}}">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/1"><<</a></li>
+													{% if all_pages >= 3 %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{page-2}}">{{page - 2}}</a></li>
+													{% endif %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{page-1}}">{{page - 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/galeria/{{page}}">{{page}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+												{% else %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{page-1}}">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/1"><<</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/{{page - 1}}">{{page - 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/galeria/{{page}}">{{page}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/{{page + 1}}">{{page + 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/{{all_pages}}">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/{{page+1}}">Następne</a></li>
+												{% endif %}
+											</ul>
+										</nav>
+									</div>
+								</div>
+							{% endif %}
+							
+							{% if albums | length == 0 %}	
+								<div class="row">
+									<div class="col-12 text-center text-white">
+									<h5>.</h5>
+								</div>
+							</div>
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										{% if page_name == "Strona Główna" %}
+											<h5>Nie posiadasz żadnych albumów</h5>
+										{% elseif page_name == "Profil" %}
+											<h5>Użytkownik nie posiada żadnych albumów</h5>
+										{% endif %}
+									</div>
+								</div>
+							{% endif %}
+						</div>
+					{% endif %}
+					
+					{% if subpage == 'album' %}
+						<div class="container" id="con-album">
+							<div class="row">
+								<div class="col-12 text-center text-white">
+									<h5>{{album.album_name}}({{images |length}})</h5>
+								</div>
+							</div>
+							{% if page_name == "Strona Główna" %}
+								<div class="row">
+									<div class="col-12 text-center text-white">
+										<h5>.</h5>
+									</div>
+								</div>
+							
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										<form method="POST" id="upload-form" enctype="multipart/form-data">
+											<label class="btn btn-primary btn-file">
+												<i class="fa fa-image"></i>
+												Dodaj zdjęcie do albumu 
+												<input accept="image/*" type="file" id="add-image" name="add-image">
+											</label>
+										</form>
+										<h6 id="image-feedback" class="text-danger"></h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12 text-center text-white">
+										<h5>.</h5>
+									</div>
+								</div>
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										<button type="button" class="btn btn-primary" onclick="delete_album()">
+											<i class="fa fa-trash"></i> 
+											Usuń cały album
+										</button>
+									
+									</div>
+								</div>
+							
+								<div class="row">
+									<div class="col-12 text-center text-white">
+										<h5>.</h5>
+									</div>
+								</div>
+							
+								<div class="row">
+									<div class="col-sm-12 text-center margin-col">
+										<div class="btn-group" role="group"  id="album_access">
+											{% if album.getalbum_access == 0 %}
+												<button type="button" class="btn btn-primary active" name="0" onclick="change_album_access(this.name)">Album publiczny</button>
+											{% else %}
+												<button type="button" class="btn btn-primary" name="0" onclick="change_album_access(this.name)">Album publiczny</button>
+											{% endif %}
+											{% if album.getalbum_access == 1 %}
+												<button type="button" class="btn btn-primary active" name="1" onclick="change_album_access(this.name)">Album prywatny</button>
+											{% else %}
+												<button type="button" class="btn btn-primary" name="1" onclick="change_album_access(this.name)">Album prywatny</button>
+											{% endif %}
+											{% if album.getalbum_access == 2 %}
+												<button type="button" class="btn btn-primary active" name="2" onclick="change_album_access(this.name)">Widoczny dla znajomych</button>
+											{% else %}
+												<button type="button" class="btn btn-primary" name="2" onclick="change_album_access(this.name)">Widoczny dla znajomych</button>
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							
+								<div class="row">
+									<div class="col-12 text-center text-white">
+										<h5>.</h5>
+									</div>
+								</div>
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="{{album.getalbum_name}}" id="new_album_name"/>
+										<button type="button" class="btn btn-primary margin_left20" onclick="change_album_name()">Zmień nazwę albumu</button>
+									
+										</div><h6 id="album-name-feedback" class="text-danger"></h6>
+									</div>
+								</div>
+							{% endif %}
+							<div class="row">
+								<div class="col-12 text-center text-white">
+									<h5>.</h5>
+								</div>
+							</div>
+							
+							{% set i = 0 %}
+							{% set image_on_page = 12 %}
+							{% set all_image = images | length %}
+							{% set begin = (page * image_on_page) - image_on_page %}
+							{% set end = begin + image_on_page %}
+							{% set all_pages = all_image / image_on_page %}
+							{% set all_pages = all_pages | round(0,'ceil') %}
+							{% set i = 0 %}
+							{% set j = 0 %}
+							
+							{% if page_name == "Strona Główna" %}
+								{% set link = "/socialweb/web/app_dev.php/profil" %}
+							{% elseif page_name == "Profil" %}
+								{% set link = "/socialweb/web/app_dev.php/user/" ~user_profile.id %}
+							{% endif %}
+							
+							{% for image in images %}
+								{% if j >= begin and j < end %}
+									{% if i%4==0 %}
+										<div class="row text-white">
+									{% endif %}
+									<div class="col-sm-3 text-center margin-col">
+										<a href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}">
+											<img src="{{ asset('images/' ~image.image_name) }}" width="150px" class="img-fluid rounded galery-img">
+										</a>
+									</div>
+									{% if i % 4 == 3 or j == all_image - 1 %}
+										</div>
+									{% endif %}
+									
+									{% set i = i + 1 %}
+								{% endif %}
+								{% set j = j + 1 %}
+							{% endfor %}
+							
+							{% if all_image > image_on_page %}
+								<div class="row row-margin3">
+									<div class="col-12 text-center">
+										<nav>
+											<ul class="pagination justify-content-center">
+												{% if page == 1 %}
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/2">2</a></li>
+													{% if all_pages >= 3 %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/3">3</a></li>
+													{% endif %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/{{all_pages}}">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/{{page+1}}">Następne</a></li>
+												{% elseif page == all_pages %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/{{page-1}}">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/1"><<</a></li>
+													{% if all_pages >= 3 %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/{{page-2}}">{{page - 2}}</a></li>
+													{% endif %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/{{page-1}}">{{page - 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/galeria/album/{{album.id}}/page/{{page}}">{{page}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+												{% else %}
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}galeria/album/{{album.id}}/page/{{page-1}}">Poprzednie</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/1"><<</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/album/{{album.id}}/page/{{page - 1}}">{{page - 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/galeria/album/{{album.id}}/page/{{page}}">{{page}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/album/{{album.id}}/page/{{page + 1}}">{{page + 1}}</a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/album/{{album.id}}/page/{{all_pages}}">>></a></li>
+													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/page/{{page+1}}">Następne</a></li>
+												{% endif %}
+											</ul>
+										</nav>
+									</div>
+								</div>
+							{% endif %}
+							{% if images | length == 0 %}	
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										{% if page_name == "Strona Główna" %}
+											<h5>Nie posiadasz zdjęć w tym albumie</h5>
+										{% elseif page_name == "Profil" %}
+											<h5>Użytkownik nie posiada zdjęć w tym albumie</h5>
+										{% endif %}
+									</div>
+								</div>
+							{% endif %}
+						
+						</div>
+					{% endif %}
+					{% if subpage == 'zdjecie' %}
+						<div class="container" id="con-image">
+							<div class="row">
+								<div class="col-sm-12 text-center">
+									<div class="image-div text-left">
+										<img src="{{ asset('images/' ~image.image_name) }}" width="100%" class="img-fluid rounded"/>
+										{% if user[9] == image.image_name %}
+											<div class="is_profile_img"><a class="btn btn-primary" title="To zdjęcie jest Twoim profilowym">
+												<i class="fa fa-image text-white"></i></a>
+											</div>
+										{% endif %}
+										{% if page_name == "Strona Główna" %}
+											<div class="text-white" id="setting-image-div">
+												<button type="button" class="btn btn-primary" title="Usuń zdjęcie" onclick="delete_image()">
+													<i class="fa fa-trash"></i> 
+												</button>
+												{% if not album.album_access == 1 %}
+													<button type="button" class="btn btn-primary" title="Ustaw jako profilowe" onclick="set_as_profile_img()">
+														<i class="fa fa-user"></i> 
+													</button>
+												{% endif %}
+												<button type="button" class="btn btn-primary" title="Dodaj opis" onclick="edit_image_description()">
+													<i class="fa fa-pencil"></i> 
+												</button>
+											</div>
+											{% endif %}
+											{% if page_name == "Strona Główna" %}
+												<div class="info-image-div text-white">
+													<h6>
+														{% if user[9] == '' %}
+															<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+														{% else %}
+															<img src="{{ asset('images/' ~user[9]) }}" width="30px" height="30px" class="rounded-circle">
+														{% endif %}
+														{{user[1]}} {{user[2]}} <br>
+														<div class="margin_left32">dodano {{image.add_date |date("d.m.Y")}}</div>
+													</h6>
+												</div>
+											{% endif %}
+											{% if page_name == "Profil" %}
+												<div class="info-image-div text-white">
+													<h6>
+														{% if user[9] == '' %}
+															<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+														{% else %}
+															<img src="{{ asset('images/' ~user_profile.getprofile_img) }}" width="30px" height="30px" class="rounded-circle">
+														{% endif %}
+														{{user_profile.getname}} {{user_profile.getsurname}} <br>
+														<div class="margin_left32">dodano {{image.add_date |date("d.m.Y")}}</div>
+													</h6>
+												</div>
+											{% endif %}
+											
+											{% if not image.description == '' %}
+												<div class="description-image-div">
+													<div class="text-white"><h6>{{ image.description }}</h6></div>
+												</div>
+											{% endif %}
+											<div class="comments-image-div">
+												<div class="row">
+													<div class="col-12 text-center text-white">
+														<h5>Komentarze</h5>
+													</div>
+												</div>
+												<div class="row comments-row">
+													<div class="col-12 text-white">
+														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+														<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
+														<div class="margin_left32">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+														<a class="text-primary pointer margin_left32" id="image-comments-replay-button"> Odpowiedz</a>
+														<div class="margin_left32 comments-row" id="replay-image-comment-div">
+															<div class="row">
+																<div class="col-10">
+																	<div class="input-group">
+																		<textarea class="form-control" rows="1" id="" placeholder="Odpowiedz"></textarea>
+																		<button type="button" class="btn btn-primary" title="Dodaj opis" onclick="edit_image_description()">
+																			<i class="fa fa-reply"></i> 
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="margin_left32 comments-row">
+															<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+															<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
+															<div class="margin_left32">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+														</div>
+													</div>
+												</div>
+												<div class="row comments-row">
+													<div class="col-12 text-white">
+														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+														<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
+														<div class="margin_left32">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+													</div>
+												</div>
+											</div>
+											<div class="comments-image-div bg-secondary">
+												<div class="row">
+													<div class="col-12 text-center text-white">
+														<h5>Dodaj komentarz</h5>
+													</div>
+												</div>
+												<div class="row comments-row">
+													<div class="col-12 text-center text-white">
+														<textarea class="form-control" rows="5" id="" placeholder="Napisz komentarz"></textarea>
+													</div>
+												</div>
+												<div class="row comments-row">
+													<div class="col-12 text-center text-white">
+														<button type="button" class="btn btn-primary" title="Usuń zdjęcie" onclick="">
+															Dodaj 
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+					{% endif %}
+					
+				</div>
+			</div>
+		</div>
+		<div class="modal" id="decision-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h4 class="modal-title">Potwierdź decyzje</h4> 
+						<button type="button" class="close" data-dismiss="modal">×</button>
+					</div>
+					<div class="modal-body">
+						<p></p>
+					</div>
+					<div class="modal-footer">
+						<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+						<button id="button_confirm" type="button" class="btn btn-primary">Potwierdzam</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% if subpage == 'zdjecie' %}
+		<div class="modal" id="edit-image-description-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h4 class="modal-title">Edytuj opis</h4> 
+						<button type="button" class="close" data-dismiss="modal">×</button>
+					</div>
+					<div class="modal-body">
+						<textarea class="form-control" rows="5" id="img-description" placeholder="{{image.description}}"></textarea>
+						<h6 id="edit-image-description-feedback" class="text-danger text-center"></h6>
+					</div>
+					<div class="modal-footer">
+						<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+						<button id="button_confirm" type="button" class="btn btn-primary">Potwierdzam</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}

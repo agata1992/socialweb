@@ -42,18 +42,32 @@ class DBService{
 		return $this->user_data_array;
 	}
 	
-	public function get_user_albums(){
-		$this->get_user_data();
-		$albums = $this->entityManager
-		->getRepository(Albums::class)->findBy(['user_id' => $this->user_data_array[0]]);
+	public function get_user_albums($user_id=''){
+		if($user_id ==''){
+			$this->get_user_data();
+			$albums = $this->entityManager
+			->getRepository(Albums::class)->findBy(['user_id' => $this->user_data_array[0]]);
+		}
+		else{
+			$albums = $this->entityManager
+			->getRepository(Albums::class)->findBy(['user_id' => $user_id]);
+		}
 		return $albums;
 	}
 
-	public function get_user_album_by_id($album_id){
-		$this->get_user_data();
-		$album = $this->entityManager
-		->getRepository(Albums::class)->findOneBy(['user_id' => $this->user_data_array[0],'id'=>$album_id]);
-		
+	public function get_user_album_by_id($album_id,$user_profile_data =''){
+		if($user_profile_data == ''){
+			$this->get_user_data();
+			$album = $this->entityManager
+			->getRepository(Albums::class)->findOneBy(['user_id' => $this->user_data_array[0],'id'=>$album_id]);
+		}
+		else{
+			$album = $this->entityManager
+			->getRepository(Albums::class)->findOneBy(['user_id' => $user_profile_data->getid(),'id'=>$album_id]);
+			
+			if(($album->getalbum_access() == 1) || ($album->getalbum_access() == 2 && $this->check_friend($user_profile_data) != 1))
+				$album = null;
+		}
 		return $album;
 	}
 	
@@ -192,12 +206,19 @@ class DBService{
 		->getRepository(Friends::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' => $searched_user->getid()]);
 		
 		$friends2 = $this->entityManager
+		->getRepository(Friends::class)->findOneBy(['user1_id' => $searched_user->getid(),'user2_id' => $this->user_data_array[0]]);
+		
+		
+		$invitations = $this->entityManager
 		->getRepository(Invitations::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' => $searched_user->getid()]);
 		
-		if($friends != null)
+		$invitations2 = $this->entityManager
+		->getRepository(Invitations::class)->findOneBy(['user1_id' => $searched_user->getid(),'user2_id' => $this->user_data_array[0]]);
+		
+		if($friends != null || $friends2 !=null )
 			$results = 1;
 		
-		if($friends2 != null)
+		if($invitations != null || $invitations2 != null)
 			$results = 2;
 		
 		return $results;
@@ -233,6 +254,22 @@ class DBService{
 				$this->entityManager->flush();
 			}
 		}
+	}
+	
+	public function get_user_profile_data($user_id){
+		
+		$user_profile_data = $this->entityManager
+		->getRepository(Users::class)->findOneBy(['id' => $user_id]);
+		
+		if($user_profile_data !=null){
+			$user_profile_data_array = array($user_profile_data->getid(),$user_profile_data->getname(),$user_profile_data->getsurname(),
+			$user_profile_data->getemail(),$user_profile_data->getpassword(),$user_profile_data->getsalt(),$user_profile_data->getcity(),
+			$user_profile_data->getbirthdate(),$user_profile_data->getgender(),$user_profile_data->getprofile_img());
+		
+			return $user_profile_data;
+		}
+		else
+			return null;
 	}
 }
 ?>
