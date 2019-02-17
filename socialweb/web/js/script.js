@@ -1,11 +1,5 @@
 window.onload = function(event) {
-	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil" ||
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/posty/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/posty" ||
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/") || 
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*") ||
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/posty/") || 
+	if(window.location.pathname.includes("/socialweb/web/app_dev.php/profil/posty") ||
 	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/posty")){
 		
 		$('#title-posts').addClass( "log-reg-title-active" );
@@ -28,9 +22,7 @@ window.onload = function(event) {
 		$("#con-album").hide();
 	}
 	
-	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie" ||
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/omnie/") ||
+	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie" ||
 	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/omnie")
 	){
 		
@@ -54,9 +46,7 @@ window.onload = function(event) {
 		$("#con-image").hide();
 	}
 	
-	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/znajomi/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/znajomi" ||
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi/") ||
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/znajomi") ||
 	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi")){
 		$('#title-friends').addClass( "log-reg-title-active" );
 		$('#title-friends').removeClass( "pointer" );
@@ -76,12 +66,14 @@ window.onload = function(event) {
 		$("#con-galery").hide();
 		$("#con-album").hide();
 		$("#con-image").hide();
+		
+		originalValue = $('#search-friends-input').val();
+		$('#search-friends-input').val('');
+		$('#search-friends-input').blur().focus().val(originalValue)
 	}
 	
-	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria/" || 
-	window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria" ||
+	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/galeria" ||
 	window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/[0-9]*") ||
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria/") ||
 	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria")){
 	
 		$('#title-galery').addClass( "log-reg-title-active" );
@@ -289,7 +281,7 @@ $('#title-friends').click(function (event) {
 		location_ = window.location.pathname;
 		match_ = location_.match("/socialweb/web/app_dev.php/user/[0-9]*");
 		user_id = match_.toString().replace("/socialweb/web/app_dev.php/user/","");
-		alert(user_id);
+		
 		if(!window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi"))
 			window.location.pathname = "/socialweb/web/app_dev.php/user/"+user_id+"/znajomi";
 	}
@@ -608,24 +600,65 @@ function set_as_profile_img(){
 
 function add_to_friends(friend_id){
 	var data='&friend_id='+friend_id;
-	
+
 	if(window.location.pathname == '/socialweb/web/app_dev.php/wyszukiwarka')
-		url = window.location.pathname+"/1/add-to-friends";
-	else
-		url = window.location.pathname+"/add-to-friends";
-	
+		url = window.location.pathname+ "/1/add-to-friends";
+	else if(window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/[a-z]*")){
+		if(window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/[a-z]*/[0-9]*") == null)
+			url = window.location.pathname+ "/1/add-to-friends";
+		else
+			url = window.location.pathname+ "/add-to-friends";
+	}	
 	var request = $.ajax({
+		url: url,
+		type: "POST",
+		datatype: "json",
+		data: data
+	});
+	 
+	request.done(function(){  
+		location.reload();
+	});
+}
+
+
+function delete_friend(friend_id){
+	var data='&friend_id='+friend_id;
+	
+	$('#decision-modal .modal-body p').html("Czy chcesz użytkownika?")
+	$('#decision-modal').addClass('delete-friend-modal');
+	$('.delete-friend-modal').show();
+	
+	$(".delete-friend-modal .modal-header .close").click(function() {
+		$('.delete-friend-modal').hide();
+	});
+	
+	$(".delete-friend-modal .modal-footer #button_cancel").click(function() {
+		$('.delete-friend-modal').hide();
+	});
+	
+	if(window.location.pathname == '/socialweb/web/app_dev.php/profil/znajomi')
+		url = '/socialweb/web/app_dev.php/profil/znajomi/1/delete-friend'
+	else
+		url = window.location.pathname + "/delete-friend";
+	
+	$(".delete-friend-modal .modal-footer #button_confirm").click(function() {
+		var request = $.ajax({
 			url: url,
 			type: "POST",
 			datatype: "json",
 			data: data
-		});
-	 
-		request.done(function(results){  
+		});   
+	
+		request.done(function(){  
+			$('.delete-friend-modal').hide(); 
 			location.reload();
-			
 		});
+	});
 }
+
+
+
 
 $('#range1').change(function(){
 	if($('#range-input2').val() == '')
@@ -657,4 +690,25 @@ $('#gender-select').change(function(){
 $('#select-gender-delete').click(function (event) {
 	$('#gender-select').val('Płeć');
 	$('#select-gender-delete').hide();
+});
+
+$('#search-friends-input').on('keyup', function(){
+	search_friends_input = $('#search-friends-input').val();
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi")){
+		match_ = window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*");
+		user_id = match_.toString().replace("/socialweb/web/app_dev.php/user/","");
+	}
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/znajomi"))
+		url = "/socialweb/web/app_dev.php/profil/znajomi";
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi"))
+		url = window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/znajomi");
+	
+	var form = $('<form action="' +url + '" method="post" id="friends_search">' +
+	'<input type="hidden" value="' +search_friends_input + '" name="search_friends_input"/></form>');
+	
+	$('#con-friends').append(form);
+	$("#friends_search").submit();
 });

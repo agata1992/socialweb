@@ -32,84 +32,168 @@
 						</div>
 					</div>
 					
-					<div class="container" id="con-friends">
-						<div class="row text-white">
-							<div class="col-12 text-center">
-								<h5> ZNAJOMI(5)</h5>
+					{% if subpage == 'znajomi' %}
+						<div class="container" id="con-friends">
+							<div class="row text-white">
+								<div class="col-12 text-center">
+									<h5> ZNAJOMI({{friends | length}})</h5>
+								</div>
 							</div>
-						</div>
 						
-						<div class="row text-white">
-							<div class="col-6 margin-col">
-								<div class="bg-secondary" style="border:1px solid;padding:5px;">
-									<h6>Wyszukaj znajomego</h6>
-									<div class="input-group">
-										<input type="text" class="form-control" placeholder="Szukaj"/>
-										<button class="btn btn-default bg-primary">
-											<i class="fa fa-search"></i>
-										</button>
+							{% set friends_on_page = 6 %}
+							{% set all_friends = friends | length %}
+							{% set begin = (page * friends_on_page) - friends_on_page %}
+							{% set end = begin + friends_on_page %}
+							{% set all_pages = all_friends / friends_on_page %}
+							{% set all_pages = all_pages | round(0,'ceil') %}
+							{% set i = 0 %}
+							{% set j = 0 %}
+						
+							{% if page_name == "Strona Główna" %}
+								{% set link = "/socialweb/web/app_dev.php/profil/znajomi" %}
+							{% elseif page_name == "Profil" %}
+								{% set link = "/socialweb/web/app_dev.php/user/" ~user_profile.id ~ "/znajomi"%}
+							{% endif %}
+						
+							<div class="row text-white">
+								<div class="col-6 margin-col">
+									<div class="bg-secondary" style="border:1px solid;padding:5px;">
+										<h6>Wyszukaj znajomego</h6>
+										<div class="input-group">
+											<input type="text" class="form-control" id="search-friends-input" value="{{ search_input }}"  placeholder="Szukaj"/>
+											<button class="btn btn-default bg-primary">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+										
 									</div>
 								</div>
 							</div>
-						</div>
-						
-						<div class="row text-white">
-							<div class="col-sm-4 text-center margin-col">
-								<div class="bg-secondary" style="border:1px solid;padding:5px;">
-									<img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle">
-									<h5 class="text-truncate">Imie Nazwisko</h5>
-									<h6>Warszawa</h6>
-									<h6>24 lata</h6>
-									<h5><a href="#"><i class="fa fa-envelope text-white"></i></a>
-										<a href="#"><i class="fa fa-user-plus text-white"></i></a>
-									</h5>
-								</div>
-							</div>
+							{% for friend in friends %}
+								{% if j >= begin and j < end %}
+									{% if i % 3==0 %}
+										<div class="row text-white">
+									{% endif %}
+									<div class="col-sm-4 text-center margin-col">
+										<div class="bg-secondary" style="border:1px solid;padding:5px">
+											{% if friend.profile_img == '' %}
+												<a href="/socialweb/web/app_dev.php/user/{{ friend.id }}/posty"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
+											{% else %}
+												<a href="/socialweb/web/app_dev.php/user/{{ friend.id }}/posty"><img src="{{ asset('images/'~friend.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
+											{% endif %}
+											<h5 class="text-truncate">{{ friend.name }} {{ friend.surname }}</h5>
+											{% if friend.city == '' %}
+												<h6>-</h6>
+											{% else %}
+												<h6>{{ friend.city }}</h6>
+											{% endif %}
+											<h6>
+												{{ friend.age }}
+												{% if friend.age == 1 %}
+													rok 
+												{% elseif friend.age % 100 >= 10 and  friend.age % 100 <= 19 %}
+												lat
+												{% else %}
+													{% if friend.age in [0,1,5,6,7,8,9] %}
+														lat
+													{% endif %}
+													{% if friend.age in [2,3,4] %}
+														lata
+													{% endif %}
+												{% endif %}
+											</h6>
+											{% if friend.id != user[0] %}
+												<h5><button class="btn btn-primary"><i class="fa fa-envelope text-white"></i></button>
+											{% else %}
+												<h5 style="padding:15px">
+											{% endif %}
+									
+											{% if page_name == "Profil" and  friend.id != user[0] %}
+												{% if friend.friendship == 0 %}
+													<button class="btn btn-primary" onclick="add_to_friends({{friend.id}})"><i class="fa fa-user-plus text-white"></i></button>
+												{% elseif friend.friendship == 1 %}
+													<button class="btn btn-primary disabled" title="Jesteście znajomymi"><i class="fa fa-user-plus text-white"></i></button>
+												{% elseif friend.friendship == 2 %}
+													<button class="btn btn-primary disabled" title="Wysłano zaproszenie"><i class="fa fa-user-plus text-white"></i></button>
+												{% endif %}
+											{% endif %}
+											{% if page_name == "Strona Główna" %}
+												<button class="btn btn-primary" title="Usuń użytkownika" onclick="delete_friend({{friend.id}})"><i class="fa fa-user-times text-white"></i></button>
+											{% endif %}
+											</h5>
+										</div>
+									</div>
 							
-							<div class="col-sm-4 text-center margin-col">
-								<div class="bg-secondary" style="border:1px solid;padding:5px;">
-									<img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle">
-									<h5 class="text-truncate">Imie Nazwisko</h5>
-									<h6>Warszawa</h6>
-									<h6>24 lata</h6>
-									<h5>
-										<a href="#" title="Wyśij wiadomość prywatną"><i class="fa fa-envelope text-white"></i></a>
-									<a href="#" title="Dodaj użytkownika do znajomych"><i class="fa fa-user-plus text-white"></i></a>
-									</h5>
-								</div>
-							</div>
-							
-							<div class="col-sm-4 text-center margin-col">
-								<div class="bg-secondary" style="border:1px solid;padding:5px;">
-									<img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle">
-									<h5 class="text-truncate">Imie Nazwisko</h5>
-									<h6>Warszawa</h6>
-									<h6>24 lata</h6>
-									<h5>
-										<a href="#"><i class="fa fa-envelope text-white"></i></a>
-										<a href="#"><i class="fa fa-user-plus text-white"></i></a>
-									</h5>
-								</div>
-							</div>
-						</div>
+									{% if i % 3 == 2 or j == all_friends - 1 %}
+										</div>
+									{% endif %}
+									{% set i = i + 1 %}
+								{% endif %}
+								{% set j = j + 1 %}
+							{% endfor %}
 						
-						<div class="row text-white">
-							<div class="col-12 text-center znajomi-col">
-								<div class="align-items-center" style="padding:5px;">
-									<nav>
-										<ul class="pagination justify-content-center">
-											<li class="page-item bg-secondary"><a class="page-link bg-secondary text-white" href="#">Poprzednie</a></li>
-											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">1</a></li>
-											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">2</a></li>
-											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">3</a></li>
-											<li class="page-item"><a class="page-link bg-secondary text-white" href="#">Następne</a></li>
-										</ul>
-									</nav>
+							{% if all_pages | length > 1 %}
+								<div class="row text-white">
+									<div class="col-12 text-center znajomi-col">
+										<div class="align-items-center" style="padding:5px;">
+											<nav>
+												<ul class="pagination justify-content-center">
+													{% if page == 1 %}
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/2">2</a></li>
+														{% if all_pages >= 3 %}
+															<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/3">3</a></li>
+														{% endif %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{all_pages}}">>></a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page+1}}">Następne</a></li>
+													{% elseif page == all_pages %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">Poprzednie</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/1"><<</a></li>
+														{% if all_pages >= 3 %}
+															<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-2}}">{{page - 2}}</a></li>
+														{% endif %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">{{page - 1}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/{{page}}">{{page}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+													{% else %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">Poprzednie</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/1"><<</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{page - 1}}">{{page - 1}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/{{page}}">{{page}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{page + 1}}">{{page + 1}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{all_pages}}">>></a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page+1}}">Następne</a></li>
+													{% endif %}
+												</ul>
+											</nav>
+										</div>
+									</div>
 								</div>
-							</div>
+							{% endif %}
+							
+							{% if friends | length == 0 %}	
+								<div class="row">
+									<div class="col-12 text-center text-white">
+										<h5>.</h5>
+										</div>
+								</div>
+								<div class="row text-white">
+									<div class="col-sm-12 text-center margin-col">
+										{% if page_name == "Strona Główna" and search_input == "" %}
+											<h5>Nie posiadasz znajomych</h5>
+										{% elseif page_name == "Profil" and search_input == "" %}
+											<h5>Użytkownik nie posiada znajomych</h5>
+										{% elseif search_input != "" %}
+											<h5>Brak wyników</h5>
+										{% endif %}
+									</div>
+								</div>
+							{% endif %}
 						</div>
-					</div>
-					
+					{% endif %}
 					{% if subpage == 'galeria' %}
 						<div class="container" id="con-galery">
 							<div class="row">
@@ -150,7 +234,7 @@
 									{% endif %}
 									<div class="col-sm-3 text-center margin-col galery-div">
 										<div class="bg-secondary" style="border:1px solid;padding:5px;">
-											<a href="{{ link }}/galeria/album/{{album.id}}/page"><img src="{{ asset('service-image/no_image.png') }}" width="150px" class="img-fluid rounded"></a>
+											<a href="{{ link }}/galeria/album/{{album.id}}/page/1"><img src="{{ asset('service-image/no_image.png') }}" width="150px" class="img-fluid rounded"></a>
 											<h5 class="text-truncate">{{album.album_name}}</h5>
 										</div>
 									</div>
@@ -205,9 +289,9 @@
 							{% if albums | length == 0 %}	
 								<div class="row">
 									<div class="col-12 text-center text-white">
-									<h5>.</h5>
+										<h5>.</h5>
+									</div>
 								</div>
-							</div>
 								<div class="row text-white">
 									<div class="col-sm-12 text-center margin-col">
 										{% if page_name == "Strona Główna" %}

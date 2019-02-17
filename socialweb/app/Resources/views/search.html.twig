@@ -107,25 +107,31 @@
 						<div class="col-sm-4 text-center margin-col">
 							<div class="bg-secondary" style="border:1px solid;padding:5px;">
 								{% if searched_user.profile_img == '' %}
-									<a href="/socialweb/web/app_dev.php/user/{{ searched_user.id }}" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
+									<a href="/socialweb/web/app_dev.php/user/{{ searched_user.id }}/posty" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
 								{%else %}
-									<a href="/socialweb/web/app_dev.php/user/{{ searched_user.id }}" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('images/'~searched_user.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
+									<a href="/socialweb/web/app_dev.php/user/{{ searched_user.id }}/posty" title="Profil użytkownika {{ searched_user.name}} {{ searched_user.surname }}"><img src="{{ asset('images/'~searched_user.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
 								{% endif %}
 								
 								<h5 class="text-truncate">{{ searched_user.name }} {{ searched_user.surname }}</h5>
 								{% if searched_user.city == '' %}
 									<h6>-</h6>
 								{% else %}
-									<h6>{{ searched_user.city }} </h6>
-								{% endif %}
-								{% if searched_user.age == 0 %}
-									<h6> {{searched_user.age}} lat </h6>
-								{% elseif searched_user.age == 1 %}
-									<h6> {{searched_user.age}} rok </h6>
-								{% else %}
-									<h6> {{searched_user.age}} lata </h6>
-								{% endif %}   
-									   
+									<h6>	
+										{{ searched_user.age }}
+										{% if searched_user.age == 1 %}
+											rok 
+										{% elseif searched_user.age % 100 >= 10 and  searched_user.age % 100 <= 19 %}
+											lat
+										{% else %}
+											{% if searched_user.age in [0,1,5,6,7,8,9] %}
+												lat
+											{% endif %}
+											{% if searched_user.age in [2,3,4] %}
+												lata
+											{% endif %}
+										{% endif %}
+									{% endif %}
+								</h6>
 								<h5>
 									<a href="#"><i class="fa fa-envelope text-white"></i></a>
 									{% if searched_user.friendship == 0 %}
