@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
 use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 use AppBundle\Service\AdditionalService;
@@ -18,17 +18,20 @@ use  AppBundle\Entity\Users;
 
 
 class LoginController extends Controller{
+	
 	public function indexAction(CookieService $cookie_service){
+		
 		$user = $cookie_service->check_exist_user_cookie();
 		
 		if($user != '')
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
-		
+			
 		return $this->render('login.html.twig', array(
 		'page_name' => 'Logowanie','user' => $user,'nav_title' => 'Zaloguj się'));
-		}
+	}
 	
 	public function registerAction(DBService $db_service,AdditionalService $additional_service,Request $request){
+		
 		$name = $request->request->get('name');
 		$surname = $request->request->get('surname');
 		$email = $request->request->get('email');
@@ -94,13 +97,16 @@ class LoginController extends Controller{
 		$is_error = 0;
 	
 		for($i = 0;$i<count($results);$i++){
+			
 			if( !$results[$i] =='' ){
+				
 				$is_error = 1;
 				break;
 			}
 		}
 	
 		if($is_error == 0){
+			
 			$salt = uniqid();
 			$password = $password.$salt;
 			$password = md5($password);
@@ -111,6 +117,7 @@ class LoginController extends Controller{
 	}
 	
 	public function loginAction(CookieService $cookie_service,DBService $db_service,Request $request){
+		
 		$email = $request->request->get('email');
 		$password = $request->request->get('password');
 	
@@ -121,6 +128,7 @@ class LoginController extends Controller{
 		if($check_email == null)
 			$results[0] = 'Wprowadzone dane są niepoprawne';
 		else{
+			
 			$password2 = $check_email->getpassword();
 			$salt = $check_email->getsalt();
 			$password = $password.$salt;
@@ -128,6 +136,7 @@ class LoginController extends Controller{
 			if(!$password2 == $password)
 				$results[0] = 'Wprowadzone dane są niepoprawne';
 			else{
+				
 				$cookie_service->set_cookie($email);
 				$results[0] = '';
 			}
@@ -137,6 +146,7 @@ class LoginController extends Controller{
 	}
 	
 	public function signoutAction(CookieService $cookie_service){
+		
 		$cookie_service->delete_user_cookie();
 		
 		return new RedirectResponse("/socialweb/web/app_dev.php/profil");

@@ -1,14 +1,17 @@
 <?php
 
 namespace AppBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Validator\Constraints\DateTime;
+
 use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 
 class SearchController extends Controller{
+	
 	public function indexAction(CookieService $cookie_service,DBService $db_service,Request $request,$page){
 		
 		$user = $cookie_service->check_exist_user_cookie();
@@ -24,6 +27,7 @@ class SearchController extends Controller{
 		$max_age = $request->query->get('max_age');
 		
 		if($name != ''){
+			
 			$searched_users=$db_service->search_users($name,$city,$gender);
 			$users_on_page =9;
 			$count_users = count($searched_users);
@@ -38,6 +42,7 @@ class SearchController extends Controller{
 				$tmp_max_age = $max_age;
 			
 			for($i = 0;$i < $count_users;$i++){
+				
 				$searched_users[$i]->age=date_diff(new \DateTime(),$searched_users[$i]->getbirthdate())->y;
 				$friendship = $db_service->check_friend($searched_users[$i]);
 				$searched_users[$i]->friendship = $friendship;
@@ -49,6 +54,7 @@ class SearchController extends Controller{
 			$users_on_page = 9;
 			
 			$count_users = count($searched_users);
+			
 			if(($count_users/$users_on_page)<($page-1))
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
@@ -63,5 +69,4 @@ class SearchController extends Controller{
 		'searcher_user_max_age' => $max_age,'page' => $page));
 	}
 }
-
 ?>

@@ -417,7 +417,7 @@
 										<div class="row text-white">
 									{% endif %}
 									<div class="col-sm-3 text-center margin-col">
-										<a href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}">
+										<a href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/1">
 											<img src="{{ asset('images/' ~image.image_name) }}" width="150px" class="img-fluid rounded galery-img">
 										</a>
 									</div>
@@ -544,41 +544,165 @@
 											<div class="comments-image-div">
 												<div class="row">
 													<div class="col-12 text-center text-white">
-														<h5>Komentarze</h5>
+														<h5>Komentarze({{image_comments | length}})</h5>
 													</div>
 												</div>
-												<div class="row comments-row">
-													<div class="col-12 text-white">
-														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
-														<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
-														<div class="margin_left32">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
-														<a class="text-primary pointer margin_left32" id="image-comments-replay-button"> Odpowiedz</a>
-														<div class="margin_left32 comments-row" id="replay-image-comment-div">
-															<div class="row">
-																<div class="col-10">
-																	<div class="input-group">
-																		<textarea class="form-control" rows="1" id="" placeholder="Odpowiedz"></textarea>
-																		<button type="button" class="btn btn-primary" title="Dodaj opis" onclick="edit_image_description()">
-																			<i class="fa fa-reply"></i> 
-																		</button>
+												
+												{% set i = 0 %}
+												{% set image_comments_on_page = 6 %}
+												{% set all_image_comments = image_comments | length %}
+												{% set begin = (page * image_comments_on_page) - image_comments_on_page %}
+												{% set end = begin + image_comments_on_page %}
+												{% set all_pages = all_image_comments / image_comments_on_page %}
+												{% set all_pages = all_pages | round(0,'ceil') %}
+												{% set i = 0 %}
+												{% set j = 0 %}
+												
+												{% if page_name == "Strona Główna" %}
+													{% set link = "/socialweb/web/app_dev.php/profil" %}
+												{% elseif page_name == "Profil" %}
+													{% set link = "/socialweb/web/app_dev.php/user/" ~user_profile.id %}
+												{% endif %}
+												
+												{% for image_comment in image_comments %}
+													{% if j >= begin and j < end %}
+														<div class="row comments-row">
+															<div class="col-12 text-white">
+																<a href="/socialweb/web/app_dev.php/user/{{ image_comment.user_id }}/posty">
+																	{% if image_comment.profile_img == '' %}
+																		<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+																	{% else %}
+																		<img src="{{ asset('images/' ~image_comment.profile_img) }}" width="30px" height="30px" class="rounded-circle">
+																	{% endif %}
+																</a>
+																<a href="/socialweb/web/app_dev.php/user/{{ image_comment.user_id }}/posty" class="text-white">
+																	<div class="d-inline-block text-bold"><h6>{{image_comment.name}} {{image_comment.surname}}</h6></div>
+																</a>
+																<div class="margin_left32">{{image_comment.text}}</div>
+																<div class="text-secondary margin_left32">{{image_comment.add_date | date("d.m.Y H:i")}}</div>
+																<a class="text-primary pointer margin_left32 image-comments-replay-button" id='image-comments-replay-button_{{image_comment.id}}'>
+																	Odpowiedz
+																</a>
+																<div class="margin_left32 comments-row replay-image-comment-div" id="replay-image-comment-div_{{image_comment.id}}">
+																	<div class="row">
+																		<div class="col-10">
+																			<div class="input-group">
+																				<textarea class="form-control" rows="2" id="image_subcomment-input_{{image_comment.id}}" placeholder="Odpowiedz"></textarea>
+																				<button type="button" class="btn btn-primary" onclick="add_image_comment(0,{{image_comment.id}})">
+																					<i class="fa fa-reply"></i> 
+																				</button>
+																			</div>
+																		</div>
 																	</div>
 																</div>
+																
+																{% set k = 0 %}
+																{% set len = 0 %}
+																{% set count_showed = 0 %}
+																
+																{% for image_subcomment in image_subcomments %}
+																	{% if image_subcomment.image_comment_id == image_comment.id %}
+																		{% set len = len+1 %}
+																	{% endif %}
+																{% endfor %}
+																
+																{% for image_subcomment in image_subcomments %}
+																	{% if image_subcomment.image_comment_id == image_comment.id %}
+																		{% if k >= 0 and k <= 4 %}
+																			<div class="margin_left32 comments-row" id="{{j}}_comments-row_{{k}}">
+																			{% set count_showed = count_showed + 1 %}
+																		{% else %}
+																			<div class="margin_left32 comments-row" style="display:none" id="{{j}}_comments-row_{{k}}">
+																		{% endif %}
+																			<a href="/socialweb/web/app_dev.php/user/{{ image_subcomment.user_id }}/posty">
+																				{% if image_subcomment.profile_img == '' %}
+																					<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
+																				{% else %}
+																					<img src="{{ asset('images/' ~image_subcomment.profile_img) }}" width="30px" height="30px" class="rounded-circle">
+																				{% endif %}
+																			</a>
+																
+																			<a href="/socialweb/web/app_dev.php/user/{{ image_subcomment.user_id }}/posty" class="text-white">
+																				<div class="d-inline-block text-bold"><h6>{{image_subcomment.name}} {{image_subcomment.surname}}</h6></div>
+																			</a>	
+																			<div class="margin_left32">{{image_subcomment.text}}</div>
+																			<div class="text-secondary margin_left32">{{image_subcomment.add_date | date("d.m.Y H:i")}}</div>
+																		</div>
+																		
+																		{% set k = k+1 %}
+																	{% endif %}
+																{% endfor %}
+																
+																<div class="text-center font-italic pointer" style="display:none" id="{{j}}_subcomments_less" onclick="image_sub_more_less(0,{{j}},{{ len }})">Mniej</div>
+																
+																{% if count_showed < len  %}
+																	<div class="text-center font-italic pointer" id="{{j}}_subcomments_more" onclick="image_sub_more_less(1,{{j}},{{ len }})">Więcej</div>
+																{% endif %}
 															</div>
 														</div>
-														<div class="margin_left32 comments-row">
-															<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
-															<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
-															<div class="margin_left32">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+														{% set i = i + 1 %}
+													{% endif %}
+													{% set j = j + 1 %}
+												{% endfor %}
+												
+												
+												{% if all_image_comments > image_comments_on_page %}
+													<div class="row row-margin3">
+														<div class="col-12 text-center">
+															<nav>
+																<ul class="pagination justify-content-center">
+																	{% if page == 1 %}
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/2">2</a></li>
+																	{% if all_pages >= 3 %}
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/3">3</a></li>
+																	{% endif %}
+																	<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{all_pages}}">>></a></li>
+																	<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page+1}}">Następne</a></li>
+																	{% elseif page == all_pages %}
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page-1}}">Poprzednie</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/1"><<</a></li>
+																	{% if all_pages >= 3 %}
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page-2}}">{{page - 2}}</a></li>
+																	{% endif %}
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page-1}}">{{page - 1}}</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page}}">{{page}}</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+																	{% else %}
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page-1}}">Poprzednie</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/1"><<</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page - 1}}">{{page - 1}}</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page}}">{{page}}</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page + 1}}">{{page + 1}}</a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{all_pages}}">>></a></li>
+																		<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/galeria/album/{{album.id}}/zdjecie/{{image.id}}/page/{{page+1}}">Następne</a></li>
+																	{% endif %}
+																</ul>
+															</nav>
 														</div>
 													</div>
-												</div>
-												<div class="row comments-row">
-													<div class="col-12 text-white">
-														<img src="{{ asset('service-image/user.png') }}" width="30px" class="img-fluid rounded-circle">
-														<div class="d-inline-block text-bold"><h6>{{user[1]}} {{user[2]}}</h6></div>
-														<div class="margin_left32">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</div>
+												{% endif %}
+												
+												{% if image_comments | length == 0 %}
+													<div class="row">
+														<div class="col-12 text-center text-white">
+															<h5>.</h5>
+														</div>
 													</div>
-												</div>
+													<div class="row text-white">
+														<div class="col-sm-12 text-center margin-col">
+															<h6>Brak komentarzy</h6>
+										
+									</div>
+								</div>
+								<div class="col-12 text-center text-white">
+										<h5>.</h5>
+									</div>
+								</div>
+							{% endif %}
 											</div>
 											<div class="comments-image-div bg-secondary">
 												<div class="row">
@@ -588,12 +712,13 @@
 												</div>
 												<div class="row comments-row">
 													<div class="col-12 text-center text-white">
-														<textarea class="form-control" rows="5" id="" placeholder="Napisz komentarz"></textarea>
+														<textarea class="form-control" rows="5" id="main_image_comment-input" placeholder="Napisz komentarz"></textarea>
+													<div class="text-danger" id="main_image_comment_input-feedback"></div>
 													</div>
 												</div>
 												<div class="row comments-row">
 													<div class="col-12 text-center text-white">
-														<button type="button" class="btn btn-primary" title="Usuń zdjęcie" onclick="">
+														<button type="button" class="btn btn-primary" onclick="add_image_comment(1)">
 															Dodaj 
 														</button>
 													</div>

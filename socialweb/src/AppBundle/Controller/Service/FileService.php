@@ -5,19 +5,22 @@ namespace AppBundle\Service;
 class FileService{
 	
 	public function save_user_image($image){
+	
 		$results = array();
 		$extensions=array('jpg','jpe','jpeg','jfif','png','bmp','dib','gif');
+		
 		if(in_array(pathinfo($image['name'])['extension'], $extensions)){
+		
 			$tmp=$image['tmp_name'];
 			$org=$image['name'];
 			$name=pathinfo($tmp)['filename'].".";
 			$name.=pathinfo($org)['extension'];
-			if(!move_uploaded_file($tmp,'images/'.$name)){
+			
+			if(!move_uploaded_file($tmp,'images/'.$name))
 				$results[0] = "Wystąpił błąd";
-			}
-			else{
+			
+			else
 				$results[0] = '';	
-			}
 			
 			$results[1] = $name;
 		}
@@ -31,10 +34,4 @@ class FileService{
 		unlink('images/'.$image);
 	}
 }	
-	
-	
-	
-	
-	
-	
 ?>

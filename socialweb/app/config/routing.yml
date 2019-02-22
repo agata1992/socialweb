@@ -19,10 +19,9 @@ delete_album:
 add_album:
    path: /profil/galeria/{page}/dodaj-album
    defaults: {_controller: AppBundle:Main_Page:add_album,page:1}      
-   
 image:
-   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}
-   defaults: {_controller: AppBundle:Main_Page:images}     
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}
+   defaults: {_controller: AppBundle:Main_Page:images,page:1}     
 edit_img_description:   
    path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/edytuj_opis
    defaults: {_controller: AppBundle:Main_Page:edit_img_description}
@@ -44,14 +43,12 @@ signin:
 signout:
    path: /wyloguj
    defaults: {_controller: AppBundle:Login:signout}
-
 search:
    path: /wyszukiwarka/{page}
    defaults: {_controller: AppBundle:Search:index,page:1}
 add_to_friends:
    path: /wyszukiwarka/{page}/add-to-friends
    defaults: {_controller: AppBundle:Friends:add_to_friends,page:1}
-
 add_to_friends2:
    path: /user/{user_id}/{subpage}/{page}/add-to-friends
    defaults: {_controller: AppBundle:Friends:add_to_friends,page:1}
@@ -64,7 +61,12 @@ user_profile:
 other_user_galery:
    path: /user/{user_id}/galeria/album/{album_id}/page/{page}
    defaults: {_controller: AppBundle:User_profile:other_user_galery,page:1}
-   
 other_user_image:
-   path: /user/{user_id}/galeria/album/{album_id}/zdjecie/{image_id}
-   defaults: {_controller: AppBundle:User_profile:other_user_images} 
+   path: /user/{user_id}/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}
+   defaults: {_controller: AppBundle:User_profile:other_user_images,page:1} 
+add_image_comment:
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}/add_image_comment
+   defaults: {_controller: AppBundle:Comments:add_image_commment,page:1}   
+add_image_comment2:
+   path: /user/{user_id}/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}/add_image_comment
+   defaults: {_controller: AppBundle:Comments:add_image_commment,page:1}  
