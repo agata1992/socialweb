@@ -14,7 +14,7 @@
 					<h5>GALERIA</h5>
 				</div>			
 			</div>
-			<div class="row bg-dark" id="main-row" >
+			<div class="row bg-dark main-row">
 				<div class="col-12">
 					<div class="container" id="con-posts">
 						<div class="row bg-success">
@@ -94,10 +94,10 @@
 												{% elseif friend.age % 100 >= 10 and  friend.age % 100 <= 19 %}
 												lat
 												{% else %}
-													{% if friend.age in [0,1,5,6,7,8,9] %}
+													{% if friend.age % 10 in [0,1,5,6,7,8,9] %}
 														lat
 													{% endif %}
-													{% if friend.age in [2,3,4] %}
+													{% if friend.age % 10 in [2,3,4] %}
 														lata
 													{% endif %}
 												{% endif %}
@@ -518,7 +518,7 @@
 															<img src="{{ asset('images/' ~user[9]) }}" width="30px" height="30px" class="rounded-circle">
 														{% endif %}
 														{{user[1]}} {{user[2]}} <br>
-														<div class="margin_left32">dodano {{image.add_date |date("d.m.Y")}}</div>
+														<div class="margin_left32">dodano {{image.add_date | date("d.m.Y")}}</div>
 													</h6>
 												</div>
 											{% endif %}

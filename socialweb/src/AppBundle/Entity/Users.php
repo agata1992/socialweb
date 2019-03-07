@@ -152,7 +152,7 @@ class Users{
 	
 	public function setgender($gender){
 		$this->gender = $gender;
-		$this->gender = $gender;
+		//$this->gender = $gender;
 	}
 	
 	public function setprofile_img($profile_img){

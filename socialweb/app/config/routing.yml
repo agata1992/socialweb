@@ -69,4 +69,10 @@ add_image_comment:
    defaults: {_controller: AppBundle:Comments:add_image_commment,page:1}   
 add_image_comment2:
    path: /user/{user_id}/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}/add_image_comment
-   defaults: {_controller: AppBundle:Comments:add_image_commment,page:1}  
+   defaults: {_controller: AppBundle:Comments:add_image_commment,page:1}
+account:
+   path: /konto/{subpage}
+   defaults: {_controller: AppBundle:Account:index}  
+change_personal_data:
+   path: /konto/{subpage}/change-personal-data
+   defaults: {_controller: AppBundle:Account:change_personal_data}  

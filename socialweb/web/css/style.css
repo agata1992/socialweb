@@ -22,7 +22,7 @@ nav{
 	height:100%;
 }
 
-#container3,#container6{
+#container3,#container6,#container8{
 	margin-top:5px;
 	margin-left:5px;
 	margin-right:5px;
@@ -120,7 +120,7 @@ nav{
 	height:100%;	
 }
 
-#main-row{
+.main-row{
 	border:0px solid red;	
 	margin-top:0px;	
 	padding-top:30px;
@@ -273,7 +273,7 @@ nav{
 	cursor: pointer;
 }
 
-#con-galery{
+#con-galery,#con-personal-data{
 	min-height:350px;
 }
 

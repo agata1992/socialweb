@@ -1,0 +1,136 @@
+{% extends 'main.html.twig' %}
+
+{% block content %}
+	<div id="container8">
+		<div class="container-fluid">
+			<div class="row bottom-border2 text-white bg-dark" id="row-title">
+				<div class="col font-comic log-reg-title-active" id="title-personal-data">
+					<h5>MOJE DANE</h5>
+				</div>
+				<div class="col font-comic pointer" id="title-account-setting">
+					<h5>USTAWIENIA KONTA</h5>
+				</div>
+			</div>
+			<div class="row bg-dark main-row">
+				<div class="col-12">
+					{% if subpage == 'dane' %}
+						<div class="container" id="con-personal-data">
+							<div class="row text-white">
+								<div class="col-12 text-center">
+									<h5>ZMIANA DANYCH</h5>
+								</div>
+							</div>
+							<div class="row text-white row-margin2">
+								<div class="col-6" id="col-change-name">
+									<label for="change-name"><h6>Imię</h6></label>
+									<div class="input-group">
+										<span class="input-group-text">
+											<i class="fa fa-user"></i>	
+										</span> 
+										<input type="text" class="form-control" id="change-name" value="{{ user[1] }}"/>
+										<div class="invalid-feedback"></div>
+									</div>
+								</div>			
+								<div class="col-6" id="col-change-surname">
+									<label for="change-surname"><h6>Nazwisko</h6></label>
+									<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa fa-user"></i>
+									</span>
+									<input type="text" class="form-control" id="change-surname" value="{{ user[2] }}"/>
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row text-white row-margin2">
+							<div class="col-6" id="col-change-city">
+								<label for="change-city"><h6>Miasto</h6></label>
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa fa-home"></i>
+									</span>
+									{% if user[6] == '' %}
+										<input type="text" class="form-control" id="change-city" placeholder="Miasto"/>
+									{% else %}
+										<input type="text" class="form-control" id="change-city" value="{{ user[6] }}"/>
+									{% endif %}
+								</div>
+							</div>
+						
+							<div class="col-6" id="col-change-birthdate">
+								<label for="change-birthdate"><h6>Data urodzenia</h6></label>
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa fa-calendar"></i>
+									</span> 
+									<input type="date" class="form-control" id="change-birthdate" value="{{ user[7] | date('Y-m-d')}}"/>
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row text-white row-margin2">
+							<div class="col-6" id="col-change-gender">
+								<label for="change-gender">Płeć</label>
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa fa-male"></i>
+									</span>
+									<select id="change-gender" class="form-control">
+										<option selected  disabled="true">Wybierz...</option>
+										{% if user[8] == "Kobieta" %}
+											<option selected>Kobieta</option>
+										{% else %}
+											<option>Kobieta</option>
+										{% endif %}
+										
+										{% if user[8] == "Mężczyzna" %}
+											<option selected>Mężczyzna</option>
+										{% else %}
+											<option>Mężczyzna</option>
+										{% endif %}
+									</select> 
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row row-margin row-margin3" id="row-change-data">
+					<div class="col-12">
+						<div class="d-flex justify-content-center align-items-center">
+						<button  class="btn btn-primary" type="submit" onclick="change_personal_data()" >Zmień dane</button>
+						</div>
+					</div>
+				</div>		
+							
+							</div>
+						</div>
+					{% endif %}
+					{% if subpage == 'ustawienia' %}
+						<div class="container" id="con-account-setting">
+							<div class="row text-white">
+								<div class="col-12 text-center">
+									<h5>ustawienia</h5>
+								
+								
+								
+								
+								
+								
+								
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					
+				</div>
+			</div>
+			
+			
+			
+			
+			
+			
+		</div>
+		
+	</div>
+{% endblock %}

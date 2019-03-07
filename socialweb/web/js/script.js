@@ -144,6 +144,31 @@ window.onload = function(event){
 		$("#setting-image-div").show();
 	}
 	
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/konto/dane")){
+	
+		$('#title-personal-data').addClass( "log-reg-title-active" );
+		$('#title-personal-data').removeClass( "pointer" );
+	
+		$('#title-account-setting').removeClass( "log-reg-title-active" );
+		$('#title-account-setting').addClass( "pointer" );
+	
+		$("#con-account-setting").hide();
+		$("#con-personal-data").show();
+	}
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/konto/ustawienia")){
+	
+		$('#title-account-setting').addClass( "log-reg-title-active" );
+		$('#title-account-setting').removeClass( "pointer" );
+		
+		$('#title-personal-data').removeClass( "log-reg-title-active" );
+		$('#title-personal-data').addClass( "pointer" );
+	
+		$("#con-personal-data").hide();
+		$("#con-account-setting").show();
+	}
+	
 	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/page") &&
 	!window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/page/[0-9]*")){
 		window.location.pathname = window.location.pathname + "/1";
@@ -154,7 +179,6 @@ window.onload = function(event){
 			$('#select-gender-delete').show();
 	}
 }
-
 
 $("#row-reg1").hide();
 $("#row-reg2").hide();
@@ -311,6 +335,19 @@ $('#title-galery').click(function(event){
 	}
 });
 
+$('#title-personal-data').click(function(event){
+	if (window.location.pathanme != "/socialweb/web/app_dev.php/konto/dane")
+		window.location.pathname = "/socialweb/web/app_dev.php/konto/dane";
+});
+
+$('#title-account-setting').click(function(event){
+	if (window.location.pathanme != "/socialweb/web/app_dev.php/konto/ustawienia")
+		window.location.pathname = "/socialweb/web/app_dev.php/konto/ustawienia";
+});
+
+
+
+
 $(".image-comments-replay-button").click(function(e){
 	
 	number = this.id.replace("image-comments-replay-button_","");
@@ -416,13 +453,13 @@ function Login(){
 	
 	var email = document.getElementById("log-email").value;
 	var password = document.getElementById("log-pass").value;
-	var data='&email='+email+'&password='+password;
+	var data = '&email=' + email + '&password=' + password;
 	
 	var request= $.ajax({
-		url:"login/logowanie",
-		type:"POST",
-		datatype:"json",
-		data:data			
+		url: "login/logowanie",
+		type: "POST",
+		datatype: "json",
+		data: data
 	});
 	
 	request.done(function(results){
@@ -430,13 +467,13 @@ function Login(){
 		$('#log-pass').removeClass( "is-invalid" );
 		$('#col-log-pass .invalid-feedback').html('');
 		
-		if(results[0] != ''){
+		if(results != ''){
 		
-			$('#col-log-pass .invalid-feedback').html(results[0]);
+			$('#col-log-pass .invalid-feedback').html(results);
 			$('#log-pass').addClass( "is-invalid" );
 		}
 		else
-			window.location.href = "/socialweb/web/app_dev.php/profil/posty";
+			window.location.pathname = "/socialweb/web/app_dev.php/profil/posty";
 	});
 }
 
@@ -651,7 +688,7 @@ function add_to_friends(friend_id){
 		if(window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/[a-z]*/[0-9]*") == null)
 			url = window.location.pathname+ "/1/add-to-friends";
 		else
-		url = window.location.pathname+ "/add-to-friends";
+			url = window.location.pathname+ "/add-to-friends";
 	}	
 	
 	var request = $.ajax({
@@ -746,6 +783,57 @@ function add_image_comment(type,comment_id = ''){
 		else
 			location.reload();
 	});	 
+}
+
+function change_personal_data(){
+	
+	name = $('#change-name').val();
+	surname = $('#change-surname').val();
+	city = $('#change-city').val();
+	birthdate = $('#change-birthdate').val();
+	gender = $('#change-gender').val();
+	
+	var data = '&name=' + name + '&surname=' + surname + '&city=' + city + '&birthdate=' + birthdate + '&gender=' + gender;
+	
+	$('#change-name').removeClass( "is-invalid" );
+	$('#change-surname').removeClass( "is-invalid" );
+	$('#change-birthdate').removeClass( "is-invalid" );
+	$('#change-gender').removeClass( "is-invalid" );
+	$('#col-change-name .invalid-feedback').html('');
+	$('#col-change-surname .invalid-feedback').html('');
+	$('#col-change-birthdate .invalid-feedback').html('');
+	$('#col-change-gender .invalid-feedback').html('');
+	
+	var request = $.ajax({
+		url: window.location.pathname + '/change-personal-data',
+		type: "POST",
+		datatype: "json",
+		data: data
+	});   
+	
+	request.done(function(results){  
+	
+		if(results[0]!=''){
+		
+			$('#col-change-name .invalid-feedback').html(results[0]);
+			$('#change-name').addClass( "is-invalid" );
+		}
+		
+		if(results[1]!=''){
+		
+			$('#col-change-surname .invalid-feedback').html(results[1]);
+			$('#change-surname').addClass( "is-invalid" );
+		}
+		
+		if(results[2]!=''){
+		
+			$('#col-change-birthdate .invalid-feedback').html(results[2]);
+			$('#change-birthdate').addClass( "is-invalid" );
+		}
+		
+		if(results[0] == '' && results[1] == '' && results[2] == '')
+			location.reload();
+	});
 }
 
 $('#range1').change(function(){
@@ -864,3 +952,4 @@ function image_sub_more_less(type,comment_id,all_subcomments){
 			$('#' + comment_id + '_subcomments_more').show();
 	}
 }
+

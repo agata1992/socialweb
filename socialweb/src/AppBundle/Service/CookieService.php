@@ -14,6 +14,7 @@ class CookieService{
 	}	
 	
 	public function check_exist_user_cookie(){
+	
 		$request = $this->requestStack->getCurrentRequest();
 		$cookie = $request->cookies;
 		if(!$cookie->get("user") == null){
@@ -26,6 +27,7 @@ class CookieService{
 	}	
 	
 	public function set_cookie($email){
+	
 		$cookie = new Cookie('user',$email,time() + ( 24 * 60 * 60));
 		$response = new Response;
 		$response->headers->setCookie($cookie);
@@ -33,11 +35,11 @@ class CookieService{
 	}
 	
 	public function delete_user_cookie(){
+	
 		$response = new Response();
 		$response->headers->clearCookie('user');
 		$response->send();
 	}
-	
 }
 	
 	
