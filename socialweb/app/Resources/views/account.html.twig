@@ -95,42 +95,85 @@
 							</div>
 						</div>
 						<div class="row row-margin row-margin3" id="row-change-data">
-					<div class="col-12">
-						<div class="d-flex justify-content-center align-items-center">
-						<button  class="btn btn-primary" type="submit" onclick="change_personal_data()" >Zmień dane</button>
-						</div>
-					</div>
-				</div>		
-							
+							<div class="col-12">
+								<div class="d-flex justify-content-center align-items-center">
+									<button class="btn btn-primary" type="submit" onclick="change_personal_data()">Zmień dane</button>
+								</div>
 							</div>
-						</div>
+						</div>		
+					</div>
+						
 					{% endif %}
 					{% if subpage == 'ustawienia' %}
 						<div class="container" id="con-account-setting">
 							<div class="row text-white">
 								<div class="col-12 text-center">
-									<h5>ustawienia</h5>
-								
-								
-								
-								
-								
-								
-								
+									<h5>USTAWIENIA KONTA</h5>
+								</div>
+							</div>
+							
+							<div class="row text-white row-margin2">
+								<div class="col-6" id="col-change-pass">
+								<label for="change-pass"><h6>Stare hasło</h6></label>
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa fa-unlock-alt"></i>
+									</span> 
+									<input type="password" class="form-control" id="change-pass" placeholder="Nowe hasło"/>
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>			
+						</div>
+						<div class="row text-white row-margin2">
+								<div class="col-6" id="col-change-new_pass">
+								<label for="change-new_pass"><h6>Nowe hasło</h6></label>
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa fa-unlock-alt"></i>
+									</span> 
+									<input type="password" class="form-control" id="change-new_pass" placeholder="Nowe hasło"/>
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>			
+							
+						</div>
+						<div class="row row-margin row-margin3" id="row-change-data">
+							<div class="col-6">
+								<div class="d-flex justify-content-center align-items-center">
+									<button class="btn btn-primary" type="submit" onclick="change_password()">Zmień hasło</button>
 								</div>
 							</div>
 						</div>
+						
+						<div class="row row-margin row-margin4" id="row-change-data">
+							<div class="col-6">
+								<div class="d-flex ">
+									<button class="btn btn-primary" type="submit" onclick="delete_account()">Usuń konto</button>
+								</div>
+							</div>
+						</div>
+						
+					</div>
 					{% endif %}
-					
 				</div>
 			</div>
-			
-			
-			
-			
-			
-			
 		</div>
-		
+		<div class="modal" id="decision-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h4 class="modal-title">Potwierdź decyzje</h4> 
+						<button type="button" class="close" data-dismiss="modal">×</button>
+					</div>
+					<div class="modal-body">
+						<p></p>
+					</div>
+					<div class="modal-footer">
+						<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+						<button id="button_confirm" type="button" class="btn btn-primary">Potwierdzam</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}

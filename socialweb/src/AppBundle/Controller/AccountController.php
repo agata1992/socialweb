@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
+use AppBundle\Service\AdditionalService;
 
 class AccountController extends Controller{
 
@@ -66,6 +67,76 @@ class AccountController extends Controller{
 				$db_service->change_personal_data($name,$surname,$city,$birthdate,$gender);
 				
 			return new JsonResponse($results);
+		}
+		else
+			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
+	}
+	
+	public function change_passwordAction(CookieService $cookie_service,DBService $db_service,AdditionalService $additional_service,Request $request){
+	
+		if($request->isXmlHttpRequest() == "true"){
+	
+			$user = $cookie_service->check_exist_user_cookie();
+
+			if($user == '')
+				return new RedirectResponse('/socialweb/web/app_dev.php/login');
+
+			$user_data = $db_service->get_user_data();
+	
+			$old_password = $request->request->get('old_password');
+			$new_password = $request->request->get('new_password');
+	
+			$results = array();
+			
+			if($old_password == '')
+				$results[0] = "Wpisz stare hasło";
+			else{
+			
+				$password2 = $user_data[4];
+				$salt = $user_data[5];
+				$password = md5($old_password.$salt);
+			
+				if($password2 != $password)
+					$results[0] = 'Błędne hasło';
+				else
+					$results[0] = '';
+			}
+			
+			if($new_password == '')
+				$results[1] = "Wpisz nowe hasło";
+			else{
+				if(!$additional_service->_s_has_upper_letters($new_password) || !$additional_service->_s_has_lower_letters($new_password)
+				|| !$additional_service->_s_has_numbers($new_password) || !$additional_service->_s_has_special_chars($new_password))
+					$results[1] = 'Hasło musi zawierać dużą litere,małą,liczbę oraz znak specjalny';
+				else{
+				
+					$salt = uniqid();
+					$new_password = $new_password.$salt;
+					$new_password = md5($new_password);
+					$db_service->change_password($new_password,$salt);
+				
+					$results[1]= '';
+				}
+			}
+			return new JsonResponse($results);
+		}
+		else
+			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
+	}
+	
+	public function delete_accountAction(CookieService $cookie_service,DBService $db_service,AdditionalService $additional_service,Request $request){
+	
+		if($request->isXmlHttpRequest() == "true"){
+	
+			$user = $cookie_service->check_exist_user_cookie();
+
+			if($user == '')
+				return new RedirectResponse('/socialweb/web/app_dev.php/login');
+
+			$user_data = $db_service->get_user_data();
+			
+			
+			return new JsonResponse('');
 		}
 		else
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');

@@ -32,7 +32,7 @@ window.onload = function(event){
 		$('#title-friends').removeClass( "log-reg-title-active" );
 		$('#title-friends').addClass( "pointer" );
 	
-		$('#title-posts').removeClass( "log-reg-title-active" );
+	$('#title-posts').removeClass( "log-reg-title-active" );
 		$('#title-posts').addClass( "pointer" );
 	
 		$('#title-galery').removeClass( "log-reg-title-active" );
@@ -336,12 +336,12 @@ $('#title-galery').click(function(event){
 });
 
 $('#title-personal-data').click(function(event){
-	if (window.location.pathanme != "/socialweb/web/app_dev.php/konto/dane")
+	if (window.location.pathname != "/socialweb/web/app_dev.php/konto/dane")
 		window.location.pathname = "/socialweb/web/app_dev.php/konto/dane";
 });
 
 $('#title-account-setting').click(function(event){
-	if (window.location.pathanme != "/socialweb/web/app_dev.php/konto/ustawienia")
+	if (window.location.pathname != "/socialweb/web/app_dev.php/konto/ustawienia")
 		window.location.pathname = "/socialweb/web/app_dev.php/konto/ustawienia";
 });
 
@@ -459,7 +459,8 @@ function Login(){
 		url: "login/logowanie",
 		type: "POST",
 		datatype: "json",
-		data: data
+		data: data,
+		processData: false
 	});
 	
 	request.done(function(results){
@@ -502,7 +503,7 @@ function change_album_name(){
 	var data = '&name='+new_album;
 	
 	var request = $.ajax({
-		url: window.location.pathname+"/zmien-nazwe-albumu",
+		url: window.location.pathname+"/change-album-name",
 		type: "POST",
 		datatype: "json",
 		data: data
@@ -525,9 +526,9 @@ function add_album(){
 	var data='&name='+new_album;
 	
 	if(!window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/[0-9]*"))
-		$url = window.location.pathname+"/1/dodaj-album";
+		$url = window.location.pathname+"/1/add-album";
 	else
-		$url = window.location.pathname+"/dodaj-album";
+		$url = window.location.pathname+"/add-album";
 	
 	var request = $.ajax({
 		url: $url,
@@ -565,7 +566,7 @@ function delete_album(){
 	$(".delete-album-modal .modal-footer #button_confirm").click(function(){
 	
 		var request = $.ajax({
-			url: window.location.pathname+"/usun-album",
+			url: window.location.pathname+"/delete-album",
 			type: "POST",
 			datatype: "json"
 		});   
@@ -597,7 +598,7 @@ function edit_image_description(){
 		var data='&description='+description;
 		
 		var request = $.ajax({
-			url: window.location.pathname+"/edytuj_opis",
+			url: window.location.pathname+"/edit_img_description",
 			type: "POST",
 			datatype: "json",
 			data: data
@@ -632,7 +633,7 @@ function delete_image(){
 	$(".delete-image-modal .modal-footer #button_confirm").click(function(){
 	
 		var request = $.ajax({
-			url: window.location.pathname+"/usun-zdjecie",
+			url: window.location.pathname+"/delete-image",
 			type: "POST",
 			datatype: "json"
 		});   
@@ -642,7 +643,7 @@ function delete_image(){
 			$('.delete-image-modal').hide(); 
 			path = window.location.pathname;
 			index = path.indexOf('zdjecie');
-			window.location.href = path.substring(0,index-1);
+			window.location.href = path.substring(0,index-1) + '/page/1';
 		});
 	});
 }
@@ -665,7 +666,7 @@ function set_as_profile_img(){
 	$(".profile-image-modal .modal-footer #button_confirm").click(function(){
 	
 		var request = $.ajax({
-			url: window.location.pathname+"/profilowe",
+			url: window.location.pathname+"/set_as_profile_img",
 			type: "POST",
 			datatype: "json"
 		});   
@@ -707,7 +708,7 @@ function delete_friend(friend_id){
 	
 	var data = '&friend_id='+friend_id;
 	
-	$('#decision-modal .modal-body p').html("Czy chcesz użytkownika?")
+	$('#decision-modal .modal-body p').html("Czy chcesz usunąć użytkownika?")
 	$('#decision-modal').addClass('delete-friend-modal');
 	$('.delete-friend-modal').show();
 	
@@ -735,6 +736,33 @@ function delete_friend(friend_id){
 		request.done(function(){  
 			$('.delete-friend-modal').hide(); 
 			location.reload();
+		});
+	});
+}
+function delete_account(){
+	
+	$('#decision-modal .modal-body p').html("Czy chcesz usunąć konto?")
+	$('#decision-modal').addClass('delete-account-modal');
+	$('.delete-account-modal').show();
+	
+	$(".delete-account-modal .modal-header .close").click(function(){
+		$('.delete-account-modal').hide();
+	});
+	
+	$(".delete-account-modal .modal-footer #button_cancel").click(function(){
+		$('.delete-account-modal').hide();
+	});
+	
+	$(".delete-account-modal .modal-footer #button_confirm").click(function(){
+		var request = $.ajax({
+			url: '/socialweb/web/app_dev.php/konto/ustawienia/delete-account',
+			type: "POST",
+			datatype: "json"
+		});   
+	
+		request.done(function(){  
+			$('.delete-account-modal').hide(); 
+			//location.reload();
 		});
 	});
 }
@@ -833,6 +861,47 @@ function change_personal_data(){
 		
 		if(results[0] == '' && results[1] == '' && results[2] == '')
 			location.reload();
+	});
+}
+
+function change_password(){
+	
+	old_password = $('#change-pass').val();
+	new_password = $('#change-new_pass').val();
+	
+	var data = '&old_password=' + old_password + '&new_password=' + new_password;
+
+	$('#change-pass').removeClass( "is-invalid" );
+	$('#change-new_pass').removeClass( "is-invalid" );
+	$('#col-change-pass .invalid-feedback').html('');
+	$('#col-change-new_pass .invalid-feedback').html('');
+	
+	var request = $.ajax({
+		url: window.location.pathname + '/change-password',
+		type: "POST",
+		datatype: "json",
+		data: data,
+		processData: false
+	});   
+	
+	request.done(function(results){ 
+		
+		if(results[0]!=''){
+		
+			$('#col-change-pass .invalid-feedback').html(results[0]);
+			$('#change-pass').addClass( "is-invalid" );
+		}
+		
+		if(results[1]!=''){
+		
+			$('#col-change-new_pass .invalid-feedback').html(results[1]);
+			$('#change-new_pass').addClass( "is-invalid" );
+		}
+		
+		if(results[0] == '' && results[1] == ''){
+			alert('Hasło zostało zmienione');
+			location.reload();
+		}
 	});
 }
 

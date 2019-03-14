@@ -137,6 +137,7 @@ class Main_PageController extends Controller{
 				
 				$image_subcomments = $db_service->getimage_subcomments($image_comments_array);
 				
+				
 				return $this->render('main_page.html.twig', array(
 				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
 				'subpage' => 'zdjecie','album' => $album,'image' => $image,'image_comments' => $image_comments,

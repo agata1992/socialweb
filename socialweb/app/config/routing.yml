@@ -11,25 +11,25 @@ album_access:
    path: /profil/galeria/album/{album_id}/page/{page}/dostep
    defaults: {_controller: AppBundle:Main_Page:album_access,page:1}  
 change_album_name:
-   path: /profil/galeria/album/{album_id}/zmien-nazwe-albumu
+   path: /profil/galeria/album/{album_id}/page/{page}/change-album-name
    defaults: {_controller: AppBundle:Main_Page:change_album_name}  
 delete_album:
-   path: /profil/galeria/album/{album_id}/page/{page}/usun-album
+   path: /profil/galeria/album/{album_id}/page/{page}/delete-album
    defaults: {_controller: AppBundle:Main_Page:delete_album,page:1}   
 add_album:
-   path: /profil/galeria/{page}/dodaj-album
+   path: /profil/galeria/{page}/add-album
    defaults: {_controller: AppBundle:Main_Page:add_album,page:1}      
 image:
    path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}
    defaults: {_controller: AppBundle:Main_Page:images,page:1}     
 edit_img_description:   
-   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/edytuj_opis
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}/edit_img_description
    defaults: {_controller: AppBundle:Main_Page:edit_img_description}
 delete_image:
-   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/usun-zdjecie
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}/delete-image
    defaults: {_controller: AppBundle:Main_Page:delete_img}
 set_as_profile_img:
-   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/profilowe
+   path: /profil/galeria/album/{album_id}/zdjecie/{image_id}/page/{page}/set_as_profile_img
    defaults: {_controller: AppBundle:Main_Page:set_as_profile_img}
 login:
    path: /login
@@ -75,4 +75,13 @@ account:
    defaults: {_controller: AppBundle:Account:index}  
 change_personal_data:
    path: /konto/{subpage}/change-personal-data
-   defaults: {_controller: AppBundle:Account:change_personal_data}  
+   defaults: {_controller: AppBundle:Account:change_personal_data}
+change_password:
+   path: /konto/ustawienia/change-password
+   defaults: {_controller: AppBundle:Account:change_password} 
+delete-account:
+   path: /konto/ustawienia/delete-account
+   defaults: {_controller: AppBundle:Account:delete_account} 
+groups:
+   path: /grupy
+   defaults: {_controller: AppBundle:Groups:index}

@@ -138,6 +138,7 @@ class LoginController extends Controller{
 			else{
 				
 				$cookie_service->set_cookie($email);
+				$results = '';
 			}
 		}
 	

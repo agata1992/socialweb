@@ -230,7 +230,6 @@ class DBService{
 		$friends2 = $this->entityManager
 		->getRepository(Friends::class)->findOneBy(['user1_id' => $searched_user->getid(),'user2_id' => $this->user_data_array[0]]);
 		
-		
 		$invitations = $this->entityManager
 		->getRepository(Invitations::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' => $searched_user->getid()]);
 		
@@ -357,7 +356,7 @@ class DBService{
 		$comments = $this->entityManager
 		->createQueryBuilder()->select('ii.id,ii.user_id,ii.add_date,ii.text','u.name,u.surname,u.profile_img')
 		->from('AppBundle:Image_Comments','ii')
-		->join('AppBundle:Users','u','WITH','u.id =ii.user_id')
+		->leftjoin('AppBundle:Users','u','WITH','u.id = ii.user_id')
 		->orderBy('ii.add_date', 'ASC')
 		->where('ii.image_id = :image_id')->setParameter(":image_id",$image_id)->getQuery()->getResult();
 		
@@ -417,6 +416,19 @@ class DBService{
 		$user->setcity($city);
 		$user->setbirthdate(new \DateTime($birthdate));
 		$user->setgender($gender);
+		
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
+	}
+	
+	public function change_password($new_password,$salt){
+		
+		$this->get_user_data();
+		$user = $this->entityManager
+		->getRepository(Users::class)->findOneBy(['id' => $this->user_data_array[0]]);
+		
+		$user->setpassword($new_password);
+		$user->setsalt($salt);
 		
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
