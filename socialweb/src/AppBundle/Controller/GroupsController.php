@@ -11,7 +11,7 @@ use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 use AppBundle\Service\AdditionalService;
 
-class GroupsController extends Controller{
+class GroupsController extends Controller{ 
 
 	public function indexAction(CookieService $cookie_service,DBService $db_service,$page,$category = ''){
 		
