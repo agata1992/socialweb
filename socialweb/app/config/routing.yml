@@ -83,8 +83,11 @@ delete-account:
    path: /konto/ustawienia/delete-account
    defaults: {_controller: AppBundle:Account:delete_account} 
 groups:
-   path: /grupy
-   defaults: {_controller: AppBundle:Groups:index}
+   path: /grupy/{page}
+   defaults: {_controller: AppBundle:Groups:index,page:1}
+groups_category:
+   path: /grupy/kategoria/{category}/{page}
+   defaults: {_controller: AppBundle:Groups:index,page:1}
 create_group:
    path: /grupy/create-group
    defaults: {_controller: AppBundle:Groups:create_group}

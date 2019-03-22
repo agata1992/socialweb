@@ -13,7 +13,7 @@ use AppBundle\Service\AdditionalService;
 
 class GroupsController extends Controller{
 
-	public function indexAction(CookieService $cookie_service,DBService $db_service){
+	public function indexAction(CookieService $cookie_service,DBService $db_service,$page,$category = ''){
 		
 		$user = $cookie_service->check_exist_user_cookie();
 
@@ -22,10 +22,21 @@ class GroupsController extends Controller{
 
 		$user_data = $db_service->get_user_data();
 		
-		$groups = $db_service->get_groups();
+		$groups = $db_service->get_groups($category);
+		
+		$groups_on_page = 6;
+			
+		$count_groups = count($groups);
+			
+		
+		if((ceil($count_groups/$groups_on_page)<($page) && $page != 1) || $page <= 0)
+			return $this->render('page_no_found.html.twig',array(
+			'page_name' => 'Nie znaleziono strony','nav_title' => 'Grupy',
+			'user' => $user_data));
+		
 		
 		return $this->render('groups.html.twig', array(
-		'page_name' => 'Grupy','nav_title' => 'Grupy','user' => $user_data,'groups' => $groups));
+		'page_name' => 'Grupy','nav_title' => 'Grupy','user' => $user_data,'groups' => $groups,'page' => $page,'category' => $category));
 	}
 	
 	public function create_groupAction(CookieService $cookie_service,DBService $db_service,Request $request){
@@ -112,8 +123,8 @@ class GroupsController extends Controller{
 			$users_on_page = 6;
 			
 			$count_users = count($group_users);
-			
-			if((ceil($count_users/$users_on_page))<($page - 1))
+			print ceil($count_users/$users_on_page);
+			if(((ceil($count_users/$users_on_page))<($page) && $page != 1) || $page <= 0)
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Grupa',
 				'user' => $user_data));

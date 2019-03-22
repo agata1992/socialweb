@@ -436,15 +436,17 @@ class DBService{
 		$this->entityManager->flush();
 	}
 	
-	public function get_groups($category = ''){
+	public function get_groups($category){
 		
 		if($category == ''){
 			$groups = $this->entityManager
-			->getRepository(Groups::class)->findOneBy(['type' => 0]);
+			->getRepository(Groups::class)->findBy(['type' => 0]);
 		}
 		else{
-			;
+			$groups = $this->entityManager
+			->getRepository(Groups::class)->findBy(['type' => 0,'category' => $category]);
 		}
+		
 		return $groups;
 	}
 	
