@@ -3,7 +3,7 @@
 {% block content %}
 	<div id="container8">
 		<div class="container-fluid bg-dark">
-			<div class="row bg-dark main-row">
+			<div class="row bg-dark main-row" id="con-groups">
 				<div class="col-12">
 					<div class="row">
 						<div class="col-12 text-center text-white">
@@ -31,9 +31,8 @@
 						<div class="col-2 text-center">
 							<a href="/socialweb/web/app_dev.php/grupy/moda" class=" nav-link text-secondary"><h5>Moda</h5></a>
 						</div>
-						
-						
 					</div>
+					
 					<div class="row">
 						<div class="col-2 text-center">
 							<a href="/socialweb/web/app_dev.php/grupy/nauka" class=" nav-link text-secondary"><h5>Nauka</h5></a>
@@ -52,12 +51,109 @@
 						</div>
 					</div>
 					
-					
-					
+					<div class="row text-white row-margin2">
+						<div class="col-6 margin-col">
+							<div class="bg-secondary" style="border:1px solid;padding:5px;">
+								<h6>Wyszukaj grupę</h6>
+								<div class="input-group">
+									<input type="text" class="form-control" id="search-groups-input" value=""  placeholder="Szukaj"/>
+									<button class="btn btn-default bg-primary">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+								
+						<div class="col-6 text-center">
+							<button class="btn btn-primary" onclick="create_group()">
+								<i class="fa fa-plus"></i> Dodaj grupę
+							</button>
+						</div>
+					</div>
+					<div class="row text-white row-margin2">
+						<div class="col-12 margin-col text-center">
+						{% if groups | length == 0 %}
+							<h5>Nie znaleziono grup</h5>
+						{% endif %}
+						</div>
+					</div>
 				</div>
-		</div>
+				
+
+				
+				
+			</div>
+			
+			
 		
 		</div>
 		
 	</div>
+	<div class="modal" id="create-group-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h4 class="modal-title">Dodaj nową grupę</h4> 
+					<button type="button" class="close" data-dismiss="modal">×</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-12">
+							<input type="text" class="form-control" id="create-group-title" placeholder="Tytuł"/>
+							<h6 id="create-group-title-feedback" class="text-danger text-center"></h6>
+						</div>
+					</div>
+					<div class="row row-margin2">
+						<div class="col-12">
+							<textarea class="form-control" rows="4" id="create-group-description" placeholder="Opis"></textarea>
+							<h6 id="create-group-description-feedback" class="text-danger text-center"></h6>
+						</div>
+					</div>
+				
+					<div class="row row-margin2">
+						<div class="col-6">
+							<select class="form-control" id="create-group-category">
+								<option selected disabled="true">Kategoria</option>
+								<option>Film</option>
+								<option>Gastronomia</option>
+								<option>Internet</option>
+								<option>Kultura</option>
+								<option>Muzyka</option>
+								<option>Moda</option>
+								<option>Nauka</option>
+								<option>Polityka</option>
+								<option>Praca</option>
+								<option>Sport</option>
+								<option>Uroda</option>
+							</select>
+							<h6 id="create-group-category-feedback" class="text-danger text-center"></h6>
+						</div>
+					
+						<div class="col-6">
+							<select class="form-control" id="create-group-type">
+								<option selected disabled="true">Typ</option>
+								<option>Publiczna</option>
+								<option>Prywatna</option>
+							</select>
+							<h6 id="create-group-type-feedback" class="text-danger text-center"></h6>
+						</div>
+					</div>
+					
+					
+				</div>
+				<div class="modal-footer">
+					<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+					<button id="button_confirm" type="button" class="btn btn-primary">Potwierdzam</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
 {% endblock %}

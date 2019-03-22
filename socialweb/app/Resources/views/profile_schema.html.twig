@@ -132,7 +132,7 @@
 								{% set j = j + 1 %}
 							{% endfor %}
 						
-							{% if all_pages | length > 1 %}
+							{% if all_pages > 1 %}
 								<div class="row text-white">
 									<div class="col-12 text-center znajomi-col">
 										<div class="align-items-center" style="padding:5px;">
@@ -739,23 +739,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal" id="decision-modal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header bg-primary">
-						<h4 class="modal-title">Potwierdź decyzje</h4> 
-						<button type="button" class="close" data-dismiss="modal">×</button>
-					</div>
-					<div class="modal-body">
-						<p></p>
-					</div>
-					<div class="modal-footer">
-						<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-						<button id="button_confirm" type="button" class="btn btn-primary">Potwierdzam</button>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 	{% if subpage == 'zdjecie' %}
 		<div class="modal" id="edit-image-description-modal">
@@ -777,3 +760,5 @@
 			</div>
 		</div>
 	{% endif %}
+	
+	{% include 'decision_modal.html.twig' %}

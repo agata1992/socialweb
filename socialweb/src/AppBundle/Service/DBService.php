@@ -4,13 +4,15 @@ namespace AppBundle\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManager;
-use  AppBundle\Entity\Users;
-use  AppBundle\Entity\Albums;
-use  AppBundle\Entity\Images;
-use  AppBundle\Entity\Friends;
-use  AppBundle\Entity\Invitations;
-use  AppBundle\Entity\Image_Comments;
-use  AppBundle\Entity\Image_Subcomments;
+use AppBundle\Entity\Users;
+use AppBundle\Entity\Albums;
+use AppBundle\Entity\Images;
+use AppBundle\Entity\Friends;
+use AppBundle\Entity\Invitations;
+use AppBundle\Entity\Image_Comments;
+use AppBundle\Entity\Image_Subcomments;
+use AppBundle\Entity\Groups;
+use AppBundle\Entity\Group_Members;
 
 class DBService{
 	
@@ -433,5 +435,115 @@ class DBService{
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
 	}
+	
+	public function get_groups($category = ''){
+		
+		if($category == ''){
+			$groups = $this->entityManager
+			->getRepository(Groups::class)->findOneBy(['type' => 0]);
+		}
+		else{
+			;
+		}
+		return $groups;
+	}
+	
+	public function create_group($title,$description,$category,$type){
+		
+		$this->get_user_data();
+		
+		$group = new Groups();
+		$group->setowner_id($this->user_data_array[0]);
+		$group->settitle($title);
+		$group->setdescription($description);
+		$group->setcategory($category);
+		$group->settype($type);
+		$group->setadd_date(new \DateTime(date("Y-m-d")));
+		$group->setimage('');
+		
+		$this->entityManager->persist($group);
+		$this->entityManager->flush();
+		
+		$last_id = $group->getId();
+		
+		$group_member = new Group_Members();
+		$group_member->setuser_id($this->user_data_array[0]);
+		$group_member->setgroup_id($last_id);
+		$group_member->setadd_date(new \DateTime(date("Y-m-d")));
+		
+		$this->entityManager->persist($group_member);
+		$this->entityManager->flush();
+		
+		return $last_id;
+	}
+	
+	public function get_group($id){
+	
+		$this->get_user_data();
+		
+		$group = $this->entityManager
+		->getRepository(Groups::class)->findOneBy(['id' => $id]);
+		
+		if($group != NULL){
+			
+			if($group->gettype() == 1){
+				if($group->getowner_id() != $this->user_data_array[0]){
+				
+					$group_member = $this->entityManager
+					->getRepository(Group_Members::class)->findOneBy(['user_id' => $this->user_data_array[0],'group_id' => $id]);
+					
+					if($group_member == NULL)
+						$group = NULL;
+				}
+			}
+		}
+			
+		return $group;
+	}
+	
+	public function get_group_owner($id){
+		
+		$group = $this->entityManager
+		->getRepository(Groups::class)->findOneBy(['id' => $id]);
+		
+		$owner_user = $this->get_user_profile_data($group->getowner_id());
+		
+		return $owner_user;
+	}
+	
+	public function get_group_users($id){
+		
+		$group_users = $this->entityManager
+		->createQueryBuilder()->select('g.user_id ,u.name,u.surname,u.city,u.birthdate,u.profile_img')->from('AppBundle:Group_Members','g')
+		->join('AppBundle:Users','u','WITH','u.id =g.user_id')->orderBy('CONCAT(u.name,  \' \',u.surname)', 'ASC')
+		->where('g.group_id = :id')->setParameter(":id",$id)->getQuery()->getResult();
+		
+		return $group_users;
+	}
+	
+	public function join_group($id){
+		
+		$this->get_user_data();
+		
+		$group_member = new Group_Members();
+		$group_member->setuser_id($this->user_data_array[0]);
+		$group_member->setgroup_id($id);
+		$group_member->setadd_date(new \DateTime(date("Y-m-d")));
+		
+		$this->entityManager->persist($group_member);
+		$this->entityManager->flush();
+	}
+	
+	public function unjoin_group($group_id){
+		
+		$this->get_user_data();
+		
+		$group_member = $this->entityManager
+		->getRepository(Group_Members::class)->findOneBy(['group_id' => $group_id,'user_id' => $this->user_data_array[0]]);
+		
+		$this->entityManager->remove($group_member);
+		$this->entityManager->flush();
+	}
+	
 }
 ?>

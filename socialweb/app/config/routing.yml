@@ -85,3 +85,12 @@ delete-account:
 groups:
    path: /grupy
    defaults: {_controller: AppBundle:Groups:index}
+create_group:
+   path: /grupy/create-group
+   defaults: {_controller: AppBundle:Groups:create_group}
+show_group:
+   path: /grupy/id/{id}/{subpage}/{page}
+   defaults: {_controller: AppBundle:Groups:show_group,page:1}   
+join_group:
+   path: /grupy/id/{id}/{subpage}/{page}/join-unjoin-group
+   defaults: {_controller: AppBundle:Groups:join_unjoin_group}   

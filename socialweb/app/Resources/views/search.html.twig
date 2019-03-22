@@ -133,13 +133,14 @@
 									{% endif %}
 								</h6>
 								<h5>
-									<a href="#"><i class="fa fa-envelope text-white"></i></a>
+								
+									<button class="btn btn-primary"><i class="fa fa-envelope text-white"></i></button>
 									{% if searched_user.friendship == 0 %}
-										<a class="pointer" title="Zaproś do znajomych" onclick="add_to_friends({{ searched_user.id }})"><i class="fa fa-user-plus text-white"></i></a>
+										<button class="btn btn-primary" onclick="add_to_friends({{ searched_user.id }})"><i class="fa fa-user-plus text-white"></i></button>
 									{% elseif searched_user.friendship == 1 %}
-										<a style="pointer-events: auto" title="Jesteście znajomymi" class="btn disabled pointer"><i class="fa fa-user-plus text-white"></i></a>
+										<button class="btn btn-primary disabled" title="Jesteście znajomymi"><i class="fa fa-user-plus text-white"></i></button>
 									{% else %}
-										<a style="pointer-events: auto" title="Wysłano zaproszenie" class="btn disabled pointer"><i class="fa fa-user-plus text-white"></i></a>
+										<button class="btn btn-primary disabled" title="Wysłano zaproszenie"><i class="fa fa-user-plus text-white"></i></button>
 									{% endif %}
 								</h5>
 							</div>
@@ -153,7 +154,7 @@
 					{% set j = j + 1 %}
 				{% endfor %}
 				
-				{% if all_users > users_on_page %}
+				{% if all_pages > 1 %}
 					<div class="row row-margin3">
 						<div class="col-12 text-center">
 							<nav>

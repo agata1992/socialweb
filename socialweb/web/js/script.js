@@ -58,7 +58,7 @@ window.onload = function(event){
 		$('#title-profile').removeClass( "log-reg-title-active" );
 		$('#title-profile').addClass( "pointer" );
 	
-		$('#title-galery').removeClass( "log-reg-title-active" );
+	$('#title-galery').removeClass( "log-reg-title-active" );
 		$('#title-galery').addClass( "pointer" );
 	
 		$("#con-friends").show();
@@ -177,6 +177,54 @@ window.onload = function(event){
 	if(window.location.pathname.includes("/socialweb/web/app_dev.php/wyszukiwarka")){
 		if($('#gender-select').val() == 'Kobieta' || $('#gender-select').val() == 'Mężczyzna')
 			$('#select-gender-delete').show();
+	}
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/dyskusja")){
+		
+		$('#title-conversation').addClass( "log-reg-title-active" );
+		$('#title-conversation').removeClass( "pointer" );
+	
+		$('#title-users').removeClass( "log-reg-title-active" );
+		$('#title-users').addClass( "pointer" );
+	
+		$('#title-informations').removeClass( "log-reg-title-active" );
+		$('#title-informations').addClass( "pointer" );
+	
+		$("#con-conversation").show();
+		$("#con-users").hide();
+		$("#con-informations").hide();
+	}
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/uzytkownicy")){
+		
+		$('#title-users').addClass( "log-reg-title-active" );
+		$('#title-users').removeClass( "pointer" );
+		
+		$('#title-conversation').removeClass( "log-reg-title-active" );
+		$('#title-conversation').addClass( "pointer" );
+	
+		$('#title-informations').removeClass( "log-reg-title-active" );
+		$('#title-informations').addClass( "pointer" );
+	
+		$("#con-users").show();
+		$("#con-conversation").hide();
+		$("#con-informations").hide();
+	}
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/informacje")){
+		
+		$('#title-informations').addClass( "log-reg-title-active" );
+		$('#title-informations').removeClass( "pointer" );
+		
+		$('#title-users').removeClass( "log-reg-title-active" );
+		$('#title-users').addClass( "pointer" );
+		
+		$('#title-conversation').removeClass( "log-reg-title-active" );
+		$('#title-conversation').addClass( "pointer" );
+	
+		$("#con-informations").show();
+		$("#con-users").hide();
+		$("#con-conversation").hide();
 	}
 }
 
@@ -343,6 +391,37 @@ $('#title-personal-data').click(function(event){
 $('#title-account-setting').click(function(event){
 	if (window.location.pathname != "/socialweb/web/app_dev.php/konto/ustawienia")
 		window.location.pathname = "/socialweb/web/app_dev.php/konto/ustawienia";
+});
+
+
+$('#title-conversation').click(function(event){
+	
+	location_ = window.location.pathname;
+	match_ = location_.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*");
+	group_id = match_.toString().replace("/socialweb/web/app_dev.php/grupy/id/","");
+	
+	if (!window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/dyskusja"))
+		window.location.pathname = "/socialweb/web/app_dev.php/grupy/id/" + group_id + "/dyskusja";
+});
+
+$('#title-users').click(function(event){
+	
+	location_ = window.location.pathname;
+	match_ = location_.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*");
+	group_id = match_.toString().replace("/socialweb/web/app_dev.php/grupy/id/","");
+	
+	if (!window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/uzytkownicy"))
+		window.location.pathname = "/socialweb/web/app_dev.php/grupy/id/" + group_id + "/uzytkownicy";
+});
+
+$('#title-informations').click(function(event){
+	
+	location_ = window.location.pathname;
+	match_ = location_.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*");
+	group_id = match_.toString().replace("/socialweb/web/app_dev.php/grupy/id/","");
+	
+	if (!window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/informacje"))
+		window.location.pathname = "/socialweb/web/app_dev.php/grupy/id/" + group_id + "/informacje";
 });
 
 
@@ -739,6 +818,7 @@ function delete_friend(friend_id){
 		});
 	});
 }
+
 function delete_account(){
 	
 	$('#decision-modal .modal-body p').html("Czy chcesz usunąć konto?")
@@ -905,6 +985,122 @@ function change_password(){
 	});
 }
 
+function create_group(){
+	
+	$('#create-group-modal').show();
+	
+	$("#create-group-modal .modal-header .close").click(function(){
+		$('#create-group-modal').hide();
+	});
+	
+	$("#create-group-modal .modal-footer #button_cancel").click(function(){
+		$('#create-group-modal').hide();
+	});
+	
+	$("#create-group-modal .modal-footer #button_confirm").click(function(){
+		
+		$('#create-group-title').removeClass( "is-invalid" );
+		$('#create-group-description').removeClass( "is-invalid" );
+		$('#create-group-category').removeClass( "is-invalid" );
+		$('#create-group-type').removeClass( "is-invalid" );
+		
+		$('#create-group-title-feedback').html('');
+		$('#create-group-description-feedback').html('');
+		$('#create-group-category-feedback').html('');
+		$('#create-group-type-feedback').html('');
+		
+		title = $('#create-group-title').val();
+		description = $('#create-group-description').val();
+		category = $('#create-group-category').val();
+		
+		if(category == null)
+			category = "";
+		
+		type = $('#create-group-type').val();
+		
+		if(type == null)
+			type = "";
+		
+		var data = '&title=' + title + '&description=' + description + '&category=' + category + '&type=' + type;
+	
+		var request = $.ajax({
+			url: '/socialweb/web/app_dev.php/grupy/create-group',
+			type: "POST",
+			datatype: "json",
+			data: data
+		});   
+	
+		request.done(function(results){  
+		
+			if(results[0] != ''){
+				$('#create-group-title').addClass( "is-invalid" );
+				$('#create-group-title-feedback').html(results[0]);
+			}
+			
+			if(results[1] != ''){
+				$('#create-group-description').addClass( "is-invalid" );
+				$('#create-group-description-feedback').html(results[1]);
+			}
+			
+			if(results[2] != ''){
+				$('#create-group-category').addClass( "is-invalid" );
+				$('#create-group-category-feedback').html(results[2]);
+			}
+			
+			if(results[3] != ''){
+				$('#create-group-type').addClass( "is-invalid" );
+				$('#create-group-type-feedback').html(results[3]);
+			}
+			
+			if(results[0] == '' && results[1] == '' && results[2] == '' && results[3] == ''){
+				$('#create-group-modal').hide();
+				window.location.pathname = "/socialweb/web/app_dev.php/grupy/id/" + results[4] +"/dyskusja";
+			}
+		});
+	});
+}
+
+function join_unjoin_group(group_id,type){
+	
+	if(type == 1)
+		$('#decision-modal .modal-body p').html("Czy chcesz dołączyć do grupy?");
+	else
+		$('#decision-modal .modal-body p').html("Czy chcesz wypisać się z grupy?");
+	
+	$('#decision-modal').addClass('join-unjoin-group-modal');
+	$('.join-unjoin-group-modal').show();
+	
+	$(".join-unjoin-group-modal .modal-header .close").click(function(){
+		$('.join-unjoin-group-modal').hide();
+	});
+	
+	$(".join-unjoin-group-modal .modal-footer #button_cancel").click(function(){
+		$('.join-unjoin-group-modal').hide();
+	});
+	
+	$(".join-unjoin-group-modal .modal-footer #button_confirm").click(function(){
+	
+		if(window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/[a-z]*")){
+		
+			if(!window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/[a-z]*/[0-9]*"))
+				window.location.pathname = window.location.pathname + "/1";
+		}
+	
+		var data = '&group_id=' + group_id + '&type=' + type;
+	
+		var request = $.ajax({
+			url: window.location.pathname + "/join-unjoin-group",
+			type: "POST",
+			datatype: "json",
+			data: data
+		}); 
+		
+		request.done(function(){ 
+			location.reload();
+		});
+	});
+}
+
 $('#range1').change(function(){
 	
 	if($('#range-input2').val() == '')
@@ -993,7 +1189,7 @@ function image_sub_more_less(type,comment_id,all_subcomments){
 		if(showed_subcomments == all_subcomments)
 			$('#' + comment_id + '_subcomments_more').hide();
 		
-		if(showed_subcomments - change_count_subcomments >=1 )
+		if(showed_subcomments - change_count_subcomments >=1)
 			$('#' + comment_id + '_subcomments_less').show();
 	}
 

@@ -1,0 +1,227 @@
+{% extends 'main.html.twig' %}
+
+{% block content %}
+	<div class=" bg-dark text-white" id="container9">
+		<div class="container-fluid">
+			<div class="align-items-center row" id="row3">
+				<div class="col-6 text-center">
+					{% if group.image == '' %}
+						<a><img src="{{ asset('service-image/user-group.png') }}" width="150px" class="img-fluid rounded-circle"></a>
+					{%else %}
+						<a><img src="{{ asset('group_images/'~user_profile.profile_img) }}" width="150px" height="150px" class="rounded-circle"></a>
+					{% endif %}
+					<h5>{{ group.title }} </h5>
+					<h6>
+						<a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy/{{group.category}}">{{ group.category }}</a>
+					</h6>
+				</div>
+				<div class="col-6 text-center">
+					
+					{% set is_user = 0 %}
+					{% set break = false %}
+					
+					{% for group_user in group_users if not break %}
+						{% if group_user.user_id == user[0] %}
+							{% set is_user = 1 %}
+							{% set break = true %}
+						{% endif %}
+					{% endfor %}
+				
+					{% if is_user == 1 and group_owner.id != user[0] %}
+						<button class="btn btn-primary" onclick="join_unjoin_group({{group.id}},0)">Wypisz się</button>
+					{% endif %}
+					
+					{% if is_user == 0 %}
+						<button class="btn btn-primary" onclick="join_unjoin_group({{group.id}},1)">Dołącz</button>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=" bg-dark text-white" id="container10">
+		<div class="container-fluid">
+			<div class="row bottom-border2 text-white bg-dark" id="row-title">
+				<div class="col font-comic log-reg-title-active" id="title-conversation">
+					<h5>DYSKUSJA</h5>
+				</div>
+				<div class="col font-comic pointer" id="title-users">
+					<h5>UŻYTKOWNICY</h5>
+				</div>
+				<div class="col font-comic pointer" id="title-informations">
+					<h5>INFORMACJE</h5>
+				</div>			  		
+			</div>
+
+			<div class="row bg-dark main-row">
+				<div class="col-12">
+					<div class="container" id="con-conversation">
+						<div class="row bg-success">
+							<div class="col-12">
+								dyskusja
+							</div>
+						</div>
+					</div>
+					
+					{% if subpage == "uzytkownicy" %}
+						<div class="container" id="con-users">
+							<div class="row text-white">
+								<div class="col-12 text-center">
+									<h5> UŻYTKOWNICY({{group_users | length}})</h5>
+								</div>
+							</div>
+						
+							{% set users_on_page = 6 %}
+							{% set all_users = group_users | length %}
+							{% set begin = (page * users_on_page) - users_on_page %}
+							{% set end = begin + users_on_page %}
+							{% set all_pages = all_users / users_on_page %}
+							{% set all_pages = all_pages | round(0,'ceil') %}
+							{% set i = 0 %}
+							{% set j = 0 %}
+						
+							{% set link = "/socialweb/web/app_dev.php/grupy/id/" ~group.id ~ "/uzytkownicy" %}
+							
+							{% for group_user in group_users %}
+								{% if j >= begin and j < end %}
+									{% if i % 3==0 %}
+										<div class="row text-white">
+									{% endif %}
+									<div class="col-sm-4 text-center margin-col">
+										<div class="bg-secondary" style="border:1px solid;padding:5px">
+											{% if group_user.profile_img == '' %}
+												<a href="/socialweb/web/app_dev.php/user/{{ group_user.user_id }}/posty"><img src="{{ asset('service-image/user.png') }}" width="100px" class="img-fluid rounded-circle"></a>
+											{% else %}
+												<a href="/socialweb/web/app_dev.php/user/{{ group_user.user_id }}/posty"><img src="{{ asset('images/'~group_user.profile_img) }}" width="100px" height="100px" class="rounded-circle"></a>
+											{% endif %}
+											<h5 class="text-truncate">{{ group_user.name }} {{ group_user.surname }}</h5>
+											{% if group_user.city == '' %}
+												<h6>-</h6>
+											{% else %}
+												<h6>{{ group_user.city }}</h6>
+											{% endif %}
+											<h6>
+												{{ group_user.age }}
+												{% if group_user.age == 1 %}
+													rok 
+												{% elseif group_user.age % 100 >= 10 and  group_user.age % 100 <= 19 %}
+												lat
+												{% else %}
+													{% if group_user.age % 10 in [0,1,5,6,7,8,9] %}
+														lat
+													{% endif %}
+													{% if group_user.age % 10 in [2,3,4] %}
+														lata
+													{% endif %}
+												{% endif %}
+											</h6>
+										</div>
+									</div>
+							
+									{% if i % 3 == 2 or j == all_users - 1 %}
+										</div>
+									{% endif %}
+									{% set i = i + 1 %}
+								{% endif %}
+								{% set j = j + 1 %}
+							{% endfor %}
+						
+							{% if all_pages > 1 %}
+								<div class="row text-white row-margin3">
+									<div class="col-12 text-center znajomi-col">
+										<div class="align-items-center" style="padding:5px;">
+											<nav>
+												<ul class="pagination justify-content-center">
+													{% if page == 1 %}
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/2">2</a></li>
+														{% if all_pages >= 3 %}
+															<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/3">3</a></li>
+														{% endif %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{all_pages}}">>></a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page+1}}">Następne</a></li>
+													{% elseif page == all_pages %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">Poprzednie</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/1"><<</a></li>
+														{% if all_pages >= 3 %}
+															<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-2}}">{{page - 2}}</a></li>
+														{% endif %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">{{page - 1}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/{{page}}">{{page}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
+													{% else %}
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">Poprzednie</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/1"><<</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{page - 1}}">{{page - 1}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/{{page}}">{{page}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{page + 1}}">{{page + 1}}</a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{all_pages}}">>></a></li>
+														<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page+1}}">Następne</a></li>
+													{% endif %}
+												</ul>
+											</nav>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						</div>
+					{% endif %}
+					{% if subpage == "informacje" %}
+						<div class="container" id="con-informations">
+							<div class="row">
+								<div class="col-12 text-center text-primary">
+									<h4>{{ group.title }}</h4>
+								</div>
+							</div>
+						
+							<div class="row row-margin2">
+								<div class="col-12 text-center">
+									<h6>{{ group.description }}</h6>
+								</div>
+							</div>
+						
+							<div class="row row-margin2">
+								<div class="col-12 text-center text-primary">
+									<h5>WŁAŚCICIEL</h5>
+								</div>
+							</div>
+							<div class="row row-margin2">
+								<div class="col-12 text-center text-primary">
+									{% if group_owner.profile_img == '' %}
+										<a href="/socialweb/web/app_dev.php/user/{{group_owner.id}}/posty"><img src="{{ asset('service-image/user.png') }}" width="150px" class="img-fluid rounded-circle"></a>
+									{%else %}
+										<a href="/socialweb/web/app_dev.php/user/{{group_owner.id}}/posty"><img src="{{ asset('images/'~group_owner.profile_img) }}" width="150px" height="150px" class="rounded-circle"></a>
+									{% endif %}
+								</div>
+							</div>
+						
+							<div class="row row-margin">
+								<div class="col-12 text-center">
+									<h6>
+										<a href="/socialweb/web/app_dev.php/user/{{group_owner.id}}/posty" class="nav-link text-white">
+											{{group_owner.name}} {{group_owner.surname}}
+										</a>
+									</h6>
+								</div>
+							</div>
+						
+							<div class="row row-margin2">
+								<div class="col-12 text-center text-primary">
+									<h5>DATA DODANIA</h5>
+								</div>
+							</div>
+							<div class="row row-margin">
+								<div class="col-12 text-center">
+									<h6>{{group.add_date | date("d.m.Y")}} roku</h6>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{% include 'decision_modal.html.twig' %}
+	</div>
+{% endblock %}
