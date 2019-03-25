@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use  AppBundle\Entity\Users;
-use  AppBundle\Entity\Albums;
-use  AppBundle\Entity\Images;
+use AppBundle\Entity\Users;
+use AppBundle\Entity\Albums;
+use AppBundle\Entity\Images;
 
 use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
@@ -25,6 +25,11 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
+		
+		if($subpage != "posty" && $subpage != "omnie" && $subpage != "znajomi" && $subpage != "galeria")
+			return $this->render('page_no_found.html.twig',array(
+			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+			'user' => $user_data));
 
 		if($subpage == "galeria"){
 			
@@ -34,7 +39,7 @@ class Main_PageController extends Controller{
 			$albums = $db_service->get_user_albums();
 			$count_albums = count($albums);
 			
-			if(($count_albums/$albums_on_page)<($page-1))
+			if(ceil($count_albums/$albums_on_page)<($page-1))
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
 				'user' => $user_data));
@@ -56,7 +61,7 @@ class Main_PageController extends Controller{
 			
 			$count_friends = count($friends);
 			
-			if(($count_friends/$friends_on_page)<($page-1))
+			if((ceil($count_friends/$friends_on_page))<($page-1))
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
 				'user' => $user_data));
@@ -94,7 +99,7 @@ class Main_PageController extends Controller{
 			$images = $db_service->get_images_by_album_id($album_id);
 			$count_images = count($images);
 			
-			if(($count_images/$images_on_page)<($page-1))
+			if(ceil($count_images/$images_on_page)<($page-1))
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
 				'user' => $user_data));
@@ -136,6 +141,7 @@ class Main_PageController extends Controller{
 					$image_comments_array[$i] = $image_comments[$i]['id'];
 				
 				$image_subcomments = $db_service->getimage_subcomments($image_comments_array);
+				
 				
 				return $this->render('main_page.html.twig', array(
 				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,

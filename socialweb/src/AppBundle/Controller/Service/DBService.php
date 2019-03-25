@@ -4,13 +4,15 @@ namespace AppBundle\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManager;
-use  AppBundle\Entity\Users;
-use  AppBundle\Entity\Albums;
-use  AppBundle\Entity\Images;
-use  AppBundle\Entity\Friends;
-use  AppBundle\Entity\Invitations;
-use  AppBundle\Entity\Image_Comments;
-use  AppBundle\Entity\Image_Subcomments;
+use AppBundle\Entity\Users;
+use AppBundle\Entity\Albums;
+use AppBundle\Entity\Images;
+use AppBundle\Entity\Friends;
+use AppBundle\Entity\Invitations;
+use AppBundle\Entity\Image_Comments;
+use AppBundle\Entity\Image_Subcomments;
+use AppBundle\Entity\Groups;
+use AppBundle\Entity\Group_Members;
 
 class DBService{
 	
@@ -108,6 +110,7 @@ class DBService{
 		
 		$album = $this->get_user_album_by_id($album_id);
 		$album->setalbum_access($album_access);
+		$this->entityManager->persist($album);
 		$this->entityManager->flush();
 	}
 	
@@ -228,7 +231,6 @@ class DBService{
 		
 		$friends2 = $this->entityManager
 		->getRepository(Friends::class)->findOneBy(['user1_id' => $searched_user->getid(),'user2_id' => $this->user_data_array[0]]);
-		
 		
 		$invitations = $this->entityManager
 		->getRepository(Invitations::class)->findOneBy(['user1_id' => $this->user_data_array[0],'user2_id' => $searched_user->getid()]);
@@ -356,7 +358,7 @@ class DBService{
 		$comments = $this->entityManager
 		->createQueryBuilder()->select('ii.id,ii.user_id,ii.add_date,ii.text','u.name,u.surname,u.profile_img')
 		->from('AppBundle:Image_Comments','ii')
-		->join('AppBundle:Users','u','WITH','u.id =ii.user_id')
+		->leftjoin('AppBundle:Users','u','WITH','u.id = ii.user_id')
 		->orderBy('ii.add_date', 'ASC')
 		->where('ii.image_id = :image_id')->setParameter(":image_id",$image_id)->getQuery()->getResult();
 		
@@ -404,5 +406,159 @@ class DBService{
 			$this->entityManager->flush();
 		}
 	}
+	
+	public function change_personal_data($name,$surname,$city,$birthdate,$gender){
+		
+		$this->get_user_data();
+		$user = $this->entityManager
+		->getRepository(Users::class)->findOneBy(['id' => $this->user_data_array[0]]);
+		
+		$user->setname($name);
+		$user->setsurname($surname);
+		$user->setcity($city);
+		$user->setbirthdate(new \DateTime($birthdate));
+		$user->setgender($gender);
+		
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
+	}
+	
+	public function change_password($new_password,$salt){
+		
+		$this->get_user_data();
+		$user = $this->entityManager
+		->getRepository(Users::class)->findOneBy(['id' => $this->user_data_array[0]]);
+		
+		$user->setpassword($new_password);
+		$user->setsalt($salt);
+		
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
+	}
+	
+	public function get_groups($category,$search_input){
+		
+		if($category == ''){
+			
+			$groups = $this->entityManager
+			->getRepository(Groups::class)->createQueryBuilder('g')
+			->where('g.title LIKE :title and g.type = 0')->setParameter(":title", '%'.$search_input.'%');
+			
+			$groups = $groups->getQuery()->getResult();
+			
+		}
+		else{
+		
+			$groups = $this->entityManager
+			->getRepository(Groups::class)->findBy(['type' => 0,'category' => $category]);
+			
+			$groups = $this->entityManager
+			->getRepository(Groups::class)->createQueryBuilder('g')
+			->where('g.title LIKE :title and g.type = 0 and g.category = :category')->setParameter(":title", '%'.$search_input.'%')
+			->setParameter(":category", $category);
+			
+			$groups = $groups->getQuery()->getResult();
+		}
+		
+		return $groups;
+	}
+	
+	public function create_group($title,$description,$category,$type){
+		
+		$this->get_user_data();
+		
+		$group = new Groups();
+		$group->setowner_id($this->user_data_array[0]);
+		$group->settitle($title);
+		$group->setdescription($description);
+		$group->setcategory($category);
+		$group->settype($type);
+		$group->setadd_date(new \DateTime(date("Y-m-d")));
+		$group->setimage('');
+		
+		$this->entityManager->persist($group);
+		$this->entityManager->flush();
+		
+		$last_id = $group->getId();
+		
+		$group_member = new Group_Members();
+		$group_member->setuser_id($this->user_data_array[0]);
+		$group_member->setgroup_id($last_id);
+		$group_member->setadd_date(new \DateTime(date("Y-m-d")));
+		
+		$this->entityManager->persist($group_member);
+		$this->entityManager->flush();
+		
+		return $last_id;
+	}
+	
+	public function get_group($id){
+	
+		$this->get_user_data();
+		
+		$group = $this->entityManager
+		->getRepository(Groups::class)->findOneBy(['id' => $id]);
+		
+		if($group != NULL){
+			
+			if($group->gettype() == 1){
+				if($group->getowner_id() != $this->user_data_array[0]){
+				
+					$group_member = $this->entityManager
+					->getRepository(Group_Members::class)->findOneBy(['user_id' => $this->user_data_array[0],'group_id' => $id]);
+					
+					if($group_member == NULL)
+						$group = NULL;
+				}
+			}
+		}
+			
+		return $group;
+	}
+	
+	public function get_group_owner($id){
+		
+		$group = $this->entityManager
+		->getRepository(Groups::class)->findOneBy(['id' => $id]);
+		
+		$owner_user = $this->get_user_profile_data($group->getowner_id());
+		
+		return $owner_user;
+	}
+	
+	public function get_group_users($id){
+		
+		$group_users = $this->entityManager
+		->createQueryBuilder()->select('g.user_id ,u.name,u.surname,u.city,u.birthdate,u.profile_img')->from('AppBundle:Group_Members','g')
+		->join('AppBundle:Users','u','WITH','u.id =g.user_id')->orderBy('CONCAT(u.name,  \' \',u.surname)', 'ASC')
+		->where('g.group_id = :id')->setParameter(":id",$id)->getQuery()->getResult();
+		
+		return $group_users;
+	}
+	
+	public function join_group($id){
+		
+		$this->get_user_data();
+		
+		$group_member = new Group_Members();
+		$group_member->setuser_id($this->user_data_array[0]);
+		$group_member->setgroup_id($id);
+		$group_member->setadd_date(new \DateTime(date("Y-m-d")));
+		
+		$this->entityManager->persist($group_member);
+		$this->entityManager->flush();
+	}
+	
+	public function unjoin_group($group_id){
+		
+		$this->get_user_data();
+		
+		$group_member = $this->entityManager
+		->getRepository(Group_Members::class)->findOneBy(['group_id' => $group_id,'user_id' => $this->user_data_array[0]]);
+		
+		$this->entityManager->remove($group_member);
+		$this->entityManager->flush();
+	}
+	
 }
 ?>

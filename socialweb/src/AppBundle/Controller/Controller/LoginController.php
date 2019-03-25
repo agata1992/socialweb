@@ -121,35 +121,35 @@ class LoginController extends Controller{
 		$email = $request->request->get('email');
 		$password = $request->request->get('password');
 	
-		$results =array();
+		$results = '';
 	
 		$check_email = $db_service->check_email($email);
 	
 		if($check_email == null)
-			$results[0] = 'Wprowadzone dane są niepoprawne';
+			$results = 'Wprowadzone dane są niepoprawne';
 		else{
 			
 			$password2 = $check_email->getpassword();
 			$salt = $check_email->getsalt();
-			$password = $password.$salt;
+			$password = md5($password.$salt);
 			
-			if(!$password2 == $password)
-				$results[0] = 'Wprowadzone dane są niepoprawne';
+			if($password2 != $password)
+				$results = 'Wprowadzone dane są niepoprawne';
 			else{
 				
 				$cookie_service->set_cookie($email);
-				$results[0] = '';
+				$results = '';
 			}
 		}
 	
-		return new JsonResponse($results);
+		return new Response($results);
 	}
 	
 	public function signoutAction(CookieService $cookie_service){
 		
 		$cookie_service->delete_user_cookie();
 		
-		return new RedirectResponse("/socialweb/web/app_dev.php/profil");
+		return new RedirectResponse("/socialweb/web/app_dev.php/profil/posty");
 	}
 }
 ?>

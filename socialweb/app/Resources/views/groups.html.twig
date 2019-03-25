@@ -55,12 +55,14 @@
 						<div class="col-6 margin-col">
 							<div class="bg-secondary" style="border:1px solid;padding:5px;">
 								<h6>Wyszukaj grupę</h6>
+								<form class="search-form" action="" method="GET">
 								<div class="input-group">
-									<input type="text" class="form-control" id="search-groups-input" value=""  placeholder="Szukaj"/>
+									<input type="text" class="form-control" id="search-groups-input" name="name" value="{{search_input}}"  placeholder="Szukaj"/>
 									<button class="btn btn-default bg-primary">
 										<i class="fa fa-search"></i>
 									</button>
 								</div>
+								</form>
 							</div>
 						</div>
 								
