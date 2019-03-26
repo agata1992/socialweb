@@ -341,8 +341,8 @@ class DBService{
 		}
 		
 		$friends = $this->entityManager
-			->getRepository(Users::class)->createQueryBuilder('u')->orderBy('CONCAT(u.name,  \' \',u.surname)', 'ASC')
-			->where('u.id in  (:friends_id_array)')->setParameter(":friends_id_array",$friends_id_array);
+		->getRepository(Users::class)->createQueryBuilder('u')->orderBy('CONCAT(u.name,  \' \',u.surname)', 'ASC')
+		->where('u.id in  (:friends_id_array)')->setParameter(":friends_id_array",$friends_id_array);
 			
 		if($search_input != '')
 			$friends = $friends->andwhere('CONCAT(u.name,  \' \',u.surname) LIKE :name')
@@ -436,15 +436,28 @@ class DBService{
 		$this->entityManager->flush();
 	}
 	
-	public function get_groups($category){
+	public function get_groups($category,$search_input){
 		
 		if($category == ''){
+			
 			$groups = $this->entityManager
-			->getRepository(Groups::class)->findBy(['type' => 0]);
+			->getRepository(Groups::class)->createQueryBuilder('g')->orderBy('g.title', 'ASC')
+			->where('g.title LIKE :title and g.type = 0')->setParameter(":title", '%'.$search_input.'%');
+			
+			$groups = $groups->getQuery()->getResult();
+			
 		}
 		else{
+		
 			$groups = $this->entityManager
 			->getRepository(Groups::class)->findBy(['type' => 0,'category' => $category]);
+			
+			$groups = $this->entityManager
+			->getRepository(Groups::class)->createQueryBuilder('g')->orderBy('g.title', 'ASC')
+			->where('g.title LIKE :title and g.type = 0 and g.category = :category')->setParameter(":title", '%'.$search_input.'%')
+			->setParameter(":category", $category);
+			
+			$groups = $groups->getQuery()->getResult();
 		}
 		
 		return $groups;
@@ -521,6 +534,39 @@ class DBService{
 		->where('g.group_id = :id')->setParameter(":id",$id)->getQuery()->getResult();
 		
 		return $group_users;
+	}
+	
+	public function get_user_groups($user_id = ''){
+	
+	
+		if($user_id == ''){
+			$this->get_user_data();
+			$user_id = $this->user_data_array[0];
+		}
+		
+		$groups = $this->entityManager
+		->getRepository(Group_Members::class)->findBy(['user_id' => $user_id]);
+		
+		$group_id_array = array();
+		
+		for($i = 0;$i<count($groups);$i++){
+			
+			$group_id_array[$i] = $groups[$i]->getgroup_id();
+			
+		}
+		
+		if($user_id == $this->user_data_array[0])
+			$user_groups = $this->entityManager
+			->getRepository(Groups::class)->createQueryBuilder('g')->orderBy('g.title', 'ASC')
+			->where('g.id in  (:user_groups_id)')->setParameter(":user_groups_id",$group_id_array)
+			->getQuery()->getResult();
+		else
+			$user_groups = $this->entityManager
+			->getRepository(Groups::class)->createQueryBuilder('g')->orderBy('g.title', 'ASC')
+			->where('g.id in  (:user_groups_id) and g.type = 0')->setParameter(":user_groups_id",$group_id_array)
+			->getQuery()->getResult();
+		
+		return $user_groups;
 	}
 	
 	public function join_group($id){

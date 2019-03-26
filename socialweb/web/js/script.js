@@ -23,7 +23,7 @@ window.onload = function(event){
 		$("#con-album").hide();
 	}
 	
-	if(window.location.pathname == "/socialweb/web/app_dev.php/profil/omnie" ||
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/omnie" )||
 	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/omnie")){
 		
 		$('#title-profile').addClass( "log-reg-title-active" );
@@ -1024,7 +1024,7 @@ function create_group(){
 		var data = '&title=' + title + '&description=' + description + '&category=' + category + '&type=' + type;
 	
 		var request = $.ajax({
-			url: '/socialweb/web/app_dev.php/grupy/create-group',
+			url: '/socialweb/web/app_dev.php/grupa/create-group',
 			type: "POST",
 			datatype: "json",
 			data: data

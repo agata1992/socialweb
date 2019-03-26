@@ -69,14 +69,33 @@ class User_profileController extends Controller{
 			
 				$count_friends = count($friends);
 				
-				if(($count_friends/$friends_on_page)<($page-1))
+				if((ceil($count_friends/$friends_on_page) <($page) && $page != 1) || $page <= 0)
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
 					'user' => $user_data));
 				
 				return $this->render('user_profile.html.twig', array(
 				'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,'friends' => $friends,
 				'user_profile' => $user_profile_data,'subpage' => $subpage,'page' => $page,'search_input' => $search_input));
+			}
+			elseif($subpage == "omnie"){
+			
+				$groups = $db_service->get_user_groups($user_id);
+			
+				$groups_on_page = 6;
+			
+				$count_groups = count($groups);
+				
+				if((ceil($count_groups/$groups_on_page) <($page) && $page != 1) || $page <= 0)
+					return $this->render('page_no_found.html.twig',array(
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+					'user' => $user_data));
+				
+				return $this->render('user_profile.html.twig', array(
+				'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,'groups' => $groups,
+				'user_profile' => $user_profile_data,'subpage' => $subpage,'page' => $page));
+				
+			
 			}
 			else
 				return $this->render('user_profile.html.twig', array(

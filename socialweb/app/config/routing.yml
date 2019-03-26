@@ -89,7 +89,7 @@ groups_category:
    path: /grupy/kategoria/{category}/{page}
    defaults: {_controller: AppBundle:Groups:index,page:1}
 create_group:
-   path: /grupy/create-group
+   path: /grupa/create-group
    defaults: {_controller: AppBundle:Groups:create_group}
 show_group:
    path: /grupy/id/{id}/{subpage}/{page}

@@ -11,9 +11,9 @@ use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 use AppBundle\Service\AdditionalService;
 
-class GroupsController extends Controller{ 
+class GroupsController extends Controller{
 
-	public function indexAction(CookieService $cookie_service,DBService $db_service,$page,$category = ''){
+	public function indexAction(CookieService $cookie_service,DBService $db_service,Request $request,$page,$category = ''){
 		
 		$user = $cookie_service->check_exist_user_cookie();
 
@@ -21,9 +21,10 @@ class GroupsController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $db_service->get_user_data();
+		$name = $request->query->get('name');
 		
-		$groups = $db_service->get_groups($category);
-		
+		$groups = $db_service->get_groups($category,$name);
+	
 		$groups_on_page = 6;
 			
 		$count_groups = count($groups);
@@ -36,7 +37,8 @@ class GroupsController extends Controller{
 		
 		
 		return $this->render('groups.html.twig', array(
-		'page_name' => 'Grupy','nav_title' => 'Grupy','user' => $user_data,'groups' => $groups,'page' => $page,'category' => $category));
+		'page_name' => 'Grupy','nav_title' => 'Grupy','user' => $user_data,'groups' => $groups,'page' => $page,'category' => $category,
+		'search_input' => $name));
 	}
 	
 	public function create_groupAction(CookieService $cookie_service,DBService $db_service,Request $request){
@@ -54,7 +56,7 @@ class GroupsController extends Controller{
 			$description = $request->request->get('description');
 			$category = $request->request->get('category');
 			$type = $request->request->get('type');
-	
+			
 			$results = array();
 			
 			if($title =='')

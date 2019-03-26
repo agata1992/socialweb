@@ -73,115 +73,13 @@
 						</div>
 					</div>
 					
-					{% set groups_on_page = 6 %}
-					{% set all_groups = groups | length %}
-					{% set begin = (page * groups_on_page) - groups_on_page %}
-					{% set end = begin + groups_on_page %}
-					{% set all_pages = all_groups / groups_on_page %}
-					{% set all_pages = all_pages | round(0,'ceil') %}
-					{% set i = 0 %}
-					{% set j = 0 %}
-						
-					{% if category == '' %}		
-						{% set link = "/socialweb/web/app_dev.php/grupy" %}
-					{% else %}
-						{% set link = "/socialweb/web/app_dev.php/grupy/kategoria/"  ~category %}
+					{% include 'gg.html.twig' %}
 					
-					{% endif %}		
-					
-					{% for group in groups %}
-						{% if j >= begin and j < end %}
-							{% if i % 3==0 and i != 0 %}
-								<div class="row text-white">
-							{% endif %}
-						
-							{% if i == 0 %}
-								<div class="row text-white row-margin3">
-							{% endif %}
-							
-							<div class="col-sm-4 text-center margin-col">
-								
-								{% if group.image == '' %}
-									<a href="/socialweb/web/app_dev.php/grupy/id/{{ group.id }}/dyskusja"><img src="{{ asset('service-image/user-group.png') }}" width="100px" class="img-fluid rounded-circle"></a>
-								{% else %}
-									<a href="/socialweb/web/app_dev.php/grupy/id/{{ group.id }}/dyskusja"><img src="{{ asset('group_images/'~group.image) }}" width="100px" height="100px" class="rounded-circle"></a>
-								{% endif %}
-
-								<a href="/socialweb/web/app_dev.php/grupy/id/{{ group.id }}/dyskusja" class="nav-link text-white">
-									<h6 class="text-truncate">{{ group.title }} </h6>
-								</a>			
-							</div>
-							
-							{% if i % 3 == 2 or j == all_groups - 1 %}
-								</div>
-							{% endif %}
-							{% set i = i + 1 %}
-						{% endif %}
-						{% set j = j + 1 %}
-					{% endfor %}
-					
-					{% if all_pages > 1 %}
-						<div class="row text-white">
-							<div class="col-12 text-center znajomi-col">
-								<div class="align-items-center" style="padding:5px;">
-									<nav>
-										<ul class="pagination justify-content-center">
-											{% if page == 1 %}
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Poprzednie</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#"><<</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">1</a></li>	
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/2">2</a></li>
-											{% if all_pages >= 3 %}
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/3">3</a></li>
-											{% endif %}
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{all_pages}}">>></a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page+1}}">Następne</a></li>
-											{% elseif page == all_pages %}
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">Poprzednie</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/1"><<</a></li>
-												{% if all_pages >= 3 %}
-													<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-2}}">{{page - 2}}</a></li>
-												{% endif %}
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">{{page - 1}}</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/{{page}}">{{page}}</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">>></a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="#">Następne</a></li>
-											{% else %}
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page-1}}">Poprzednie</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/1"><<</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{page - 1}}">{{page - 1}}</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn disabled" href="{{ link }}/{{page}}">{{page}}</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{page + 1}}">{{page + 1}}</a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white btn" href="{{ link }}/{{all_pages}}">>></a></li>
-												<li class="page-item"><a class="page-link bg-primary text-white" href="{{ link }}/{{page+1}}">Następne</a></li>
-											{% endif %}
-										</ul>
-									</nav>
-								</div>
-							</div>
-						</div>
-					{% endif %}
-					
-					
-					<div class="row text-white row-margin2">
-						<div class="col-12 margin-col text-center">
-						{% if groups | length == 0 %}
-							<h5>Nie znaleziono grup</h5>
-						{% endif %}
-						</div>
-					</div>
 				</div>
-				
-
-				
-				
 			</div>
-			
-			
-		
 		</div>
-		
 	</div>
+	
 	<div class="modal" id="create-group-modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -231,8 +129,6 @@
 							<h6 id="create-group-type-feedback" class="text-danger text-center"></h6>
 						</div>
 					</div>
-					
-					
 				</div>
 				<div class="modal-footer">
 					<button id="button_cancel" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
@@ -241,12 +137,4 @@
 			</div>
 		</div>
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
 {% endblock %}

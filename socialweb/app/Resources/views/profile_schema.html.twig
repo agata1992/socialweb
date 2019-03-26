@@ -24,13 +24,18 @@
 						</div>
 					</div>
 					
-					<div class="container" id="con-profile">
-						<div class="row bg-success">
-							<div class="col-12">
-								PROFIL
+					{% if subpage == 'omnie' %}
+						<div class="container" id="con-profile">
+							<div class="row text-white">
+								<div class="col-12 text-center">
+									<h5> GRUPY({{groups | length}})</h5>
+									
+									{% include 'gg.html.twig' %}
+									
+								</div>
 							</div>
 						</div>
-					</div>
+					{% endif %}
 					
 					{% if subpage == 'znajomi' %}
 						<div class="container" id="con-friends">

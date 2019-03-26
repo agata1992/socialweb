@@ -61,7 +61,7 @@ class Main_PageController extends Controller{
 			
 			$count_friends = count($friends);
 			
-			if((ceil($count_friends/$friends_on_page))<($page-1))
+			if((ceil($count_friends/$friends_on_page) <($page) && $page != 1) || $page <= 0)
 				return $this->render('page_no_found.html.twig',array(
 				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
 				'user' => $user_data));
@@ -70,10 +70,31 @@ class Main_PageController extends Controller{
 				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,'friends' => $friends,
 				'subpage' => $subpage,'page' =>$page,'search_input' => $search_input));
 		}
+		elseif($subpage == "omnie"){
+			
+			$groups = $db_service->get_user_groups();
+			
+			$groups_on_page = 6;
+			
+			$count_groups = count($groups);
+			
+			if((ceil($count_groups/$groups_on_page) <($page) && $page != 1) || $page <= 0)
+				return $this->render('page_no_found.html.twig',array(
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data));
+		
+			return $this->render('main_page.html.twig', array(
+			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,'groups' => $groups,
+			'subpage' => $subpage,'page' =>$page));
+		
+		}
 		else{
+			
+			
+		
 			return $this->render('main_page.html.twig', array(
 			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-			'subpage' => $subpage));
+			'subpage' => $subpage,'page' =>$page));
 		}
 	}
 

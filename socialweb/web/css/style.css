@@ -275,7 +275,7 @@ nav{
 	cursor: pointer;
 }
 
-#con-galery,#con-personal-data,#con-account-setting{
+#con-galery,#con-personal-data,#con-account-setting,#con-profile{
 	min-height:350px;
 }
 
