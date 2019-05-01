@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="invitations")
  */
  
-class Invitations{
+class Invitations
+{
 	
 	/**
 	 * @ORM\Id
@@ -39,32 +40,38 @@ class Invitations{
 	*/
 	private $add_date;
 	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getuser1_id(){
+	public function getuser1_id()
+	{
 		return $this->user1_id;
 	}
 	
-	public function getuser2_id(){
+	public function getuser2_id()
+	{
 		return $this->user2_id;
 	}
 	
-	public function getadd_date(){
+	public function getadd_date()
+	{
 		return $this->add_date;
 	}
 	
-	public function setuser1_id($user1_id){
+	public function setuser1_id($user1_id)
+	{
 		$this->user1_id = $user1_id;
 	}
 	
-	public function setuser2_id($user2_id){
+	public function setuser2_id($user2_id)
+	{
 		$this->user2_id = $user2_id;
 	}
 	
-	public function setadd_date($add_date){
+	public function setadd_date($add_date)
+	{
 		$this->add_date = $add_date;
 	}
-}	
-?>
+}

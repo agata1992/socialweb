@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="albums")
  */
  
-class Albums{
-	
+class Albums
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -39,32 +39,38 @@ class Albums{
 	*/
 	private $album_access;
 	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getuser_id(){
+	public function getuser_id()
+	{
 		return $this->user_id;
 	}
 	
-	public function getalbum_name(){
+	public function getalbum_name()
+	{
 		return $this->album_name;
 	}
 	
-	public function getalbum_access(){
+	public function getalbum_access()
+	{
 		return $this->album_access;
 	}
 	
-	public function setuser_id($user_id){
+	public function setuser_id($user_id)
+	{
 		$this->user_id = $user_id;
 	}
 	
-	public function setalbum_name($album_name){
+	public function setalbum_name($album_name)
+	{
 		$this->album_name = $album_name;
 	}
 	
-	public function setalbum_access($album_access){
+	public function setalbum_access($album_access)
+	{
 		$this->album_access = $album_access;
 	}
 }
-?>

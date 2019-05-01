@@ -11,10 +11,11 @@ use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 use AppBundle\Service\AdditionalService;
 
-class AccountController extends Controller{
-
-	public function indexAction(CookieService $cookie_service,DBService $db_service,$subpage){
-		
+class AccountController extends Controller
+{
+	public function indexAction(CookieService $cookie_service,DBService $db_service,
+		$subpage
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -23,14 +24,14 @@ class AccountController extends Controller{
 		$user_data = $db_service->get_user_data();
 		
 		return $this->render('account.html.twig', array(
-			'page_name' => 'Moje konto','nav_title' => 'Moje konto','user' => $user_data, 'subpage' => $subpage));
-
+			'page_name' => 'Moje konto','nav_title' => 'Moje konto','user' => $user_data, 'subpage' => $subpage)
+		);
 	}
 	
-	public function change_personal_dataAction(CookieService $cookie_service,DBService $db_service,Request $request,$subpage){
-	
+	public function change_personal_dataAction(CookieService $cookie_service,
+		DBService $db_service,Request $request,$subpage
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
@@ -72,10 +73,10 @@ class AccountController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 	
-	public function change_passwordAction(CookieService $cookie_service,DBService $db_service,AdditionalService $additional_service,Request $request){
-	
+	public function change_passwordAction(CookieService $cookie_service,
+		DBService $db_service,AdditionalService $additional_service,Request $request
+	){
 		if($request->isXmlHttpRequest() == "true"){
-	
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
@@ -91,7 +92,6 @@ class AccountController extends Controller{
 			if($old_password == '')
 				$results[0] = "Wpisz stare hasło";
 			else{
-			
 				$password2 = $user_data[4];
 				$salt = $user_data[5];
 				$password = md5($old_password.$salt);
@@ -105,11 +105,13 @@ class AccountController extends Controller{
 			if($new_password == '')
 				$results[1] = "Wpisz nowe hasło";
 			else{
-				if(!$additional_service->_s_has_upper_letters($new_password) || !$additional_service->_s_has_lower_letters($new_password)
-				|| !$additional_service->_s_has_numbers($new_password) || !$additional_service->_s_has_special_chars($new_password))
+				if(!$additional_service->_s_has_upper_letters($new_password) || 
+					!$additional_service->_s_has_lower_letters($new_password) ||
+					!$additional_service->_s_has_numbers($new_password) || 
+					!$additional_service->_s_has_special_chars($new_password)
+				)
 					$results[1] = 'Hasło musi zawierać dużą litere,małą,liczbę oraz znak specjalny';
 				else{
-				
 					$salt = uniqid();
 					$new_password = $new_password.$salt;
 					$new_password = md5($new_password);
@@ -124,10 +126,10 @@ class AccountController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 	
-	public function delete_accountAction(CookieService $cookie_service,DBService $db_service,AdditionalService $additional_service,Request $request){
-	
+	public function delete_accountAction(CookieService $cookie_service,
+		DBService $db_service,AdditionalService $additional_service,Request $request
+	){
 		if($request->isXmlHttpRequest() == "true"){
-	
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
@@ -135,12 +137,9 @@ class AccountController extends Controller{
 
 			$user_data = $db_service->get_user_data();
 			
-			
 			return new JsonResponse('');
 		}
 		else
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 }
-?>
-

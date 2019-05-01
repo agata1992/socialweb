@@ -1,43 +1,9 @@
 {% extends 'main.html.twig' %}
 
 {% block content %}
-	<div class=" bg-dark text-white" id="container9">
-		<div class="container-fluid">
-			<div class="align-items-center row" id="row3">
-				<div class="col-6 text-center">
-					{% if group.image == '' %}
-						<a><img src="{{ asset('service-image/user-group.png') }}" width="150px" class="img-fluid rounded-circle"></a>
-					{%else %}
-						<a><img src="{{ asset('group_images/'~user_profile.profile_img) }}" width="150px" height="150px" class="rounded-circle"></a>
-					{% endif %}
-					<h5>{{ group.title }} </h5>
-					<h6>
-						<a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy/{{group.category}}">{{ group.category }}</a>
-					</h6>
-				</div>
-				<div class="col-6 text-center">
-					
-					{% set is_user = 0 %}
-					{% set break = false %}
-					
-					{% for group_user in group_users if not break %}
-						{% if group_user.user_id == user[0] %}
-							{% set is_user = 1 %}
-							{% set break = true %}
-						{% endif %}
-					{% endfor %}
-				
-					{% if is_user == 1 and group_owner.id != user[0] %}
-						<button class="btn btn-primary" onclick="join_unjoin_group({{group.id}},0)">Wypisz się</button>
-					{% endif %}
-					
-					{% if is_user == 0 %}
-						<button class="btn btn-primary" onclick="join_unjoin_group({{group.id}},1)">Dołącz</button>
-					{% endif %}
-				</div>
-			</div>
-		</div>
-	</div>
+
+	{% include 'groups_header.html.twig' %}
+	
 	<div class=" bg-dark text-white" id="container10">
 		<div class="container-fluid">
 			<div class="row bottom-border2 text-white bg-dark" id="row-title">
@@ -54,14 +20,44 @@
 
 			<div class="row bg-dark main-row">
 				<div class="col-12">
-					<div class="container" id="con-conversation">
-						<div class="row bg-success">
-							<div class="col-12">
-								dyskusja
-							</div>
-						</div>
-					</div>
+					{% if subpage == "dyskusja" %}
+						<div class="container" id="con-conversation">
+						
+							{% set is_user = 0 %}
+							{% set break = false %}
 					
+							{% for group_user in group_users if not break %}
+								{% if group_user.user_id == user[0] %}
+									{% set is_user = 1 %}
+									{% set break = true %}
+								{% endif %}
+							{% endfor %}
+					
+							{% if is_user == 1 %}
+								<div class="row">
+									<div class="col-12">
+										<div class="row comments-row">
+											<div class="col-12 text-center text-white">
+												<textarea class="form-control" rows="5" id="main_comment-input" placeholder="Napisz komentarz"></textarea>
+												<div class="text-danger" id="main_group_comment_input-feedback"></div>
+											</div>
+										</div>
+										<div class="row comments-row">
+											<div class="col-12 text-center text-white">
+												<button type="button" class="btn btn-primary" onclick="add_comment(1)">
+													Dodaj 
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						
+							{% include 'comments_list.html.twig' %}	
+						</div>
+					{% endif %}
+					
+	
 					{% if subpage == "uzytkownicy" %}
 						<div class="container" id="con-users">
 							<div class="row text-white">

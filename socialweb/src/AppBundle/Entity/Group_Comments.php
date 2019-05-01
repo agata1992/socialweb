@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="group_members")
+ * @ORM\Table(name="group_comments")
  */
  
-class Group_Members
+class Group_Comments
 {
 	/**
 	 * @ORM\Id
@@ -33,11 +33,18 @@ class Group_Members
 	private $group_id;
 	
 	/**
-	* @ORM\Column(name="add_date",type="date")
+	* @ORM\Column(name="add_date",type="datetime")
 	* Doctrine\ORM\Mapping\GeneratedValue(strategy="AUTO")
 	* 
 	*/
 	private $add_date;
+	
+	/**
+	* @ORM\Column(name="text",type="text")
+	* Doctrine\ORM\Mapping\GeneratedValue(strategy="AUTO")
+	* 
+	*/
+	private $text;
 	
 	public function getId()
 	{
@@ -49,7 +56,8 @@ class Group_Members
 		return $this->user_id;
 	}
 	
-	public function getgroup_id(){
+	public function getgroup_id()
+	{
 		return $this->group_id;
 	}
 	
@@ -58,18 +66,28 @@ class Group_Members
 		return $this->add_date;
 	}
 	
+	public function gettext()
+	{
+		return $this->text;
+	}
+	
 	public function setuser_id($user_id)
 	{
 		$this->user_id = $user_id;
-	}	
+	}
 	
 	public function setgroup_id($group_id)
 	{
 		$this->group_id = $group_id;
-	}	
+	}
 	
 	public function setadd_date($add_date)
 	{
 		$this->add_date = $add_date;
+	}
+	
+	public function settext($text)
+	{
+		$this->text = $text;
 	}
 }

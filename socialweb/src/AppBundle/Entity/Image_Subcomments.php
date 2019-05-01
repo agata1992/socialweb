@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="image_subcomments")
  */
  
-class Image_Subcomments{
+class Image_Subcomments
+{
 	
 	/**
 	 * @ORM\Id
@@ -26,11 +27,11 @@ class Image_Subcomments{
 	private $user_id;
 	
 	/**
-	* @ORM\Column(name="image_comment_id",type="integer")
+	* @ORM\Column(name="comment_id",type="integer")
 	* Doctrine\ORM\Mapping\GeneratedValue(strategy="AUTO")
 	* 
 	*/
-	private $image_comment_id;
+	private $comment_id;
 	
 	/**
 	* @ORM\Column(name="add_date",type="datetime")
@@ -46,40 +47,48 @@ class Image_Subcomments{
 	*/
 	private $text;
 	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getuser_id(){
+	public function getuser_id()
+	{
 		return $this->user_id;
 	}
 	
-	public function getimage_comment_id(){
-		return $this->image_comment_id;
+	public function getcomment_id()
+	{
+		return $this->comment_id;
 	}
 	
-	public function getadd_date(){
+	public function getadd_date()
+	{
 		return $this->add_date;
 	}
 	
-	public function gettext(){
+	public function gettext()
+	{
 		return $this->text;
 	}
 	
-	public function setuser_id($user_id){
+	public function setuser_id($user_id)
+	{
 		$this->user_id = $user_id;
 	}
 	
-	public function setimage_comment_id($image_comment_id){
-		$this->image_comment_id = $image_comment_id;
+	public function setcomment_id($comment_id)
+	{
+		$this->comment_id = $comment_id;
 	}
 	
-	public function setadd_date($add_date){
+	public function setadd_date($add_date)
+	{
 		$this->add_date = $add_date;
 	}
 	
-	public function settext($text){
+	public function settext($text)
+	{
 		$this->text = $text;
 	}
-}	
-?>
+}

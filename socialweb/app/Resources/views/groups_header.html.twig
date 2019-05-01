@@ -1,0 +1,40 @@
+<div class=" bg-dark text-white" id="container9">
+	<div class="container-fluid">
+		<div class="align-items-center row" id="row3">
+			<div class="col-6 text-center">
+				{% if group.image == '' %}
+					<a><img src="{{ asset('service-image/user-group.png') }}" width="150px" class="img-fluid rounded-circle"></a>
+				{%else %}
+					<a><img src="{{ asset('group_images/'~user_profile.profile_img) }}" width="150px" height="150px" class="rounded-circle"></a>
+				{% endif %}
+				<h5>{{ group.title }} </h5>
+				<h6>
+					<a class="nav-link text-white" href="/socialweb/web/app_dev.php/grupy/kategoria/{{group.category}}">{{ group.category }}</a>
+				</h6>
+			</div>
+			<div class="col-6 text-center">
+					
+				{% set is_user = 0 %}
+				{% set break = false %}
+					
+				{% for group_user in group_users if not break %}
+					{% if group_user.user_id == user[0] %}
+						{% set is_user = 1 %}
+						{% set break = true %}
+					{% endif %}
+				{% endfor %}
+				
+				{% if is_user == 1 and group_owner.id != user[0] %}
+					<button class="btn btn-primary" onclick="join_unjoin_group({{group.id}},0)">Wypisz się</button>
+				{% endif %}
+					
+				{% if is_user == 0 %}
+					<button class="btn btn-primary" onclick="join_unjoin_group({{group.id}},1)">Dołącz</button>
+				{% endif %}
+				{% if group_owner.id == user[0] %}
+					<button class="btn btn-primary" onclick="">Ustawienia</button>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>

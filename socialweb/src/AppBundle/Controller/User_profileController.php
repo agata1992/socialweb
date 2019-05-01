@@ -10,10 +10,11 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 
-class User_profileController extends Controller{
-	
-	public function show_profileAction(CookieService $cookie_service,DBService $db_service,Request $request,$user_id,$subpage,$page){
-
+class User_profileController extends Controller
+{
+	public function show_profileAction(CookieService $cookie_service,
+		DBService $db_service,Request $request,$user_id,$subpage,$page
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -25,43 +26,60 @@ class User_profileController extends Controller{
 		
 		if($user_profile_data == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+				'user' => $user_data)
+			);
 		elseif($user_data[0] == $user_profile_data->getid())
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 		else{
 		
-			$user_profile_data->age=date_diff(new \DateTime(),$user_profile_data->getbirthdate())->y;
+			$user_profile_data->age=date_diff(new \DateTime(),
+				$user_profile_data->getbirthdate()
+			)->y;
+			
 			$friendship = $db_service->check_friend($user_profile_data);
 			$user_profile_data->friendship = $friendship;
 		
 			if($subpage == "galeria"){
-				
 				$albums_on_page = 4;
 				$albums = $db_service->get_user_albums($user_id);
 			
 				for($i = 0;$i<count($albums);$i++){
-					
 					if(($albums[$i]->getalbum_access() == 1))
 						unset($albums[$i]);
-					elseif($albums[$i]->getalbum_access() == 2 && $db_service->check_friend($user_profile_data) != 1)
+					elseif($albums[$i]->getalbum_access() == 2 && 
+						$db_service->check_friend($user_profile_data) != 1
+					){
 						unset($albums[$i]);
+					}
 				}
-			
+				
+				$albums_on_page = 4;
 				$count_albums = count($albums);
-		
+				
+				if((ceil($count_albums/$albums_on_page) <($page) && $page != 1) ||
+					$page <= 0
+				)
+					return $this->render('page_no_found.html.twig',array(
+						'page_name' => 'Nie znaleziono strony',
+						'nav_title' => 'Profil użytkownika',
+						'user' => $user_data)
+					);
+					
 				return $this->render('user_profile.html.twig', array(
-				'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,
-				'user_profile' => $user_profile_data,'subpage' =>$subpage,'albums' => $albums,'page' =>$page));
+					'page_name' => 'Profil','nav_title' => 'Profil użytkownika',
+					'user' => $user_data,'user_profile' => $user_profile_data,
+					'subpage' =>$subpage,'albums' => $albums,'page' =>$page)
+				);
 			}
 			elseif($subpage == "znajomi"){
-			
 				$search_input = $request->request->get('search_friends_input');
 				$friends = $db_service->get_friends($user_id,$search_input);
 				
 				for($i =0;$i<count($friends);$i++){
-				
-					$friends[$i]->age=date_diff(new \DateTime(),$friends[$i]->getbirthdate())->y;
+					$friends[$i]->age=date_diff(new \DateTime(),
+						$friends[$i]->getbirthdate()
+					)->y;
 					$friends[$i]->friendship = $db_service->check_friend($friends[$i]);
 				}
 				
@@ -69,14 +87,21 @@ class User_profileController extends Controller{
 			
 				$count_friends = count($friends);
 				
-				if((ceil($count_friends/$friends_on_page) <($page) && $page != 1) || $page <= 0)
+				if((ceil($count_friends/$friends_on_page) <($page) && $page != 1) || 
+					$page <= 0
+				){
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
-					'user' => $user_data));
+						'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+						'user' => $user_data)
+					);
+				}
 				
 				return $this->render('user_profile.html.twig', array(
-				'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,'friends' => $friends,
-				'user_profile' => $user_profile_data,'subpage' => $subpage,'page' => $page,'search_input' => $search_input));
+					'page_name' => 'Profil','nav_title' => 'Profil użytkownika',
+					'user' => $user_data,'friends' => $friends,
+					'user_profile' => $user_profile_data,'subpage' => $subpage,
+					'page' => $page,'search_input' => $search_input)
+				);
 			}
 			elseif($subpage == "omnie"){
 			
@@ -88,24 +113,28 @@ class User_profileController extends Controller{
 				
 				if((ceil($count_groups/$groups_on_page) <($page) && $page != 1) || $page <= 0)
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
-					'user' => $user_data));
-				
-				return $this->render('user_profile.html.twig', array(
-				'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,'groups' => $groups,
-				'user_profile' => $user_profile_data,'subpage' => $subpage,'page' => $page));
-				
-			
+						'page_name' => 'Nie znaleziono strony',
+						'nav_title' => 'Profil użytkownika','user' => $user_data)
+					);
+				else
+					return $this->render('user_profile.html.twig', array(
+						'page_name' => 'Profil','nav_title' => 'Profil użytkownika',
+						'user' => $user_data,'groups' => $groups,
+						'user_profile' => $user_profile_data,'subpage' => $subpage,
+						'page' => $page)
+					);
 			}
 			else
 				return $this->render('user_profile.html.twig', array(
-				'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,
-				'user_profile' => $user_profile_data,'subpage' => $subpage));
+					'page_name' => 'Profil','nav_title' => 'Profil użytkownika',
+					'user' => $user_data,'user_profile' => $user_profile_data,
+					'subpage' => $subpage));
 		}	
 	}
 	
-	public function other_user_galeryAction(CookieService $cookie_service,DBService $db_service,$user_id,$album_id,$page){
-		
+	public function other_user_galeryAction(CookieService $cookie_service,
+		DBService $db_service,$user_id,$album_id,$page
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -117,11 +146,14 @@ class User_profileController extends Controller{
 		
 		if($user_profile_data == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+				'user' => $user_data)
+			);
 		else{
-		
-			$user_profile_data->age = date_diff(new \DateTime(),$user_profile_data->getbirthdate())->y;
+			$user_profile_data->age = date_diff(new \DateTime(),
+				$user_profile_data->getbirthdate()
+			)->y;
+			
 			$friendship = $db_service->check_friend($user_profile_data);
 			$user_profile_data->friendship = $friendship;
 			
@@ -129,16 +161,16 @@ class User_profileController extends Controller{
 			
 			if($album == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else{
-				
 				$images_on_page = 12;
 			
 				$images = $db_service->get_images_by_album_id($album_id);
 				$count_images = count($images);
 			
-				if(($count_images/$images_on_page)<($page-1))
+				if((ceil($count_images/$images_on_page) <($page) && $page != 1) || $page <= 0)
 					return $this->render('page_no_found.html.twig',array(
 					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
 					'user' => $user_data));
@@ -150,8 +182,9 @@ class User_profileController extends Controller{
 		}
 	}
 	
-	public function other_user_imagesAction(CookieService $cookie_service,DBService $db_service,$user_id,$album_id,$image_id,$page){
-		
+	public function other_user_imagesAction(CookieService $cookie_service,
+		DBService $db_service,$user_id,$album_id,$image_id,$page
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -163,11 +196,14 @@ class User_profileController extends Controller{
 		
 		if($user_profile_data == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+				'user' => $user_data)
+			);
 		else{
-		
-			$user_profile_data->age=date_diff(new \DateTime(),$user_profile_data->getbirthdate())->y;
+			$user_profile_data->age=date_diff(new \DateTime(),
+				$user_profile_data->getbirthdate()
+			)->y;
+			
 			$friendship = $db_service->check_friend($user_profile_data);
 			$user_profile_data->friendship = $friendship;
 			
@@ -175,18 +211,18 @@ class User_profileController extends Controller{
 			
 			if($album == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+					'user' => $user_data)
+				);
 			else{
-				
 				$image = $db_service->get_image_by_image_id($image_id,$album_id);
 			
 				if($image == null)
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-					'user' => $user_data));
+						'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+						'user' => $user_data)
+					);
 				else{
-				
 					$image_comments = $db_service->getimage_comments($image_id);
 					$image_comments_array = array();
 				
@@ -195,13 +231,26 @@ class User_profileController extends Controller{
 					
 					$image_subcomments = $db_service->getimage_subcomments($image_comments_array);
 					
+					$comments_on_page = 6;
+					$count_comments = count($image_comments);
+					
+					if((ceil($count_comments/$comments_on_page) <($page) && $page != 1) ||
+						$page <= 0
+					)
+						return $this->render('page_no_found.html.twig',array(
+							'page_name' => 'Nie znaleziono strony','nav_title' => 'Profil użytkownika',
+							'user' => $user_data)
+						);
+					
 					return $this->render('user_profile.html.twig', array(
-					'page_name' => 'Profil','nav_title' => 'Profil użytkownika','user' => $user_data,'user_profile' => $user_profile_data,
-					'subpage' => 'zdjecie','album' => $album,'image' => $image,'image_comments' => $image_comments,
-					'image_subcomments' => $image_subcomments,'page' => $page));
+						'page_name' => 'Profil','nav_title' => 'Profil użytkownika',
+						'user' => $user_data,'user_profile' => $user_profile_data,
+						'subpage' => 'zdjecie','album' => $album,'image' => $image,
+						'comments' => $image_comments,'subcomments' => $image_subcomments,
+						'page' => $page)
+					);
 				}
 			}
 		}
 	}
 }
-?>

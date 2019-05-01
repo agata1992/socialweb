@@ -97,3 +97,6 @@ show_group:
 join_group:
    path: /grupy/id/{id}/{subpage}/{page}/join-unjoin-group
    defaults: {_controller: AppBundle:Groups:join_unjoin_group}   
+add_group_comment:
+   path: /grupy/id/{id}/dyskusja/{page}/add_group_comment
+   defaults: {_controller: AppBundle:Comments:add_group_commment,page:1}

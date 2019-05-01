@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="groups")
  */
  
-class Groups{
-	
+class Groups
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -67,67 +67,78 @@ class Groups{
 	*/
 	private $image;
 	
-	
-	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getowner_id(){
+	public function getowner_id()
+	{
 		return $this->owner_id;
 	}
 	
-	public function gettitle(){
+	public function gettitle()
+	{
 		return $this->title;
 	}
 	
-	public function getdescription(){
+	public function getdescription()
+	{
 		return $this->description;
 	}
 	
-	public function getcategory(){
+	public function getcategory()
+	{
 		return $this->category;
 	}
 	
-	public function gettype(){
+	public function gettype()
+	{
 		return $this->type;
 	}
 	
-	public function getadd_date(){
+	public function getadd_date()
+	{
 		return $this->add_date;
 	}
 	
-	public function getimage(){
+	public function getimage()
+	{
 		return $this->image;
 	}
 		
-	public function setowner_id($owner_id){
+	public function setowner_id($owner_id)
+	{
 		$this->owner_id = $owner_id;
 	}	
 		
-	public function settitle($title){
+	public function settitle($title)
+	{
 		$this->title = $title;
 	}
 	
-	public function setdescription($description){
+	public function setdescription($description)
+	{
 		$this->description = $description;
 	}
 	
-	public function setcategory($category){
+	public function setcategory($category)
+	{
 		$this->category = $category;
 	}
 	
-	public function settype($type){
+	public function settype($type)
+	{
 		$this->type = $type;
 	}
 	
-	public function setadd_date($add_date){
+	public function setadd_date($add_date)
+	{
 		$this->add_date = $add_date;
 	}
 	
-	public function setimage($image){
+	public function setimage($image)
+	{
 		$this->image = $image;
 	}
-	
 }
-?>

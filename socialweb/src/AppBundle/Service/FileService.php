@@ -2,15 +2,14 @@
 	
 namespace AppBundle\Service;
 	
-class FileService{
-	
-	public function save_user_image($image){
-	
+class FileService
+{
+	public function save_user_image($image)
+	{
 		$results = array();
 		$extensions=array('jpg','jpe','jpeg','jfif','png','bmp','dib','gif');
 		
 		if(in_array(pathinfo($image['name'])['extension'], $extensions)){
-		
 			$tmp=$image['tmp_name'];
 			$org=$image['name'];
 			$name=pathinfo($tmp)['filename'].".";
@@ -18,7 +17,6 @@ class FileService{
 			
 			if(!move_uploaded_file($tmp,'images/'.$name))
 				$results[0] = "Wystąpił błąd";
-			
 			else
 				$results[0] = '';	
 			
@@ -33,5 +31,4 @@ class FileService{
 	public function remove_user_image($image){
 		unlink('images/'.$image);
 	}
-}	
-?>
+}

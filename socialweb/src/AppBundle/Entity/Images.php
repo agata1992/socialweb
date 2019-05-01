@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="images")
  */
-class Images{
+class Images
+{
 	
 	/**
 	 * @ORM\Id
@@ -45,40 +46,48 @@ class Images{
 	*/
 	private $add_date;
 	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getalbum_id(){
+	public function getalbum_id()
+	{
 		return $this->album_id;
 	}
 	
-	public function getimage_name(){
+	public function getimage_name()
+	{
 		return $this->image_name;
 	}
 	
-	public function getdescription(){
+	public function getdescription()
+	{
 		return $this->description;
 	}
 	
-	public function getadd_date(){
+	public function getadd_date()
+	{
 		return $this->add_date;
 	}
 	
-	public function setalbum_id($album_id){
+	public function setalbum_id($album_id)
+	{
 		$this->album_id = $album_id;
 	}
 	
-	public function setimage_name($image_name){
+	public function setimage_name($image_name)
+	{
 		$this->image_name = $image_name;
 	}
 	
-	public function setdescription($description){
+	public function setdescription($description)
+	{
 		$this->description = $description;
 	}
 	
-	public function setadd_date($add_date){
+	public function setadd_date($add_date)
+	{
 		$this->add_date = $add_date;
 	}
 }
-?>

@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="users")
  */
  
-class Users{
+class Users
+{
 	
 	/**
 	 * @ORM\Id
@@ -82,81 +83,98 @@ class Users{
 	*/
 	private $profile_img;
 	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getname(){
+	public function getname()
+	{
 		return $this->name;
 	}
 	
-	public function getsurname(){
+	public function getsurname()
+	{
 		return $this->surname;
 	}
 	
-	public function getemail(){
+	public function getemail()
+	{
 		return $this->email;
 	}
 	
-	public function getpassword(){
+	public function getpassword()
+	{
 		return $this->password;
 	}
 	
-	public function getsalt(){
+	public function getsalt()
+	{
 		return $this->salt;
 	}
 	
-	public function getcity(){
+	public function getcity()
+	{
 		return $this->city;
 	}
 	
-	public function getbirthdate(){
+	public function getbirthdate()
+	{
 		return $this->birthdate;
 	}
 	
-	public function getgender(){
+	public function getgender()
+	{
 		return $this->gender;
 	}
 	
-	public function getprofile_img(){
+	public function getprofile_img()
+	{
 		return $this->profile_img;
 	}
 	
-	public function setname($name){
+	public function setname($name)
+	{
 		$this->name = $name;
 	}
 	
-	public function setsurname($surname){
+	public function setsurname($surname)
+	{
 		$this->surname = $surname;
 	}
 	
-	public function setemail($email){
+	public function setemail($email)
+	{
 		$this->email = $email;
 	}
 	
-	public function setpassword($password){
+	public function setpassword($password)
+	{
 		$this->password = $password;
 	}
 	
-	public function setsalt($salt){
+	public function setsalt($salt)
+	{
 		$this->salt = $salt;
 	}
 	
-	public function setcity($city){
+	public function setcity($city)
+	{
 		$this->city = $city;
 	}
 	
-	public function setbirthdate($birthdate){
+	public function setbirthdate($birthdate)
+	{
 		$this->birthdate = $birthdate;
 	}
 	
-	public function setgender($gender){
+	public function setgender($gender)
+	{
 		$this->gender = $gender;
-		//$this->gender = $gender;
 	}
 	
-	public function setprofile_img($profile_img){
+	public function setprofile_img($profile_img)
+	{
 		$this->profile_img = $profile_img;
 	}
 }
-?>

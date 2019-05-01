@@ -16,9 +16,11 @@ use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 use AppBundle\Service\FileService;
 
-class Main_PageController extends Controller{
-
-	public function indexAction(CookieService $cookie_service,DBService $db_service,Request $request,$subpage,$page){
+class Main_PageController extends Controller
+{
+	public function indexAction(CookieService $cookie_service,DBService $db_service,
+		Request $request,$subpage,$page
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -26,35 +28,43 @@ class Main_PageController extends Controller{
 
 		$user_data = $db_service->get_user_data();
 		
-		if($subpage != "posty" && $subpage != "omnie" && $subpage != "znajomi" && $subpage != "galeria")
+		if($subpage != "posty" && $subpage != "omnie" && $subpage != "znajomi" && 
+			$subpage != "galeria"
+		)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data)
+			);
 
-		if($subpage == "galeria"){
-			
+		if($subpage == "galeria")
+		{
 			$user_id = $user_data[0];
 
 			$albums_on_page = 4;
 			$albums = $db_service->get_user_albums();
 			$count_albums = count($albums);
 			
-			if(ceil($count_albums/$albums_on_page)<($page-1))
+			if((ceil($count_albums/$albums_on_page) <($page) && $page != 1) || $page <= 0)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else
 				return $this->render('main_page.html.twig', array(
-				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-				'subpage' => $subpage,'albums' => $albums,'page' =>$page));
+					'page_name' => 'Strona Główna','nav_title' => 'Strona Główna',
+					'user' => $user_data,'subpage' => $subpage,'albums' => $albums,
+					'page' =>$page)
+				);
 		}
-		elseif($subpage == "znajomi"){
-			
+		elseif($subpage == "znajomi")
+		{
 			$search_input = $request->request->get('search_friends_input');
 			$friends = $db_service->get_friends('',$search_input);
 			
 			for($i =0;$i<count($friends);$i++){
-				$friends[$i]->age=date_diff(new \DateTime(),$friends[$i]->getbirthdate())->y;
+				$friends[$i]->age=date_diff(new \DateTime(),
+					$friends[$i]->getbirthdate()
+				)->y;
 			}
 				
 			$friends_on_page = 6;
@@ -63,15 +73,18 @@ class Main_PageController extends Controller{
 			
 			if((ceil($count_friends/$friends_on_page) <($page) && $page != 1) || $page <= 0)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else	
 				return $this->render('main_page.html.twig', array(
-				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,'friends' => $friends,
-				'subpage' => $subpage,'page' =>$page,'search_input' => $search_input));
+					'page_name' => 'Strona Główna','nav_title' => 'Strona Główna',
+					'user' => $user_data,'friends' => $friends,'subpage' => $subpage,
+					'page' =>$page,'search_input' => $search_input)
+				);
 		}
-		elseif($subpage == "omnie"){
-			
+		elseif($subpage == "omnie")
+		{
 			$groups = $db_service->get_user_groups();
 			
 			$groups_on_page = 6;
@@ -80,26 +93,28 @@ class Main_PageController extends Controller{
 			
 			if((ceil($count_groups/$groups_on_page) <($page) && $page != 1) || $page <= 0)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
-		
-			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,'groups' => $groups,
-			'subpage' => $subpage,'page' =>$page));
-		
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
+			else
+				return $this->render('main_page.html.twig', array(
+					'page_name' => 'Strona Główna','nav_title' => 'Strona Główna',
+					'user' => $user_data,'groups' => $groups,'subpage' => $subpage,
+					'page' =>$page)
+				);
 		}
 		else{
-			
-			
-		
 			return $this->render('main_page.html.twig', array(
-			'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-			'subpage' => $subpage,'page' =>$page));
+				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna',
+				'user' => $user_data,'subpage' => $subpage,
+				'page' =>$page)
+			);
 		}
 	}
 
-	public function galeryAction(CookieService $cookie_service,DBService $db_service,$album_id,$page){
-		
+	public function galeryAction(CookieService $cookie_service,DBService $db_service,
+	$album_id,$page
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -110,29 +125,32 @@ class Main_PageController extends Controller{
 		
 		if($album == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
-		
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data)
+			);
 		else{
-		
 			$images_on_page =12;
 		
 			$images = $db_service->get_images_by_album_id($album_id);
 			$count_images = count($images);
 			
-			if(ceil($count_images/$images_on_page)<($page-1))
+			if((ceil($count_images/$images_on_page) <($page) && $page != 1) || $page <= 0)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else
 				return $this->render('main_page.html.twig', array(
-				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-				'subpage' => 'album','album' => $album,'images' => $images,'page' => $page));
+					'page_name' => 'Strona Główna','nav_title' => 'Strona Główna',
+					'user' => $user_data,'subpage' => 'album','album' => $album,
+					'images' => $images,'page' => $page)
+				);
 		}
 	}
 
-	public function imagesAction(CookieService $cookie_service,DBService $db_service,$album_id,$image_id,$page){
-		
+	public function imagesAction(CookieService $cookie_service,DBService $db_service,
+		$album_id,$image_id,$page
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -143,18 +161,18 @@ class Main_PageController extends Controller{
 
 		if($album == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data)
+			);
 		else{
-		
 			$image = $db_service->get_image_by_image_id($image_id,$album_id);
 			
 			if($image == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else{
-			
 				$image_comments = $db_service->getimage_comments($image_id);
 				$image_comments_array = array();
 				
@@ -163,17 +181,30 @@ class Main_PageController extends Controller{
 				
 				$image_subcomments = $db_service->getimage_subcomments($image_comments_array);
 				
+				$comments_on_page = 6;
+				$count_comments = count($image_comments);
+				
+				if((ceil($count_comments/$comments_on_page) <($page) && $page != 1) ||
+					$page <= 0
+				)
+					return $this->render('page_no_found.html.twig',array(
+						'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+						'user' => $user_data)
+					);
 				
 				return $this->render('main_page.html.twig', array(
-				'page_name' => 'Strona Główna','nav_title' => 'Strona Główna','user' => $user_data,
-				'subpage' => 'zdjecie','album' => $album,'image' => $image,'image_comments' => $image_comments,
-				'image_subcomments' => $image_subcomments,'page' => $page));
+					'page_name' => 'Strona Główna','nav_title' => 'Strona Główna',
+					'user' => $user_data,'subpage' => 'zdjecie','album' => $album,
+					'image' => $image,'comments' => $image_comments,
+					'subcomments' => $image_subcomments,'page' => $page)
+				);
 			}
 		}
 	}
 
-	public function uploadAction(CookieService $cookie_service,DBService $db_service,FileService $file_service,Request $request,$album_id){
-		
+	public function uploadAction(CookieService $cookie_service,DBService $db_service,
+		FileService $file_service,Request $request,$album_id
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -184,29 +215,26 @@ class Main_PageController extends Controller{
 
 		if($album == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' =>' Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' =>' Strona Główna',
+				'user' => $user_data)
+			);
 		
 		$results = array();
 
 		if($request->isXmlHttpRequest() == "true"){
-		
 			if(isset($_FILES["add-image"])){
-			
 				$results = $file_service->save_user_image($_FILES["add-image"]);
 
 				if($results[0] == ''){
-				
-					try {
-					
+					try 
+					{
 						$db_service->save_user_image_info($results[1],$album_id);
 					}
-					catch(\Doctrine\DBAL\DBALException $e){
-					
+					catch(\Doctrine\DBAL\DBALException $e)
+					{
 						$db_service->remove_user_image($results[1]);
 						$results[0] = "Wystapil blad";
 					}
-
 				}
 			}
 			else
@@ -218,8 +246,9 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 
-	public function album_accessAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id){
-		
+	public function album_accessAction(CookieService $cookie_service,DBService $db_service,
+		Request $request,$album_id
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
@@ -231,24 +260,28 @@ class Main_PageController extends Controller{
 
 		if($album == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data)
+			);
 		
-		else
+		else{
 			$album_access = $request->request->get('album_access');
 			$db_service->change_album_access($album_id,$album_access);
+			
 			return new JsonResponse('');
+		}
 	}
-
-	public function change_album_nameAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id){
-		
+	
+	public function change_album_nameAction(CookieService $cookie_service,
+		DBService $db_service,Request $request,$album_id
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $this->getDoctrine()
-		->getRepository(Users::class)->findOneBy(['email' => $user]);
+			->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 		$user_data = $db_service->get_user_data();
 
@@ -256,21 +289,19 @@ class Main_PageController extends Controller{
 
 		if($album == null)
 			return $this->render('page_no_found.html.twig',array(
-			'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-			'user' => $user_data));
+				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+				'user' => $user_data)
+			);
 		else{
-
 			$results = '';
 			$album_name = $request->request->get('name');
 
 			if($album_name == '')
 				$results = "Wpisano pusta nazwe";
 			else{
-			
 				$album2 = $db_service->check_album_exists($album_name);
 
 				if($album2 == null){
-				
 					$db_service->setnew_album_name($album_id,$album_name);
 					$results = "";
 				}
@@ -282,15 +313,16 @@ class Main_PageController extends Controller{
 		}
 	}
 
-	public function add_albumAction(CookieService $cookie_service,DBService $db_service,Request $request){
-		
+	public function add_albumAction(CookieService $cookie_service,DBService $db_service,
+		Request $request
+	){
 		$user = $cookie_service->check_exist_user_cookie();
 
 		if($user == '')
 			return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 		$user_data = $this->getDoctrine()
-		->getRepository(Users::class)->findOneBy(['email' => $user]);
+			->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 		$user_data = $db_service->get_user_data();
 		$album_name = $request->request->get('name');
@@ -298,20 +330,17 @@ class Main_PageController extends Controller{
 
 		if($album_name == '')
 			$results = "Wpisano pusta nazwe";
-		
 		else{
-		
 			$album = $db_service->check_album_exists($album_name);
 
 			if($album == null){
-			
-				try{
-				
+				try
+				{
 					$db_service->add_album($album_name);
 					$results = "";
 				}
-				catch(\Doctrine\DBAL\DBALException $e){
-				
+				catch(\Doctrine\DBAL\DBALException $e)
+				{
 					$results = "Wystapil blad";
 				}
 			}
@@ -322,32 +351,31 @@ class Main_PageController extends Controller{
 		return new JsonResponse($results);
 	}
 
-	public function delete_albumAction(CookieService $cookie_service,DBService $db_service,FileService $file_service,Request $request,$album_id){
-		
+	public function delete_albumAction(CookieService $cookie_service,DBService $db_service,
+		FileService $file_service,Request $request,$album_id
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
 				return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 			$user_data = $this->getDoctrine()
-			->getRepository(Users::class)->findOneBy(['email' => $user]);
+				->getRepository(Users::class)->findOneBy(['email' => $user]);
 			
 			$album = $db_service->get_user_album_by_id($album_id);
 
 			if($album == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else{
-
-				try{
-				
+				try
+				{
 					$images = $db_service->getimages($album_id);
 
 					for($i = 0;$i<count($images);$i++){
-					
 						$image_name = $images[$i]->getimage_name();
 						$file_service->remove_user_image($image_name);
 						$db_service->remove_image_info($images[$i]);
@@ -364,17 +392,17 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 
-	public function edit_img_descriptionAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id,$image_id){
-		
+	public function edit_img_descriptionAction(CookieService $cookie_service,
+		DBService $db_service,Request $request,$album_id,$image_id
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
 				return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 			$user_data = $this->getDoctrine()
-			->getRepository(Users::class)->findOneBy(['email' => $user]);
+				->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 			$user_data = $db_service->get_user_data();
 			$description = $request->request->get('description');
@@ -382,19 +410,18 @@ class Main_PageController extends Controller{
 
 			if($album == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
-			
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else{
-			
 				$image = $db_service->get_image_by_image_id($image_id,$album_id);
 			
 				if($image == null)
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-					'user' => $user_data));
+						'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+						'user' => $user_data)
+					);
 				else{
-					
 					$results = '';
 					
 					if(strlen($description) > 255)
@@ -410,38 +437,38 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 	
-	public function delete_imgAction(CookieService $cookie_service,DBService $db_service,FileService $file_service,Request $request,$album_id,$image_id){
-		
+	public function delete_imgAction(CookieService $cookie_service,DBService $db_service,
+		FileService $file_service,Request $request,$album_id,$image_id
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
 				return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 			$user_data = $this->getDoctrine()
-			->getRepository(Users::class)->findOneBy(['email' => $user]);
+				->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 			$user_data = $db_service->get_user_data();
 			$album = $db_service->get_user_album_by_id($album_id);
 
 			if($album == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
-			
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else{
-			
 				$image = $db_service->get_image_by_image_id($image_id,$album_id);
 			
 				if($image == null)
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-					'user' => $user_data));
-				else
-					
+						'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+						'user' => $user_data)
+					);
+				else{
 					$file_service->remove_user_image($image->getimage_name());
 					$db_service->remove_image_info($image);
+				}
 			}
 		
 			return new JsonResponse('');
@@ -450,33 +477,34 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 	
-	public function set_as_profile_imgAction(CookieService $cookie_service,DBService $db_service,Request $request,$album_id,$image_id){
-		
+	public function set_as_profile_imgAction(CookieService $cookie_service,
+		DBService $db_service,Request $request,$album_id,$image_id
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
 				return new RedirectResponse('/socialweb/web/app_dev.php/login');
 
 			$user_data = $this->getDoctrine()
-			->getRepository(Users::class)->findOneBy(['email' => $user]);
+				->getRepository(Users::class)->findOneBy(['email' => $user]);
 
 			$user_data = $db_service->get_user_data();
 			$album = $db_service->get_user_album_by_id($album_id);
 
 			if($album == null)
 				return $this->render('page_no_found.html.twig',array(
-				'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-				'user' => $user_data));
+					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+					'user' => $user_data)
+				);
 			else{
-			
 				$image = $db_service->get_image_by_image_id($image_id,$album_id);
 			
 				if($image == null)
 					return $this->render('page_no_found.html.twig',array(
-					'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
-					'user' => $user_data));
+						'page_name' => 'Nie znaleziono strony','nav_title' => 'Strona Główna',
+						'user' => $user_data)
+					);
 				else
 					$db_service->set_as_profile_image($image);
 			}
@@ -487,4 +515,3 @@ class Main_PageController extends Controller{
 			return new RedirectResponse('/socialweb/web/app_dev.php/profil/posty');
 	}
 }
-?>

@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="group_members")
+ * @ORM\Table(name="group_subcomments")
  */
  
-class Group_Members
+class Group_Subcomments
 {
 	/**
 	 * @ORM\Id
@@ -26,18 +26,25 @@ class Group_Members
 	private $user_id;
 	
 	/**
-	* @ORM\Column(name="group_id",type="integer")
+	* @ORM\Column(name="comment_id",type="integer")
 	* Doctrine\ORM\Mapping\GeneratedValue(strategy="AUTO")
 	* 
 	*/
-	private $group_id;
+	private $comment_id;
 	
 	/**
-	* @ORM\Column(name="add_date",type="date")
+	* @ORM\Column(name="add_date",type="datetime")
 	* Doctrine\ORM\Mapping\GeneratedValue(strategy="AUTO")
 	* 
 	*/
 	private $add_date;
+	
+	/**
+	* @ORM\Column(name="text",type="text")
+	* Doctrine\ORM\Mapping\GeneratedValue(strategy="AUTO")
+	* 
+	*/
+	private $text;
 	
 	public function getId()
 	{
@@ -49,8 +56,9 @@ class Group_Members
 		return $this->user_id;
 	}
 	
-	public function getgroup_id(){
-		return $this->group_id;
+	public function getcomment_id()
+	{
+		return $this->comment_id;
 	}
 	
 	public function getadd_date()
@@ -58,18 +66,28 @@ class Group_Members
 		return $this->add_date;
 	}
 	
+	public function gettext()
+	{
+		return $this->text;
+	}
+	
 	public function setuser_id($user_id)
 	{
 		$this->user_id = $user_id;
-	}	
+	}
 	
-	public function setgroup_id($group_id)
+	public function setcomment_id($comment_id)
 	{
-		$this->group_id = $group_id;
-	}	
+		$this->comment_id = $comment_id;
+	}
 	
 	public function setadd_date($add_date)
 	{
 		$this->add_date = $add_date;
+	}
+	
+	public function settext($text)
+	{
+		$this->text = $text;
 	}
 }

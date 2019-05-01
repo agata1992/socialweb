@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="image_comments")
  */
  
-class Image_Comments{
+class Image_Comments
+{
 	
 	/**
 	 * @ORM\Id
@@ -46,40 +47,48 @@ class Image_Comments{
 	*/
 	private $text;
 	
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function getuser_id(){
+	public function getuser_id()
+	{
 		return $this->user_id;
 	}
 	
-	public function getimage_id(){
+	public function getimage_id()
+	{
 		return $this->image_id;
 	}
 	
-	public function getadd_date(){
+	public function getadd_date()
+	{
 		return $this->add_date;
 	}
 	
-	public function gettext(){
+	public function gettext()
+	{
 		return $this->text;
 	}
 	
-	public function setuser_id($user_id){
+	public function setuser_id($user_id)
+	{
 		$this->user_id = $user_id;
 	}
 	
-	public function setimage_id($image_id){
+	public function setimage_id($image_id)
+	{
 		$this->image_id = $image_id;
 	}
 	
-	public function setadd_date($add_date){
+	public function setadd_date($add_date)
+	{
 		$this->add_date = $add_date;
 	}
 	
-	public function settext($text){
+	public function settext($text)
+	{
 		$this->text = $text;
 	}
-}	
-?>
+}

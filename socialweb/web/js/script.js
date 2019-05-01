@@ -128,7 +128,7 @@ window.onload = function(event){
 	
 		$('#title-friends').removeClass( "log-reg-title-active" );
 		$('#title-friends').addClass( "pointer" );
-	
+		
 		$('#title-posts').removeClass( "log-reg-title-active" );
 		$('#title-posts').addClass( "pointer" );
 	
@@ -241,7 +241,7 @@ $("#image-feedback").hide();
 $("#album-name-feedback").hide();
 $("#add-album-feedback").hide();
 $('#main_image_comment_input-feedback').hide();
-$(".replay-image-comment-div").hide();
+$(".replay-comment-div").hide();
 
 $('#add-image').change(function(){
 	$('#upload-form').submit();
@@ -427,14 +427,14 @@ $('#title-informations').click(function(event){
 
 
 
-$(".image-comments-replay-button").click(function(e){
+$(".comments-replay-button").click(function(e){
 	
-	number = this.id.replace("image-comments-replay-button_","");
+	number = this.id.replace("comments-replay-button_","");
 	
-	if($('#replay-image-comment-div_'+number).is(':hidden'))
-		$('#replay-image-comment-div_'+number).show();
+	if($('#replay-comment-div_'+number).is(':hidden'))
+		$('#replay-comment-div_'+number).show();
 	else
-		$('#replay-image-comment-div_'+number).hide();
+		$('#replay-comment-div_'+number).hide();
 	});
 
 function Register(){
@@ -847,30 +847,41 @@ function delete_account(){
 	});
 }
 
-function add_image_comment(type,comment_id = ''){
+function add_comment(type,comment_id = ''){
 	
-	$('#main_image_comment_input-feedback').html('');
-	$('#main_image_comment_input-feedback').show();
+	$('#main_comment_input-feedback').html('');
+	$('#main_comment_input-feedback').hide();
 	
 	if(type == 1)
-		image_comment_input = $('#main_image_comment-input').val();	
+		comment_input = $('#main_comment-input').val();	
 	else
-		image_comment_input = $('#image_subcomment-input_' + comment_id).val();
+		comment_input = $('#subcomment-input_' + comment_id).val();
 	
-	var data = '&image_comment_input=' + image_comment_input + '&type=' + type;
+	alert(comment_input);
+	var data = '&comment_input=' + comment_input + '&type=' + type;
     
 	if(type == 0){
 		data = data + '&comment_id=' + comment_id;
 	}
 	
-	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/") &&
-	window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/zdjecie/[0-9]*/page/[0-9]*") == null)
-		url = window.location.pathname+ "/1/add_image_comment";
-	else if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/") &&
-	window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria/album/[0-9]*/zdjecie/[0-9]*/page/[0-9]*"))
-		url = window.location.pathname+ "/1/add_image_comment";
-	else
-		url = window.location.pathname+ "/add_image_comment";
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/profil/"))
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/profil/galeria/album/[0-9]*/zdjecie/[0-9]*/page/[0-9]*"))
+			url = window.location.pathname+ "/1/add_image_comment";
+		else
+			url = window.location.pathname+ "/add_image_comment";
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/user/"))
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/user/[0-9]*/galeria/album/[0-9]*/zdjecie/[0-9]*/page/[0-9]*"))
+			url = window.location.pathname+ "/1/add_image_comment";
+		else
+			url = window.location.pathname+ "/add_image_comment";
+	
+	if(window.location.pathname.match("/socialweb/web/app_dev.php/grupy/"))
+		if(!window.location.pathname.match("/socialweb/web/app_dev.php/grupy/id/[0-9]*/dyskusja/[0-9]*"))
+			url = window.location.pathname+ "/1/add_group_comment";
+		else
+			url = window.location.pathname+ "/add_group_comment";
+	
 		 
 	var request = $.ajax({
 		url: url,
@@ -883,11 +894,11 @@ function add_image_comment(type,comment_id = ''){
 	
 		if(results != '' && type == 1){
 		
-			$('#main_image_comment_input-feedback').html(results);
-			$('#main_image_comment_input-feedback').show();
+			$('#main_comment_input-feedback').html(results);
+			$('#main_comment_input-feedback').show();
 		}
 		else if(results != '' && type == 0)
-			$('#image_subcomment-input_' + comment_id).addClass('is-invalid');
+			$('#subcomment-input_' + comment_id).addClass('is-invalid');
 		else
 			location.reload();
 	});	 
@@ -1160,7 +1171,7 @@ $('#search-friends-input').on('keyup', function(){
 	$("#friends_search").submit();
 });
 
-function image_sub_more_less(type,comment_id,all_subcomments){
+function sub_more_less(type,comment_id,all_subcomments){
 	
 	showed_subcomments = 0;
 	change_count_subcomments = 5;

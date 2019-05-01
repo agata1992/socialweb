@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Service\CookieService;
 use AppBundle\Service\DBService;
 
-class FriendsController extends Controller{
-	
-	public function add_to_friendsAction(CookieService $cookie_service,DBService $db_service,Request $request){
-		
+class FriendsController extends Controller
+{
+	public function add_to_friendsAction(CookieService $cookie_service,
+		DBService $db_service,Request $request
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
@@ -30,10 +30,10 @@ class FriendsController extends Controller{
 		}
 	}
 	
-	public function delete_friendAction(CookieService $cookie_service,DBService $db_service,Request $request){
-		
+	public function delete_friendAction(CookieService $cookie_service,
+		DBService $db_service,Request $request
+	){
 		if($request->isXmlHttpRequest() == "true"){
-			
 			$user = $cookie_service->check_exist_user_cookie();
 
 			if($user == '')
@@ -47,4 +47,3 @@ class FriendsController extends Controller{
 		}
 	}
 }
-?>
