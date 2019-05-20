@@ -33,16 +33,13 @@ set_as_profile_img:
    defaults: {_controller: AppBundle:Main_Page:set_as_profile_img}
 login:
    path: /login
-   defaults: {_controller: AppBundle:Login:index}
+   defaults: {_controller: AppBundle:Login_Register:login}
 register:
-   path: /login/rejestracja
-   defaults: {_controller: AppBundle:Login:register}
-signin:
-   path: /login/logowanie
-   defaults: {_controller: AppBundle:Login:login}
+   path: /rejestracja
+   defaults: {_controller: AppBundle:Login_Register:register}
 signout:
    path: /wyloguj
-   defaults: {_controller: AppBundle:Login:signout}
+   defaults: {_controller: AppBundle:Login_Register:signout}
 search:
    path: /wyszukiwarka/{page}
    defaults: {_controller: AppBundle:Search:index,page:1}

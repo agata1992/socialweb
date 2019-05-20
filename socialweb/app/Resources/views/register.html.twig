@@ -1,0 +1,116 @@
+{{ form_start(form) }}
+	<div class="row row-margin">
+		<div class="col-6">
+			<label for="reg-name">Imię</label>
+			<div class="input-group">
+				<span class="input-group-text">
+					<i class="fa fa-user"></i>	
+				</span> 
+						
+				{{ form_widget(form.name) }}
+							
+				<div  class="invalid-feedback d-block">
+					{{ form_errors(form.name) }}
+				</div>
+			</div>
+		</div>		
+		<div class="col-6">
+			<label for="reg-surname">Nazwisko</label>
+			<div class="input-group">
+				<span class="input-group-text">
+					<i class="fa fa-user"></i>
+				</span>
+				{{ form_widget(form.surname) }}
+				<div  class="invalid-feedback d-block">
+					{{ form_errors(form.surname) }}
+				</div>
+			</div>
+		</div>
+	</div>
+				
+	<div class="row row-margin">
+		<div class="col-6">
+			<label for="reg-email1">Email</label>
+			<div class="input-group">
+				<span class="input-group-text">@</span> 
+				{{ form_widget(form.email) }}
+				<div  class="invalid-feedback d-block">
+					{{ form_errors(form.email) }}
+				</div>
+			</div>
+		</div>	
+					
+						
+		<div class="col-6">
+			<label for="reg-email2">Powtórz Email</label>
+			<div class="input-group">
+				<span class="input-group-text">@</span>
+				{{ form_widget(form.email2) }}
+				<div class="invalid-feedback d-block">
+					{{ form_errors(form.email2) }}	
+				</div>
+			</div>
+		</div>
+	</div>
+				
+	<div class="row row-margin">
+		<div class="col-6" id="col-reg-pass">
+			<label for="reg-pass">Hasło</label>
+			<div class="input-group">
+				<span class="input-group-text">
+					<i class="fa fa-unlock-alt"></i>
+				</span> 
+				{{ form_widget(form.password) }}
+				<div  class="invalid-feedback d-block">
+					{{ form_errors(form.password) }}
+				</div>
+			</div>
+		</div>	
+							
+		<div class="col-6">
+			<label for="reg-city">Miasto</label>
+			<div class="input-group">
+				<span class="input-group-text">
+					<i class="fa fa-home"></i>
+				</span>
+				{{ form_widget(form.city) }}
+			</div>
+		</div>
+	</div>
+				
+	<div class="row row-margin">
+		<div class="col-6">
+			<label for="reg-birthdate">Data urodzenia</label>
+			<div class="input-group">
+				<span class="input-group-text">
+					<i class="fa fa-calendar"></i>
+				</span> 
+				{{ form_widget(form.birthdate, { 'id': 'title-field','type':'date' }) }}
+				<div  class="invalid-feedback d-block">
+					{{ form_errors(form.birthdate) }}
+				</div>
+			</div>
+		</div>	
+							
+		<div class="col-6">
+			<label for="reg-gender">Płeć</label>
+			<div class="input-group">
+				<span class="input-group-text">
+					<i class="fa fa-male"></i>
+				</span>
+				{{ form_widget(form.gender) }}
+				<div  class="invalid-feedback d-block">
+					{{ form_errors(form.gender) }}
+				</div>
+			</div>
+		</div>
+	</div>
+				
+	<div class="row row-margin">
+		<div class="col-12">
+			<div class="d-flex justify-content-center align-items-center">
+				{{ form_widget(form.register) }}
+			</div>
+		</div>
+	</div>	
+{{ form_end(form) }}

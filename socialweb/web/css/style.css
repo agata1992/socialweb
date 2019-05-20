@@ -83,15 +83,15 @@ nav{
 	padding-bottom:10px;
 	background:white;
 	width:50%;
-	height:85%;
+	
 }
 
 #results-container{
-	padding-top:10px;
-	padding-bottom:10px;
+	padding-top:25px;
+	padding-bottom:25px;
 	background:white;
 	width:50%;
-	height:30%;
+	height:45%;
 }
 
 .bottom-border{
@@ -119,6 +119,11 @@ nav{
 .row-margin4{
 	margin-top:50px;	
 }
+
+.margin_top15{
+	margin-top:15px;
+}
+
 
 #row2,#row3{
 	height:100%;	
@@ -247,6 +252,10 @@ nav{
 	margin-left:32px;
 }
 
+.margin_left48{
+	margin-left:48px;
+}
+
 .margin_left20{
 	margin-left:20px;
 }
@@ -287,3 +296,14 @@ nav{
 	display:none;
 }
 
+.invalid-feedback ul li {
+	list-style-type: none;
+	
+	
+}
+
+.invalid-feedback ul  {
+	padding-left:0px;
+	
+	margin-bottom:0px;
+}

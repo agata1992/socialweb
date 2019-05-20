@@ -1,0 +1,42 @@
+{% extends 'main.html.twig' %}
+
+{% block content %}
+
+	{% if page_name == 'Logowanie' or page_name == 'Rejestracja' %}
+		<div class="d-flex justify-content-center align-items-center" id="container1">
+			<div class="align-self-center" id="login-container">
+				<div class="container ">
+					<div class="row bottom-border">
+						<div class="col font-comic log-reg-title-active" id="title-log">Logowanie</div>
+						<div class="col font-comic pointer" id="title-reg">Rejestracja</div>
+					</div>
+				
+					{% if page_name == 'Logowanie' %}
+						{% include 'login.html.twig' %}
+				
+					{% endif %}	
+			
+					{% if page_name == 'Rejestracja' %}
+						{% include 'register.html.twig' %}
+					{% endif %}	
+				</div>
+			</div>	
+		</div>	
+	{% endif %}	
+	{% if page_name == 'Utworzono konto' %}
+		<div class="d-flex justify-content-center align-items-center" id="container2">
+			<div class="align-self-center text-center" id="results-container">
+				<div style="font-size:25px">Utworzono konto !!!</div>
+				<div class="margin_top15">
+					<h1 class="text-success"><i class="fa fa-thumbs-up"></i></h1>
+				</div>
+				<div class="margin_top15">
+					<h6>Dziękujemy za rejestracje.Teraz możesz się zalogować</h6>
+				</div>
+				<div class="margin_top15">
+					<a class="btn btn-primary" href="/socialweb/web/app_dev.php/login">OK</a>
+				</div>
+			</div>
+		</div>	
+	{% endif %}		
+{% endblock %}
